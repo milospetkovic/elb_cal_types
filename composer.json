@@ -1,0 +1,16 @@
+{
+    "name": "nextcloud/elb-calendar-types",
+    "description": "Nextcloud manage calendar types with reminder options",
+    "type": "project",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "Milos Petkovic",
+            "email": "milos.petkovic@elb-solutions.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    }
+}
