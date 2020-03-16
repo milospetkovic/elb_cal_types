@@ -2,106 +2,18 @@
     <Content :class="{'icon-loading': loading}" app-name="vueexample">
         <AppNavigation>
             <AppNavigationNew v-if="!loading"
-                              :text="t('vueexample', 'New XXXXXX')"
+                              :text="t('elbcaltypes', 'New event type')"
                               :disabled="false"
                               button-id="new-vueexample-button"
                               button-class="icon-add"
                               @click="newButtonAction" />
-            <ul id="app-vueexample-navigation">
-                <AppNavigationItem icon="icon-user" title="This is a user">
-                    <AppNavigationCounter slot="counter" :highlighted="true">
-                        99+
-                    </AppNavigationCounter>
-                    <template slot="actions">
-                        <ActionButton icon="icon-edit" @click="alert('Edit')">
-                            Edit
-                        </ActionButton>
-                        <ActionButton icon="icon-delete" @click="alert('Delete')">
-                            Delete
-                        </ActionButton>
-                        <ActionLink icon="icon-external" title="Link" href="https://nextcloud.com" />
-                    </template>
-                </AppNavigationItem>
-                <AppNavigationItem title="This is bullet item">
-                    <AppNavigationIconBullet slot="icon" color="0082c9" />
-                    <template slot="actions">
-                        <ActionButton :disabled="false" icon="icon-edit" @click="alert('Edit')">
-                            Edit
-                        </ActionButton>
-                        <ActionLink :disabled="false"
-                                    icon="icon-external"
-                                    title="Link"
-                                    href="https://nextcloud.com" />
-                        <ActionCheckbox :disabled="false">
-                            Checkbox
-                        </ActionCheckbox>
-                        <ActionInput :disabled="false" icon="icon-add">
-                            ActionInput
-                        </ActionInput>
-                        <ActionRouter :disabled="false" icon="icon-add" to="#">
-                            ActionRouter
-                        </ActionRouter>
-                        <ActionText :disabled="false" icon="icon-add">
-                            ActionText
-                        </ActionText>
-                        <ActionTextEditable :disabled="false">
-                            ActionTextEditable
-                        </ActionTextEditable>
-                    </template>
-                </AppNavigationItem>
-                <AppNavigationItem title="Counter and actions"
-                                   icon="icon-category-enabled">
-                    <AppNavigationCounter slot="counter" :highlighted="true">
-                        99+
-                    </AppNavigationCounter>
-                    <template slot="actions">
-                        <ActionButton icon="icon-edit" @click="alert('Edit')">
-                            Edit
-                        </ActionButton>
-                        <ActionButton icon="icon-delete" @click="alert('Delete')">
-                            Delete
-                        </ActionButton>
-                        <ActionLink icon="icon-external" title="Link" href="https://nextcloud.com" />
-                    </template>
-                </AppNavigationItem>
-                <AppNavigationItem title="Item with children"
-                                   :allow-collapse="true"
-                                   icon="icon-folder">
-                    <template>
-                        <AppNavigationItem title="AppNavigationItemChild1">
-                            <AppNavigationIconBullet slot="icon" color="0082c9" />
-                        </AppNavigationItem>
-                        <AppNavigationItem title="AppNavigationItemChild2" icon="icon-category-enabled" />
-                        <AppNavigationItem title="AppNavigationItemChild3" icon="icon-category-enabled" />
-                        <AppNavigationItem title="AppNavigationItemChild4" icon="icon-category-enabled" />
-                    </template>
-                </AppNavigationItem>
-                <AppNavigationItem title="Loading Item" :loading="true" />
-                <AppNavigationItem title="Event Item" icon="icon-folder" @click="console.log('clicked')" />
-                <AppNavigationItem title="Editable Item"
-                                   icon="icon-folder"
-                                   :editable="true"
-                                   edit-placeholder="I am a placeholder" />
-                <AppNavigationItem title="Are you sure you want to delete?" :undo="true" />
-                <AppNavigationItem title="First pinned item"
-                                   icon="icon-category-enabled"
-                                   :pinned="true" />
-                <AppNavigationItem title="Second pinned item"
-                                   icon="icon-category-enabled"
-                                   :pinned="true" />
-                <AppNavigationItem title="Third pinned item"
-                                   icon="icon-category-enabled"
-                                   :pinned="true" />
-            </ul>
+
             <AppNavigationSettings>
                 Example settings
             </AppNavigationSettings>
         </AppNavigation>
         <AppContent>
             <span>This is the content</span>
-            <button @click="show = !show">
-                Toggle sidebar
-            </button>
         </AppContent>
         <AppSidebar v-show="show"
                     title="eberhard-grossgasteiger-VDw-nsi5TpE-unsplash.jpg"
@@ -191,7 +103,7 @@
 				loading: false,
 				date: Date.now() + 86400000 * 3,
 				date2: Date.now() + 86400000 * 3 + Math.floor(Math.random() * 86400000 / 2),
-				show: true,
+				show: false,
 				starred: false,
 			}
 		},
