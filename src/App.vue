@@ -54,6 +54,8 @@
 	import ActionText from '@nextcloud/vue/dist/Components/ActionText'
 	import ActionTextEditable from '@nextcloud/vue/dist/Components/ActionTextEditable'
 
+	import axios from '@nextcloud/axios'
+
 	export default {
 		name: 'App',
 		components: {
@@ -77,6 +79,7 @@
 		},
 		data: function() {
 			return {
+				currentCalType: null,
 				calTypes: [],
 				loading: true,
 				show: false,
@@ -87,11 +90,10 @@
 		 * Fetch list of calendar types when the component is loaded
 		 */
 		async mounted() {
-
 			//alert('poziva mounted?')
-
 			try {
 				const response = await axios.get(OC.generateUrl('/apps/elb_cal_types/caltypes'))
+                console.log('Response:', response)
 				this.calTypes = response.data
 			} catch (e) {
 				console.error(e)

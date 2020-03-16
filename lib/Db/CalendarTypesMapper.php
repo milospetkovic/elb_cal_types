@@ -7,9 +7,14 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
-class CalendarTypesMapper extends QBMapper {
-
-    public function __construct(IDBConnection $db) {
+class CalendarTypesMapper extends QBMapper
+{
+    /**
+     * CalendarTypesMapper constructor.
+     * @param IDBConnection $db
+     */
+    public function __construct(IDBConnection $db)
+    {
         parent::__construct($db, 'elb_calendar_types', CalendarTypes::class);
     }
 
@@ -33,7 +38,7 @@ class CalendarTypesMapper extends QBMapper {
      * @param string $userId
      * @return array
      */
-    public function findAll(): array {
+    public function findAll($userId): array {
         /* @var $qb IQueryBuilder */
         $qb = $this->db->getQueryBuilder();
         $qb->select('*')

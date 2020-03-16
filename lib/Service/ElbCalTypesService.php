@@ -20,7 +20,7 @@ class ElbCalTypesService {
     }
 
     public function findAll(string $userId): array {
-        return $this->mapper->findAll();
+        return $this->mapper->findAll($userId);
     }
 
     private function handleException (Exception $e): void {
