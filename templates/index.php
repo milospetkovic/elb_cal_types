@@ -1,5 +1,5 @@
 <?php
-script('elb_cal_types', 'vueexample');
+script('elb_cal_types', 'vue');
 style('elb_cal_types', 'style');
 ?>
 
