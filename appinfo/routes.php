@@ -8,6 +8,9 @@
  * it's instantiated in there
  */
 return [
+    'resources' => [
+        'elbcaltype' => ['url' => '/caltypes'],
+    ],
     'routes' => [
         [ 'name' => 'page#index', 'url' => '/', 'verb' => 'GET']
     ]

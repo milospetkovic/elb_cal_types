@@ -77,34 +77,32 @@
 		},
 		data: function() {
 			return {
-				loading: false,
-				date: Date.now() + 86400000 * 3,
-				date2: Date.now() + 86400000 * 3 + Math.floor(Math.random() * 86400000 / 2),
+				calTypes: [],
+				loading: true,
 				show: false,
 				starred: false,
 			}
 		},
+		/**
+		 * Fetch list of calendar types when the component is loaded
+		 */
+		async mounted() {
+
+			//alert('poziva mounted?')
+
+			try {
+				const response = await axios.get(OC.generateUrl('/apps/elb_cal_types/caltypes'))
+				this.calTypes = response.data
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elbcaltypes', 'Could not fetch calendar types'))
+			}
+			this.loading = false
+		},
 		methods: {
-			addOption(val) {
-				this.options.push(val)
-				this.select.push(val)
-			},
-			previous(data) {
-				console.debug(data)
-			},
-			next(data) {
-				console.debug(data)
-			},
-			close(data) {
-				console.debug(data)
-			},
 			newCalendarType(e) {
 				alert('let\'s gooooo!!!');
-				//console.debug(e)
-			},
-			log(e) {
-				console.debug(e)
-			},
+			}
 		},
 	}
 </script>

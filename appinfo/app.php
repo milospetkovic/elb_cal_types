@@ -24,21 +24,3 @@ use OCP\Util;
 
 $application = new Application();
 $application->register();
-
-$eventDispatcher = OC::$server->getEventDispatcher();
-
-$includes = [
-    'Files' => 'files',
-    'Files_Sharing' => 'files',
-];
-
-// pages where additional javascript/css should be inserted
-foreach ($includes as $app => $include) {
-    $eventDispatcher->addListener(
-        'OCA\\'.$app.'::loadAdditionalScripts',
-        function () use ($include) {
-            Util::addScript('files_gf_trackdownloads', 'main');
-            Util::addStyle('files_gf_trackdownloads', 'style');
-        }
-    );
-}
