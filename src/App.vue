@@ -1,61 +1,38 @@
 <template>
-    <Content :class="{'icon-loading': loading}" app-name="vueexample">
+    <content>
         <AppNavigation>
             <AppNavigationNew v-if="!loading"
-                              :text="t('elbcaltypes', 'New event type')"
+                              :text="t('elbcaltypes', 'New calendar type')"
                               :disabled="false"
-                              button-id="new-vueexample-button"
+                              button-id="new-caltype-button"
                               button-class="icon-add"
-                              @click="newButtonAction" />
+                              @click="newCalendarType" />
 
             <AppNavigationSettings>
                 Example settings
             </AppNavigationSettings>
         </AppNavigation>
         <AppContent>
-            <span>This is the content</span>
+            <div v-if="currentCalType">
+                <input ref="title"
+                       v-model="currentCalType.title"
+                       type="text"
+                       :disabled="updating">
+                <textarea ref="content" v-model="currentCalType.content" :disabled="updating" />
+                <input type="button"
+                       class="primary"
+                       :value="t('elbcaltypes', 'Save')"
+                       :disabled="updating || !savePossible"
+                       @click="saveCalType">
+            </div>
+            <div v-else id="emptycontent">
+                <div class="icon-file" />
+                <h2>{{ t('elbcaltypes', 'Create a new calendar type to get started') }}</h2>
+            </div>
         </AppContent>
-        <AppSidebar v-show="show"
-                    title="eberhard-grossgasteiger-VDw-nsi5TpE-unsplash.jpg"
-                    subtitle="4,3 MB, last edited 41 days ago"
-                    :starred.sync="starred"
-                    @close="show=false">
-            <template #primary-actions>
-                <button class="primary">
-                    Button 1
-                </button>
-                <input id="link-checkbox"
-                       name="link-checkbox"
-                       class="checkbox link-checkbox"
-                       type="checkbox">
-                <label for="link-checkbox" class="link-checkbox-label">Do something</label>
-            </template>
-            <template #secondary-actions>
-                <ActionButton icon="icon-edit" @click="alert('Edit')">
-                    Edit
-                </ActionButton>
-                <ActionButton icon="icon-delete" @click="alert('Delete')">
-                    Delete
-                </ActionButton>
-                <ActionLink icon="icon-external" title="Link" href="https://nextcloud.com" />
-            </template>
-            <AppSidebarTab id="vueexample" name="Vueexample" icon="icon-vueexample">
-                this is the vueexample tab
-            </AppSidebarTab>
-            <AppSidebarTab id="activity" name="Activity" icon="icon-activity">
-                this is the activity tab
-            </AppSidebarTab>
-            <AppSidebarTab id="comments" name="Comments" icon="icon-comment">
-                this is the comments tab
-            </AppSidebarTab>
-            <AppSidebarTab id="sharing" name="Sharing" icon="icon-shared">
-                this is the sharing tab
-            </AppSidebarTab>
-            <AppSidebarTab id="versions" name="Versions" icon="icon-history">
-                this is the versions tab
-            </AppSidebarTab>
-        </AppSidebar>
-    </Content>
+
+    </content>
+
 </template>
 
 <script>
@@ -121,8 +98,9 @@
 			close(data) {
 				console.debug(data)
 			},
-			newButtonAction(e) {
-				console.debug(e)
+			newCalendarType(e) {
+				alert('let\'s gooooo!!!');
+				//console.debug(e)
 			},
 			log(e) {
 				console.debug(e)
