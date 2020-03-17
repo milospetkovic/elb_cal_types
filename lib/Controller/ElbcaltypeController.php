@@ -16,6 +16,8 @@ class ElbcaltypeController extends Controller
     /** @var string */
     private $userId;
 
+    use Errors;
+
     public function __construct($appName,
                                 IRequest $request,
                                 ElbCalTypesService $service,
@@ -41,6 +43,16 @@ class ElbcaltypeController extends Controller
     {
         return new DataResponse($this->service->create($title, $description,
             $this->userId));
+    }
+
+    /**
+     * @NoAdminRequired
+     */
+    public function update(int $id, string $title, string $description): DataResponse
+    {
+        return $this->handleNotFound(function () use ($id, $title, $description) {
+            return $this->service->update($id, $title, $description, $this->userId);
+        });
     }
 
 

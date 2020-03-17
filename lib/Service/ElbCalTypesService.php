@@ -59,12 +59,12 @@ class ElbCalTypesService
         return $this->mapper->insert($calType);
     }
 
-    public function update($id, $title, $content, $userId)
+    public function update($id, $title, $description, $userId)
     {
         try {
             $note = $this->mapper->find($id, $userId);
             $note->setTitle($title);
-            $note->setContent($content);
+            $note->setDescription($description);
             return $this->mapper->update($note);
         } catch(Exception $e) {
             $this->handleException($e);
