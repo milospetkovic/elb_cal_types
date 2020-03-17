@@ -1,6 +1,7 @@
 {
-  "translations":
-  {
-    "New calendar type" : "New calendar type"
+  "translations":  {
+    "New calendar type" : "New calendar type",
+    "Name for calendar type": "Name for calendar type",
+    "Description for calendar type": "Description for calendar type"
   }, "pluralForm" :""
 }

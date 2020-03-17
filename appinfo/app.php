@@ -20,7 +20,6 @@
  */
 
 use OCA\ElbCalTypes\AppInfo\Application;
-use OCP\Util;
 
 $application = new Application();
 $application->register();
