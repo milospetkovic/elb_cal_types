@@ -29,7 +29,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     * @NoAdminRequired
+     *
      */
     public function index(): DataResponse
     {
@@ -37,7 +37,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     * @NoAdminRequired
+     *
      */
     public function create(string $title, string $description): DataResponse
     {
@@ -46,7 +46,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     * @NoAdminRequired
+     *
      */
     public function update(int $id, string $title, string $description): DataResponse
     {
@@ -56,7 +56,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     * @NoAdminRequired
+     *
      */
     public function destroy(int $id): DataResponse
     {
