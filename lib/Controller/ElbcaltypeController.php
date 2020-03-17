@@ -55,5 +55,15 @@ class ElbcaltypeController extends Controller
         });
     }
 
+    /**
+     * @NoAdminRequired
+     */
+    public function destroy(int $id): DataResponse
+    {
+        return $this->handleNotFound(function () use ($id) {
+            return $this->service->delete($id, $this->userId);
+        });
+    }
+
 
 }

@@ -88,7 +88,23 @@ export default {
             return (calType) => {
                 return {
                     text: calType.title,
-                    title: calType.title
+					action: () => this.openCalType(calType),
+					classes: this.currentCalTypeID === calType.id ? 'active' : '',
+					utils: {
+						actions: [
+							{
+								icon: calType.id === -1 ? 'icon-close' : 'icon-delete',
+								text: calType.id === -1 ? t('elb_cal_types', 'Cancel calendar type creation') : t('elb_cal_types', 'Delete calendar type'),
+								action: () => {
+									if (calType.id === -1) {
+										this.cancelNewCalType(calType)
+									} else {
+										this.deleteCalType(calType)
+									}
+								},
+							},
+						],
+					},
                 }
             }
         },
@@ -115,23 +131,43 @@ export default {
     },
     methods: {
 		/**
+		 * Create a new calendar type and focus the calendar type content field automatically
+		 * @param {Object} calType calType object
+		 */
+		openCalType(calType) {
+			if (this.updating) {
+				return
+			}
+			this.currentCalTypeID = calType.id
+			this.$nextTick(() => {
+				this.$refs.content.focus()
+			})
+		},
+		/**
+		 * Abort creating a new calendary type
+		 */
+		cancelNewCalType() {
+			this.calTypes.splice(this.calTypes.findIndex((calType) => calType.id === -1), 1)
+			this.currentCalTypeID = null
+		},
+		/**
 		 * Create a new calendar type and add focus to the title field automatically
 		 * The calendar type is not yet saved, therefore an id of -1 is used until it
 		 * has been persisted in the backend
 		 */
-        newCalendarType(e) {
-            if (this.currentCalTypeID !== -1) {
-                this.currentCalTypeID = -1
-                this.calTypes.push({
-                    id: -1,
-                    title: '',
-                    description: '',
-                })
-                this.$nextTick(() => {
-                    this.$refs.title.focus()
-                })
-            }
-        },
+		newCalendarType(e) {
+			if (this.currentCalTypeID !== -1) {
+				this.currentCalTypeID = -1
+				this.calTypes.push({
+					id: -1,
+					title: '',
+					description: '',
+				})
+				this.$nextTick(() => {
+					this.$refs.title.focus()
+				})
+			}
+		},
 		/**
 		 * Action triggered when clicking the save button
 		 * create a new calendar type or update existing
@@ -139,9 +175,9 @@ export default {
 		saveCalType() {
 			if (this.currentCalTypeID === -1) {
 				this.createCalType(this.currentCalType)
-			}/* else {
+			} else {
 				this.updateCalType(this.currentCalType)
-			}*/
+			}
 		},
 		/**
 		 * Create a new calendar type by sending the information to the server
@@ -160,7 +196,38 @@ export default {
 			}
 			this.updating = false
 		},
-    },
+		/**
+		 * Update a existing calendar type on the server
+		 * @param {Object} calType calType object
+		 */
+		async updateCalType(calType) {
+			this.updating = true
+			try {
+				await axios.put(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`), calType)
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elb_cal_types', 'Could not update the calendar type'))
+			}
+			this.updating = false
+		},
+		/**
+		 * Delete a calendar type, remove it from the frontend and show a hint
+		 * @param {Object} calType calType object
+		 */
+		async deleteCalType(calType) {
+			try {
+				await axios.delete(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`))
+				this.calTypes.splice(this.calTypes.indexOf(calType), 1)
+				if (this.currentCalTypeID === calType.id) {
+					this.currentCalTypeID = null
+				}
+				OCP.Toast.success(t('elb_cal_types', 'Calendar type has been deleted'))
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elb_cal_types', 'Could not delete the calendar type'))
+			}
+		}
+	}
 }
 </script>
 <style scoped>

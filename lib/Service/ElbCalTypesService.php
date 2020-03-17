@@ -74,9 +74,9 @@ class ElbCalTypesService
     public function delete($id, $userId)
     {
         try {
-            $note = $this->mapper->find($id, $userId);
-            $this->mapper->delete($note);
-            return $note;
+            $calType = $this->mapper->find($id, $userId);
+            $this->mapper->delete($calType);
+            return $calType;
         } catch(Exception $e) {
             $this->handleException($e);
         }
