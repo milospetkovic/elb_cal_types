@@ -215,17 +215,21 @@ export default {
 		 * @param {Object} calType calType object
 		 */
 		async deleteCalType(calType) {
-			try {
-				await axios.delete(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`))
-				this.calTypes.splice(this.calTypes.indexOf(calType), 1)
-				if (this.currentCalTypeID === calType.id) {
-					this.currentCalTypeID = null
+			if (confirm(t('elb_cal_types', 'Really delete'+'?'))) {
+				try {
+					await axios.delete(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`))
+					this.calTypes.splice(this.calTypes.indexOf(calType), 1)
+					if (this.currentCalTypeID === calType.id) {
+						this.currentCalTypeID = null
+					}
+					OCP.Toast.success(t('elb_cal_types', 'Calendar type has been deleted'))
+				} catch (e) {
+					console.error(e)
+					OCP.Toast.error(t('elb_cal_types', 'Could not delete the calendar type'))
 				}
-				OCP.Toast.success(t('elb_cal_types', 'Calendar type has been deleted'))
-			} catch (e) {
-				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not delete the calendar type'))
-			}
+			} else {
+				return false;
+            }
 		}
 	}
 }
