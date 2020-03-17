@@ -8,8 +8,8 @@ use OCP\AppFramework\Controller;
 
 use OCA\ElbCalTypes\Service\ElbCalTypesService;
 
-class ElbcaltypeController extends Controller {
-
+class ElbcaltypeController extends Controller
+{
     /** @var ElbCalTypesService */
     private $service;
 
@@ -19,7 +19,8 @@ class ElbcaltypeController extends Controller {
     public function __construct($appName,
                                 IRequest $request,
                                 ElbCalTypesService $service,
-                                $userId) {
+                                $userId)
+    {
         parent::__construct($appName, $request);
         $this->service = $service;
         $this->userId = $userId;
@@ -28,8 +29,18 @@ class ElbcaltypeController extends Controller {
     /**
      * @NoAdminRequired
      */
-    public function index(): DataResponse {
+    public function index(): DataResponse
+    {
         return new DataResponse($this->service->findAll($this->userId));
+    }
+
+    /**
+     * @NoAdminRequired
+     */
+    public function create(string $title, string $description): DataResponse
+    {
+        return new DataResponse($this->service->create($title, $description,
+            $this->userId));
     }
 
 

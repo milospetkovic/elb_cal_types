@@ -10,29 +10,34 @@ use OCA\ElbCalTypes\Db\CalendarTypes;
 use OCA\ElbCalTypes\Db\CalendarTypesMapper;
 
 
-class ElbCalTypesService {
+class ElbCalTypesService
+{
 
     /** @var CalendarTypesMapper */
     private $mapper;
 
-    public function __construct(CalendarTypesMapper $mapper){
+    public function __construct(CalendarTypesMapper $mapper)
+    {
         $this->mapper = $mapper;
     }
 
-    public function findAll(string $userId): array {
+    public function findAll(string $userId): array
+    {
         return $this->mapper->findAll($userId);
     }
 
-    private function handleException (Exception $e): void {
+    private function handleException (Exception $e): void
+    {
         if ($e instanceof DoesNotExistException ||
             $e instanceof MultipleObjectsReturnedException) {
-            throw new NoteNotFound($e->getMessage());
+            throw new ElbCalTypeNotFound($e->getMessage());
         } else {
             throw $e;
         }
     }
 
-    public function find($id, $userId) {
+    public function find($id, $userId)
+    {
         try {
             return $this->mapper->find($id);
 
@@ -45,15 +50,17 @@ class ElbCalTypesService {
         }
     }
 
-    public function create($title, $content, $userId) {
+    public function create($title, $description, $userId)
+    {
         $calType = new CalendarTypes();
         $calType->setTitle($title);
-        $calType->setContent($content);
+        $calType->setDescription($description);
         $calType->setUserId($userId);
         return $this->mapper->insert($calType);
     }
 
-    public function update($id, $title, $content, $userId) {
+    public function update($id, $title, $content, $userId)
+    {
         try {
             $note = $this->mapper->find($id, $userId);
             $note->setTitle($title);
@@ -64,7 +71,8 @@ class ElbCalTypesService {
         }
     }
 
-    public function delete($id, $userId) {
+    public function delete($id, $userId)
+    {
         try {
             $note = $this->mapper->find($id, $userId);
             $this->mapper->delete($note);
