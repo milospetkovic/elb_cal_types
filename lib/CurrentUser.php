@@ -118,10 +118,7 @@ class CurrentUser
         if ($this->sessionUser === false) {
             $user = $this->userSession->getUser();
         }
-
-        return ['data' => 1];
-
-        //return $response;
+        return ['isSuperAdmin' => true];
     }
 
 }

@@ -71,9 +71,9 @@ export default {
         }
     },
 	async beforeMount() {
-
-		axios.get(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
-            console.log('result je ', result);
+		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
+            //console.log('result je ', result.data.isSuperAdmin);
+			this.isAdminUser = result.data.isSuperAdmin
 		})
 		// try {
 		// 	const result = await axios.get(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin'))

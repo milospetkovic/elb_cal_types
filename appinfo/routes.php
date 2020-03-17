@@ -13,6 +13,6 @@ return [
     ],
     'routes' => [
         [ 'name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-        [ 'name' => 'user#isusersuperadmin', 'url' => '/isusersuperadmin', 'verb' => 'GET'],
+        [ 'name' => 'user#isusersuperadmin', 'url' => '/isusersuperadmin', 'verb' => 'POST'],
     ]
 ];

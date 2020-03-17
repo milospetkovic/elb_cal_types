@@ -25,6 +25,7 @@ namespace OCA\ElbCalTypes\Controller;
 use OCA\ElbCalTypes\CurrentUser;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 class UserController extends Controller
 {
@@ -43,11 +44,10 @@ class UserController extends Controller
      *
      * @NoAdminRequired
      * @NoCSRFRequired
-     * @return DataResponse
      */
-    public function isusersuperadmin() : DataResponse
+    public function isusersuperadmin()
     {
-        return new DataResponse($this->currentUser->isCurrentUserSuperAdmin());
+        return new JSONResponse($this->currentUser->isCurrentUserSuperAdmin());
     }
 
 }
