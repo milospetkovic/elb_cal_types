@@ -2,14 +2,14 @@
     <div id="content" class="app-elb-cal-types">
 
         <AppNavigation>
-            <AppNavigationNew v-if="!loading"
+            <AppNavigationNew v-if="permissionToManageCalendarTypes"
                               :text="t('elbcaltypes', 'New calendar type')"
                               :disabled="false"
                               button-id="new-caltype-button"
                               button-class="icon-add"
                               @click="newCalendarType" />
 
-            <ul>
+            <ul v-if="permissionToManageCalendarTypes">
                 <AppNavigationItem v-for="calType in calTypes" :key="calType.id" :item="calTypeEntry(calType)" />
             </ul>
 
@@ -67,9 +67,28 @@ export default {
             currentCalTypeID: null,
             loading: true,
 			updating: false,
+			isAdminUser: false
         }
     },
+	async beforeMount() {
+
+		axios.get(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
+            console.log('result je ', result);
+		})
+		// try {
+		// 	const result = await axios.get(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin'))
+		// 	console.log('result check admin role: ', result.data);
+		// 	this.isAdminUser = result
+		// } catch (e) {
+		// 	console.error(e)
+		// 	OCP.Toast.error(t('elbcaltypes', 'Error checking if current user is super admin'))
+		// }
+		//this.isAdminUser = false
+	},
     computed: {
+    	permissionToManageCalendarTypes() {
+            return (!this.loading && this.isAdminUser)
+        },
         /**
          * Return the currently selected calendar type
          * @returns {Object|null}

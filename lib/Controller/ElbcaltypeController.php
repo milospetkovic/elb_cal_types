@@ -16,8 +16,18 @@ class ElbcaltypeController extends Controller
     /** @var string */
     private $userId;
 
+    /**
+     * trait for handling errors
+     */
     use Errors;
 
+    /**
+     * ElbcaltypeController constructor.
+     * @param $appName
+     * @param IRequest $request
+     * @param ElbCalTypesService $service
+     * @param $userId
+     */
     public function __construct($appName,
                                 IRequest $request,
                                 ElbCalTypesService $service,
@@ -29,7 +39,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     *
+     * Show all saved calendar types
      */
     public function index(): DataResponse
     {
@@ -37,7 +47,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     *
+     * Create a calendar type
      */
     public function create(string $title, string $description): DataResponse
     {
@@ -46,7 +56,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     *
+     * Update a calendar type
      */
     public function update(int $id, string $title, string $description): DataResponse
     {
@@ -56,7 +66,7 @@ class ElbcaltypeController extends Controller
     }
 
     /**
-     *
+     * Delete a calendar type
      */
     public function destroy(int $id): DataResponse
     {

@@ -12,6 +12,7 @@ return [
         'elbcaltype' => ['url' => '/caltypes'],
     ],
     'routes' => [
-        [ 'name' => 'page#index', 'url' => '/', 'verb' => 'GET']
+        [ 'name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+        [ 'name' => 'user#isusersuperadmin', 'url' => '/isusersuperadmin', 'verb' => 'GET'],
     ]
 ];
