@@ -8,6 +8,10 @@
                               button-class="icon-add"
                               @click="newCalendarType" />
 
+            <ul>
+                <AppNavigationItem v-for="calType in calTypes" :key="calType.id" :item="calTypeEntry(calType)" />
+            </ul>
+
             <AppNavigationSettings>
                 Example settings
             </AppNavigationSettings>
@@ -18,7 +22,7 @@
                        v-model="currentCalType.title"
                        type="text"
                        :disabled="updating">
-                <textarea ref="content" v-model="currentCalType.content" :disabled="updating" />
+                <textarea ref="content" v-model="currentCalType.description" :disabled="updating" />
                 <input type="button"
                        class="primary"
                        :value="t('elbcaltypes', 'Save')"
@@ -36,46 +40,24 @@
 </template>
 
 <script>
-	import Content from '@nextcloud/vue/dist/Components/Content'
-	import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-	import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
-	import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-	import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
-	import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
-	import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
-	import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
-	import AppNavigationCounter from '@nextcloud/vue/dist/Components/AppNavigationCounter'
-	import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-	import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
-	import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet'
-	import ActionCheckbox from '@nextcloud/vue/dist/Components/ActionCheckbox'
-	import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
-	import ActionRouter from '@nextcloud/vue/dist/Components/ActionRouter'
-	import ActionText from '@nextcloud/vue/dist/Components/ActionText'
-	import ActionTextEditable from '@nextcloud/vue/dist/Components/ActionTextEditable'
+	import {
+		AppContent,
+		AppNavigation,
+		AppNavigationItem,
+		AppNavigationNew,
+		AppNavigationSettings
+	} from 'nextcloud-vue'
 
 	import axios from '@nextcloud/axios'
 
 	export default {
 		name: 'App',
 		components: {
-			Content,
 			AppContent,
 			AppNavigation,
 			AppNavigationItem,
 			AppNavigationNew,
-			AppNavigationSettings,
-			AppSidebar,
-			AppSidebarTab,
-			AppNavigationCounter,
-			ActionButton,
-			ActionLink,
-			AppNavigationIconBullet,
-			ActionCheckbox,
-			ActionInput,
-			ActionRouter,
-			ActionText,
-			ActionTextEditable,
+			AppNavigationSettings
 		},
 		data: function() {
 			return {
@@ -86,6 +68,21 @@
 				starred: false,
 			}
 		},
+        computed: {
+			/**
+			 * Return the item object for the sidebar entry of a calendar type
+			 * @returns {Object}
+			 */
+			calTypeEntry() {
+				return (calType) => {
+					console.log('calType:', calType)
+					return {
+						text: calType.title,
+                        title: calType.title
+					}
+				}
+			},
+        },
 		/**
 		 * Fetch list of calendar types when the component is loaded
 		 */
