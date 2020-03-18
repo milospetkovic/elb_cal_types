@@ -48,6 +48,9 @@ class ElbcaltypeController extends Controller
 
     /**
      * Create a calendar type
+     * @param string $title
+     * @param string $description
+     * @return DataResponse
      */
     public function create(string $title, string $description): DataResponse
     {
@@ -56,6 +59,10 @@ class ElbcaltypeController extends Controller
 
     /**
      * Update a calendar type
+     * @param int $id
+     * @param string $title
+     * @param string $description
+     * @return DataResponse
      */
     public function update(int $id, string $title, string $description): DataResponse
     {
@@ -66,6 +73,8 @@ class ElbcaltypeController extends Controller
 
     /**
      * Delete a calendar type
+     * @param int $id
+     * @return DataResponse
      */
     public function destroy(int $id): DataResponse
     {
@@ -73,6 +82,5 @@ class ElbcaltypeController extends Controller
             return $this->service->delete($id);
         });
     }
-
 
 }

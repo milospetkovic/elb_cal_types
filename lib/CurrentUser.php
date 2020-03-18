@@ -22,103 +22,53 @@
 namespace OCA\ElbCalTypes;
 
 
+use OCA\Activity\CurrentUser as CurrentUserAlias;
+use OCP\IDBConnection;
 use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserSession;
 
 class CurrentUser
 {
-    /** @var IUserSession */
-    protected $userSession;
     /** @var IRequest */
     protected $request;
 
-    /** @var string */
-    protected $identifier;
-    /** @var string|false|null */
-    protected $sessionUser;
+    /**
+     * @var CurrentUserAlias
+     */
+    private $currentUser;
+
+    /**
+     * @var IDBConnection
+     */
+    private $connection;
 
     /**
      * CurrentUser constructor.
-     * @param IUserSession $userSession
      * @param IRequest $request
+     * @param CurrentUserAlias $currentUser
      */
-    public function __construct(IUserSession $userSession,
-                                IRequest $request)
+    public function __construct(IRequest $request,
+                                CurrentUserAlias $currentUser,
+                                IDBConnection $connection)
     {
-        $this->userSession = $userSession;
         $this->request = $request;
-        $this->sessionUser = false;
+        $this->currentUser = $currentUser;
+        $this->connection = $connection;
     }
 
     /**
-     * Get an identifier for the user, session or token
+     * Check up if current logged in user belongs to the super admin user group
      *
-     * @return string
+     * @return array
      */
-    public function getUserIdentifier()
-    {
-        if ($this->identifier === null) {
-            $this->identifier = $this->getUID();
-
-            if ($this->identifier === null) {
-                $this->identifier = $this->getCloudIDFromToken();
-
-                if ($this->identifier === null) {
-                    // Nothing worked, fallback to empty string
-                    $this->identifier = '';
-                }
-            }
-        }
-
-        return $this->identifier;
-    }
-
-    /**
-     * Get the current user from the session
-     * @return string|null
-     */
-    public function getUID()
-    {
-        if ($this->sessionUser === false) {
-            $user = $this->userSession->getUser();
-            if ($user instanceof IUser) {
-                $this->sessionUser = (string) $user->getUID();
-            } else {
-                $this->sessionUser = null;
-            }
-        }
-
-        return $this->sessionUser;
-    }
-
-    /**
-     * Get the cloud ID from the sharing token
-     * @return string|null
-     */
-    protected function getCloudIDFromToken()
-    {
-        if (!empty($this->request->server['PHP_AUTH_USER'])) {
-            $token = $this->request->server['PHP_AUTH_USER'];
-            try {
-                $share = $this->shareManager->getShareByToken($token);
-                if ($share->getShareType() === Share::SHARE_TYPE_REMOTE) {
-                    return $share->getSharedWith();
-                }
-            } catch (ShareNotFound $e) {
-                // No share, use the fallback
-            }
-        }
-
-        return null;
-    }
-
     public function isCurrentUserSuperAdmin()
     {
-        if ($this->sessionUser === false) {
-            $user = $this->userSession->getUser();
+        $stmt = $this->connection->prepare('SELECT 1 FROM `*PREFIX*group_user` as gu where `gu`.`gid`= "admin" and `gu`.`uid`= "'.$this->currentUser->getUserIdentifier().'"' );
+        $stmt->execute();
+        $isSuperAdmin = false;
+        while ($row = $stmt->fetch()) {
+            $isSuperAdmin = true;
         }
-        return ['isSuperAdmin' => true];
+        return ['isSuperAdmin' => $isSuperAdmin];
     }
 
 }
