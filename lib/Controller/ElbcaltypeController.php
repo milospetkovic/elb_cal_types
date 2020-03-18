@@ -43,7 +43,7 @@ class ElbcaltypeController extends Controller
      */
     public function index(): DataResponse
     {
-        return new DataResponse($this->service->findAll($this->userId));
+        return new DataResponse($this->service->findAll());
     }
 
     /**
@@ -51,8 +51,7 @@ class ElbcaltypeController extends Controller
      */
     public function create(string $title, string $description): DataResponse
     {
-        return new DataResponse($this->service->create($title, $description,
-            $this->userId));
+        return new DataResponse($this->service->create($title, $description));
     }
 
     /**
@@ -61,7 +60,7 @@ class ElbcaltypeController extends Controller
     public function update(int $id, string $title, string $description): DataResponse
     {
         return $this->handleNotFound(function () use ($id, $title, $description) {
-            return $this->service->update($id, $title, $description, $this->userId);
+            return $this->service->update($id, $title, $description);
         });
     }
 
@@ -71,7 +70,7 @@ class ElbcaltypeController extends Controller
     public function destroy(int $id): DataResponse
     {
         return $this->handleNotFound(function () use ($id) {
-            return $this->service->delete($id, $this->userId);
+            return $this->service->delete($id);
         });
     }
 

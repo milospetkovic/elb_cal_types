@@ -3,8 +3,11 @@ namespace OCA\ElbCalTypes\Service;
 
 use Exception;
 
+
+use OCA\Activity\CurrentUser;
 use OCA\ElbCalTypes\Controller\Errors;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 
 use OCA\ElbCalTypes\Db\CalendarTypes;
@@ -13,6 +16,7 @@ use OCA\ElbCalTypes\Db\CalendarTypesMapper;
 
 class ElbCalTypesService
 {
+    use Errors;
 
     /**
      * Calendar type slug (id of created calendar type will be added to the end of the string)
@@ -22,21 +26,42 @@ class ElbCalTypesService
      */
     private $elbCalendarTypeSlugPrefix = 'elb-caltype-';
 
-    use Errors;
-
     /** @var CalendarTypesMapper */
     private $mapper;
 
-    public function __construct(CalendarTypesMapper $mapper)
+    /**
+     * @var CurrentUser
+     */
+    private $currentUser;
+
+    /**
+     * ElbCalTypesService constructor.
+     * @param CalendarTypesMapper $mapper
+     * @param CurrentUser $currentUser
+     */
+    public function __construct(CalendarTypesMapper $mapper,
+                                CurrentUser $currentUser)
     {
         $this->mapper = $mapper;
+        $this->currentUser = $currentUser;
     }
 
+    /**
+     * Fetch all calendar types
+     *
+     * @return array
+     */
     public function findAll(): array
     {
         return $this->mapper->findAll();
     }
 
+    /**
+     * Exception handler for calendar type
+     *
+     * @param Exception $e
+     * @throws ElbCalTypeNotFound
+     */
     private function handleException (Exception $e): void
     {
         if ($e instanceof DoesNotExistException ||
@@ -47,6 +72,13 @@ class ElbCalTypesService
         }
     }
 
+    /**
+     * Get calendar type by it's id
+     *
+     * @param $id
+     * @return CalendarTypes|Entity
+     * @throws ElbCalTypeNotFound
+     */
     public function find($id)
     {
         try {
@@ -54,13 +86,21 @@ class ElbCalTypesService
         } catch(Exception $e) {
             $this->handleException($e);
         }
+        return false;
     }
 
-    public function create($title, $description, $userId)
+    /**
+     * Create a calendar type
+     *
+     * @param $title
+     * @param $description
+     * @return CalendarTypes|Entity
+     */
+    public function create($title, $description)
     {
         $calType = new CalendarTypes();
         $calType->setCreatedAt(date('Y-m-d H:i:s', time()));
-        $calType->setUserAuthor($userId);
+        $calType->setUserAuthor($this->currentUser->getUID());
         $calType->setTitle($title);
         $calType->setSlug($this->elbCalendarTypeSlugPrefix);
         $calType->setDescription($description);
@@ -72,10 +112,21 @@ class ElbCalTypesService
         return $calType;
     }
 
-    public function update($id, $title, $description, $userId)
+    /**
+     * Update a calendar type
+     *
+     * @param $id
+     * @param $title
+     * @param $description
+     * @return Entity
+     * @throws ElbCalTypeNotFound
+     */
+    public function update($id, $title, $description)
     {
         try {
             $calType = $this->mapper->find($id);
+            $calType->setModifiedAt(date('Y-m-d H:i:s', time()));
+            $calType->setUserModifier($this->currentUser->getUID());
             $calType->setTitle($title);
             $calType->setDescription($description);
             return $this->mapper->update($calType);
@@ -84,6 +135,13 @@ class ElbCalTypesService
         }
     }
 
+    /**
+     * Delete a calendar type with provided id
+     *
+     * @param $id
+     * @return CalendarTypes|Entity
+     * @throws ElbCalTypeNotFound
+     */
     public function delete($id)
     {
         try {
