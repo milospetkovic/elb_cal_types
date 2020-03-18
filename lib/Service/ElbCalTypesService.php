@@ -14,6 +14,14 @@ use OCA\ElbCalTypes\Db\CalendarTypesMapper;
 class ElbCalTypesService
 {
 
+    /**
+     * Calendar type slug (id of created calendar type will be added to the end of the string)
+     * i.e. elb-caltype-50 (elb calendar type id=50)
+     *
+     * @var string
+     */
+    private $elbCalendarTypeSlugPrefix = 'elb-caltype-';
+
     use Errors;
 
     /** @var CalendarTypesMapper */
@@ -54,9 +62,14 @@ class ElbCalTypesService
         $calType->setCreatedAt(date('Y-m-d H:i:s', time()));
         $calType->setUserAuthor($userId);
         $calType->setTitle($title);
-        $calType->setSlug($calType->slugify('title'));
+        $calType->setSlug($this->elbCalendarTypeSlugPrefix);
         $calType->setDescription($description);
-        return $this->mapper->insert($calType);
+        $res = $this->mapper->insert($calType);
+        if ($res->id > 0) {
+            $calType->setSlug($this->elbCalendarTypeSlugPrefix.$res->id);
+            return $this->mapper->update($calType);
+        }
+        return $calType;
     }
 
     public function update($id, $title, $description, $userId)
