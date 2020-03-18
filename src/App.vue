@@ -1,6 +1,5 @@
 <template>
     <div id="content" class="app-elb-cal-types">
-
         <AppNavigation>
             <AppNavigationNew v-if="permissionToManageCalendarTypes"
                               :text="t('elbcaltypes', 'New calendar type')"
@@ -70,7 +69,7 @@ export default {
 			isAdminUser: false
         }
     },
-	async beforeMount() {
+	beforeMount() {
         // Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
 			this.isAdminUser = result.data.isSuperAdmin
@@ -135,13 +134,13 @@ export default {
      */
     async mounted() {
         try {
-        	if (this.isAdminUser) {
+        	//if (this.isAdminUser) {
 				const response = await axios.get(OC.generateUrl('/apps/elb_cal_types/caltypes'))
 				this.calTypes = response.data
-			}
+			//}
         } catch (e) {
             console.error(e)
-            OCP.Toast.error(t('elbcaltypes', 'Could not fetch calendar types'))
+            //OCP.Toast.error(t('elbcaltypes', 'Could not fetch calendar types'))
         }
         this.loading = false
     },
@@ -231,7 +230,7 @@ export default {
 		 * @param {Object} calType calType object
 		 */
 		async deleteCalType(calType) {
-			if (confirm(t('elb_cal_types', 'Really delete'+'?'))) {
+			if (confirm(t('elb_cal_types', 'Really delete' + '?'))) {
 				try {
 					await axios.delete(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`))
 					this.calTypes.splice(this.calTypes.indexOf(calType), 1)
@@ -246,8 +245,8 @@ export default {
 			} else {
 				return false;
             }
-		}
-	}
+		},
+	},
 }
 </script>
 <style scoped>
