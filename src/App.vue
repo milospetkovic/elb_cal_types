@@ -41,21 +41,14 @@
                     :title="t('elbcaltypes', 'Manage reminders for calendar type')"
                     :subtitle="'Here title of selected cal type'"
                     @close="show=false">
-            <AppSidebarTab id="vueexample" name="Vueexample" icon="icon-vueexample">
-                this is the vueexample tab
+            <AppSidebarTab id="avail-reminders" name="availableReminders" icon="icon-edit">
+                Available reminders
             </AppSidebarTab>
-            <AppSidebarTab id="activity" name="Activity" icon="icon-activity">
-                this is the activity tab
+
+            <AppSidebarTab id="assigned-reminders" name="assignedReminders" icon="icon-file" >
+                Assigned reminders
             </AppSidebarTab>
-            <AppSidebarTab id="comments" name="Comments" icon="icon-comment">
-                this is the comments tab
-            </AppSidebarTab>
-            <AppSidebarTab id="sharing" name="Sharing" icon="icon-shared">
-                this is the sharing tab
-            </AppSidebarTab>
-            <AppSidebarTab id="versions" name="Versions" icon="icon-history">
-                this is the versions tab
-            </AppSidebarTab>
+
         </AppSidebar>
 
     </div>
