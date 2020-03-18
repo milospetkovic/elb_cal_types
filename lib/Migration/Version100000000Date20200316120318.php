@@ -42,9 +42,24 @@ class Version100000000Date20200316120318 extends SimpleMigrationStep {
                 'notnull' => true,
             ]);
 
-            $table->addColumn('user_id', 'string', [
+            $table->addColumn('created_at', 'datetime', [
+                'notnull' => true
+            ]);
+
+            $table->addColumn('modified_at', 'datetime', [
+                'notnull' => false,
+                'default' => null
+            ]);
+
+            $table->addColumn('user_author', 'string', [
                 'notnull' => true,
-                'length' => 200,
+                'length' => 40,
+            ]);
+
+            $table->addColumn('user_modifier', 'string', [
+                'notnull' => false,
+                'default' => null,
+                'length' => 40,
             ]);
 
             $table->addColumn('title', 'string', [
@@ -64,7 +79,12 @@ class Version100000000Date20200316120318 extends SimpleMigrationStep {
 
             $table->setPrimaryKey(['id']);
 
-            $table->addIndex(['user_id'], 'idx_ect_user_id');
+            $table->addIndex(['user_author'], 'idx_ect_user_author');
+
+            $table->addIndex(['user_modifier'], 'idx_ect_user_modifier');
+
+            $table->addUniqueIndex(['slug'], 'unq_ect_slug');
+
         }
         return $schema;
 	}

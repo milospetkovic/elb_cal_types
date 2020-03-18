@@ -3,6 +3,7 @@ namespace OCA\ElbCalTypes\Service;
 
 use Exception;
 
+use OCA\ElbCalTypes\Controller\Errors;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 
@@ -13,6 +14,8 @@ use OCA\ElbCalTypes\Db\CalendarTypesMapper;
 class ElbCalTypesService
 {
 
+    use Errors;
+
     /** @var CalendarTypesMapper */
     private $mapper;
 
@@ -21,9 +24,9 @@ class ElbCalTypesService
         $this->mapper = $mapper;
     }
 
-    public function findAll(string $userId): array
+    public function findAll(): array
     {
-        return $this->mapper->findAll($userId);
+        return $this->mapper->findAll();
     }
 
     private function handleException (Exception $e): void
@@ -36,15 +39,10 @@ class ElbCalTypesService
         }
     }
 
-    public function find($id, $userId)
+    public function find($id)
     {
         try {
             return $this->mapper->find($id);
-
-            // in order to be able to plug in different storage backends like files
-            // for instance it is a good idea to turn storage related exceptions
-            // into service related exceptions so controllers and service users
-            // have to deal with only one type of exception
         } catch(Exception $e) {
             $this->handleException($e);
         }
@@ -53,16 +51,18 @@ class ElbCalTypesService
     public function create($title, $description, $userId)
     {
         $calType = new CalendarTypes();
+        $calType->setCreatedAt(date('Y-m-d H:i:s', time()));
+        $calType->setUserAuthor($userId);
         $calType->setTitle($title);
+        $calType->setSlug($calType->slugify('title'));
         $calType->setDescription($description);
-        $calType->setUserId($userId);
         return $this->mapper->insert($calType);
     }
 
     public function update($id, $title, $description, $userId)
     {
         try {
-            $calType = $this->mapper->find($id, $userId);
+            $calType = $this->mapper->find($id);
             $calType->setTitle($title);
             $calType->setDescription($description);
             return $this->mapper->update($calType);
@@ -71,10 +71,10 @@ class ElbCalTypesService
         }
     }
 
-    public function delete($id, $userId)
+    public function delete($id)
     {
         try {
-            $calType = $this->mapper->find($id, $userId);
+            $calType = $this->mapper->find($id);
             $this->mapper->delete($calType);
             return $calType;
         } catch(Exception $e) {

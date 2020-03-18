@@ -7,15 +7,19 @@ use OCP\AppFramework\Db\Entity;
 
 class CalendarTypes extends Entity implements JsonSerializable {
 
+    protected $createdAt;
+    protected $modifiedAt;
     protected $title;
-    protected $userId;
+    protected $userAuthor;
+    protected $userModifier;
     protected $slug;
     protected $description;
 
-    public function jsonSerialize(): array {
+    public function jsonSerialize(): array
+    {
         return [
             'id' => $this->id,
-            'user_id' => $this->userId,
+            'user_author' => $this->userAuthor,
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description

@@ -3,6 +3,7 @@ namespace OCA\ElbCalTypes\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -19,14 +20,15 @@ class CalendarTypesMapper extends QBMapper
     }
 
     /**
+     * Find calendar type by it's id
+     *
      * @param int $id
-     * @param string $userId
      * @return Entity|CalendarTypes
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
      * @throws DoesNotExistException
+     * @throws MultipleObjectsReturnedException
      */
-    public function find(int $id): CalendarTypes {
-        /* @var $qb IQueryBuilder */
+    public function find(int $id): CalendarTypes
+    {
         $qb = $this->db->getQueryBuilder();
         $qb->select('*')
             ->from('elb_calendar_types')
@@ -35,11 +37,12 @@ class CalendarTypesMapper extends QBMapper
     }
 
     /**
-     * @param string $userId
+     * Fetch all calendar types
+     *
      * @return array
      */
-    public function findAll($userId): array {
-        /* @var $qb IQueryBuilder */
+    public function findAll(): array
+    {
         $qb = $this->db->getQueryBuilder();
         $qb->select('*')
             ->from('elb_calendar_types');
