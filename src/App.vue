@@ -71,21 +71,16 @@ export default {
         }
     },
 	async beforeMount() {
+        // Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
-            //console.log('result je ', result.data.isSuperAdmin);
 			this.isAdminUser = result.data.isSuperAdmin
 		})
-		// try {
-		// 	const result = await axios.get(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin'))
-		// 	console.log('result check admin role: ', result.data);
-		// 	this.isAdminUser = result
-		// } catch (e) {
-		// 	console.error(e)
-		// 	OCP.Toast.error(t('elbcaltypes', 'Error checking if current user is super admin'))
-		// }
-		//this.isAdminUser = false
 	},
     computed: {
+    	/**
+         * Check up if managing calendar types is allowed
+         * @returns {Boolean}
+         */
     	permissionToManageCalendarTypes() {
             return (!this.loading && this.isAdminUser)
         },
@@ -140,8 +135,10 @@ export default {
      */
     async mounted() {
         try {
-            const response = await axios.get(OC.generateUrl('/apps/elb_cal_types/caltypes'))
-            this.calTypes = response.data
+        	if (this.isAdminUser) {
+				const response = await axios.get(OC.generateUrl('/apps/elb_cal_types/caltypes'))
+				this.calTypes = response.data
+			}
         } catch (e) {
             console.error(e)
             OCP.Toast.error(t('elbcaltypes', 'Could not fetch calendar types'))
