@@ -37,6 +37,27 @@
             </div>
         </AppContent>
 
+        <AppSidebar v-show="true"
+                    :title="t('elbcaltypes', 'Manage reminders for calendar type')"
+                    :subtitle="'Here title of selected cal type'"
+                    @close="show=false">
+            <AppSidebarTab id="vueexample" name="Vueexample" icon="icon-vueexample">
+                this is the vueexample tab
+            </AppSidebarTab>
+            <AppSidebarTab id="activity" name="Activity" icon="icon-activity">
+                this is the activity tab
+            </AppSidebarTab>
+            <AppSidebarTab id="comments" name="Comments" icon="icon-comment">
+                this is the comments tab
+            </AppSidebarTab>
+            <AppSidebarTab id="sharing" name="Sharing" icon="icon-shared">
+                this is the sharing tab
+            </AppSidebarTab>
+            <AppSidebarTab id="versions" name="Versions" icon="icon-history">
+                this is the versions tab
+            </AppSidebarTab>
+        </AppSidebar>
+
     </div>
 </template>
 
@@ -47,7 +68,9 @@ import {
     AppNavigationItem,
     AppNavigationNew,
     AppNavigationSettings,
-    Multiselect
+    Multiselect,
+	AppSidebar,
+	AppSidebarTab
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
@@ -60,7 +83,9 @@ export default {
         AppNavigationItem,
         AppNavigationNew,
         AppNavigationSettings,
-        Multiselect
+        Multiselect,
+		AppSidebar,
+		AppSidebarTab,
     },
     data: function() {
         return {
