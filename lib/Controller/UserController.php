@@ -24,7 +24,6 @@ namespace OCA\ElbCalTypes\Controller;
 
 use OCA\ElbCalTypes\CurrentUser;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\JSONResponse;
 
 class UserController extends Controller
@@ -34,6 +33,10 @@ class UserController extends Controller
      */
     private $currentUser;
 
+    /**
+     * UserController constructor.
+     * @param CurrentUser $currentUser
+     */
     public function __construct(CurrentUser $currentUser)
     {
         $this->currentUser = $currentUser;
