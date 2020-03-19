@@ -47,7 +47,7 @@
         <AppSidebar v-show="showSidebar"
                     :title="t('elbcaltypes', 'Manage reminders for calendar type')"
                     :subtitle="'Here title of selected cal type'"
-                    @close="showSidebar=false">
+                    @close="toggleSidebar">
             <AppSidebarTab id="avail-reminders" name="availableReminders" icon="icon-edit">
                 Available reminders
             </AppSidebarTab>
