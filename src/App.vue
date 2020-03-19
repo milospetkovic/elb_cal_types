@@ -55,6 +55,17 @@
 
             <AppSidebarTab id="avail-reminders" :name="t('elbcaltypes', 'Available reminders')" icon="icon-edit">
                 Available reminders
+                <div v-if="defaultCalReminders.length">
+
+                    <ul v-for="defCal in defaultCalReminders">
+                        <li>{{ t('elbcaltypes', defCal.title) }}</li>
+                    </ul>
+
+                </div>
+                <div v-else>
+                    NEMA
+                </div>
+
             </AppSidebarTab>
 
             <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-file" >
