@@ -20,8 +20,8 @@
 
         <AppContent>
 
-            <button @click="showSidebar = !showSidebar" class="pull-right">
-                Toggle sidebar
+            <button v-show="showToggleSidebarButton" @click="toggleSidebar" class="pull-right">
+                {{ t('elbcaltypes', 'Toggle sidebar') }}
             </button>
 
             <div v-if="currentCalType">
@@ -95,7 +95,7 @@ export default {
 			updating: false,
 			isAdminUser: false,
             defaultCalReminders: [],
-			showSidebar: true,
+			selectedOpenSidebar: false
         }
     },
 	beforeMount() {
@@ -110,6 +110,12 @@ export default {
 		})
 	},
     computed: {
+		showSidebar() {
+		    return (this.selectedOpenSidebar && this.currentCalTypeID > 0)
+        },
+		showToggleSidebarButton() {
+            return (this.currentCalTypeID > 0)
+        },
     	/**
          * Check up if managing calendar types is allowed
          * @returns {Boolean}
@@ -206,6 +212,7 @@ export default {
 		 */
 		newCalendarType(e) {
 			if (this.currentCalTypeID !== -1) {
+
 				this.currentCalTypeID = -1
 				this.calTypes.push({
 					id: -1,
@@ -280,6 +287,9 @@ export default {
 				return false;
             }
 		},
+		toggleSidebar() {
+			this.selectedOpenSidebar = !this.selectedOpenSidebar
+        }
 	},
 }
 </script>
