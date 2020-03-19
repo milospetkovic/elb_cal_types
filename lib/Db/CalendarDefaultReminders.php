@@ -21,7 +21,6 @@ class CalendarDefaultReminders extends Entity implements JsonSerializable {
             'user_author' => $this->userAuthor,
             'user_modifier' => $this->userModifier,
             'title' => $this->title,
-            'slug' => $this->slug,
             'minutes_before_event' => $this->minutesBeforeEvent
         ];
     }

@@ -10,12 +10,15 @@ use OCP\AppFramework\Http\JSONResponse;
 
 class ElbcalreminderController extends Controller
 {
-
     /**
      * @var ElbCalReminderService
      */
     private $calReminderService;
 
+    /**
+     * ElbcalreminderController constructor.
+     * @param ElbCalReminderService $calReminderService
+     */
     public function __construct(ElbCalReminderService $calReminderService)
     {
         $this->calReminderService = $calReminderService;
@@ -24,12 +27,10 @@ class ElbcalreminderController extends Controller
     /**
      * Get all default calendar reminders
      *
-     * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function getallreminders()
     {
-        return new JSONResponse($this->calReminderService->getAvailableReminders());
+        return new JSONResponse($this->calReminderService->findAll());
     }
 
 }
