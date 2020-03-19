@@ -46,7 +46,7 @@
 
         <AppSidebar v-show="showSidebar"
                     :title="t('elbcaltypes', 'Manage reminders for calendar type')"
-                    :subtitle="'Here title of selected cal type'"
+                    :subtitle="getTitleOfCurrentCalType"
                     @close="toggleSidebar">
             <AppSidebarTab id="avail-reminders" name="availableReminders" icon="icon-edit">
                 Available reminders
@@ -140,6 +140,16 @@ export default {
                 return null
             }
             return this.calTypes.find((calTypes) => calTypes.id === this.currentCalTypeID)
+        },
+        /**
+         * Get title of currently selected calendar type (needed for sidebar)
+         * @returns {string}
+         */
+		getTitleOfCurrentCalType() {
+        	if (this.currentCalType) {
+                return this.currentCalType.title
+            }
+        	return ''
         },
         /**
          * Return the item object for the sidebar entry of a calendar type
