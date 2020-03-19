@@ -48,6 +48,11 @@
                     :title="t('elbcaltypes', 'Manage reminders for calendar type')"
                     :subtitle="getTitleOfCurrentCalType"
                     @close="toggleSidebar">
+
+            <AppSidebarTab id="create-reminders" name="createReminders" icon="icon-edit">
+                Create reminders
+            </AppSidebarTab>
+
             <AppSidebarTab id="avail-reminders" name="availableReminders" icon="icon-edit">
                 Available reminders
             </AppSidebarTab>
