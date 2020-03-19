@@ -49,15 +49,15 @@
                     :subtitle="getTitleOfCurrentCalType"
                     @close="toggleSidebar">
 
-            <AppSidebarTab id="create-reminders" name="createReminders" icon="icon-edit">
+            <AppSidebarTab id="create-reminders" :name="t('elbcaltypes', 'Create reminders')" icon="icon-edit">
                 Create reminders
             </AppSidebarTab>
 
-            <AppSidebarTab id="avail-reminders" name="availableReminders" icon="icon-edit">
+            <AppSidebarTab id="avail-reminders" :name="t('elbcaltypes', 'Available reminders')" icon="icon-edit">
                 Available reminders
             </AppSidebarTab>
 
-            <AppSidebarTab id="assigned-reminders" name="assignedReminders" icon="icon-file" >
+            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-file" >
                 Assigned reminders
             </AppSidebarTab>
 
