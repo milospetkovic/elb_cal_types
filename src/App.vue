@@ -231,15 +231,23 @@ export default {
 		newCalendarType(e) {
 			if (this.currentCalTypeID !== -1) {
 
-				this.currentCalTypeID = -1
-				this.calTypes.push({
-					id: -1,
-					title: '',
-					description: '',
-				})
-				this.$nextTick(() => {
+				let alreadyStartedCreating = this.calTypes.findIndex((calType) => calType.id == -1)
+                //console.log('isAlready started: ', alreadyStartedCreating)
+
+                if (alreadyStartedCreating === -1) {
+					this.currentCalTypeID = -1
+					this.calTypes.push({
+						id: -1,
+						title: '',
+						description: '',
+					})
+					this.$nextTick(() => {
+						this.$refs.title.focus()
+					})
+				} else {
+                	this.currentCalTypeID = -1
 					this.$refs.title.focus()
-				})
+                }
 			}
 		},
 		/**
