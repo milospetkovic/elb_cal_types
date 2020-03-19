@@ -1,5 +1,6 @@
 <template>
     <div id="content" class="app-elb-cal-types">
+
         <AppNavigation>
             <AppNavigationNew v-if="permissionToManageCalendarTypes"
                               :text="t('elbcaltypes', 'New calendar type')"
@@ -9,7 +10,7 @@
                               @click="newCalendarType" />
 
             <ul v-if="permissionToManageCalendarTypes">
-                <AppNavigationItem v-for="calType in calTypes" :key="calType.id" :item="calTypeEntry(calType)" />
+                <AppNavigationItem v-for="calType in calTypes" :key="calType.id" :item="calTypeEntry(calType)" :icon="'icon-user'" />
             </ul>
 
             <AppNavigationSettings>
@@ -18,6 +19,11 @@
         </AppNavigation>
 
         <AppContent>
+
+            <button @click="showSidebar = !showSidebar" class="pull-right">
+                Toggle sidebar
+            </button>
+
             <div v-if="currentCalType">
                 <input ref="title"
                        :placeholder="t('elbcaltypes', 'Name for calendar type')"
@@ -35,12 +41,13 @@
                 <div class="icon-file" />
                 <h2>{{ t('elbcaltypes', 'Create a new calendar type to get started') }}</h2>
             </div>
+
         </AppContent>
 
-        <AppSidebar v-show="true"
+        <AppSidebar v-show="showSidebar"
                     :title="t('elbcaltypes', 'Manage reminders for calendar type')"
                     :subtitle="'Here title of selected cal type'"
-                    @close="show=false">
+                    @close="showSidebar=false">
             <AppSidebarTab id="avail-reminders" name="availableReminders" icon="icon-edit">
                 Available reminders
             </AppSidebarTab>
@@ -87,7 +94,8 @@ export default {
             loading: true,
 			updating: false,
 			isAdminUser: false,
-            defaultCalReminders: []
+            defaultCalReminders: [],
+			showSidebar: true,
         }
     },
 	beforeMount() {
