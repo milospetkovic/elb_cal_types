@@ -4,6 +4,7 @@
 namespace OCA\ElbCalTypes\Service;
 
 
+use OCA\ElbCalTypes\Db\CalendarDefaultRemindersMapper;
 use OCP\IL10N;
 
 class ElbCalReminderService
@@ -13,9 +14,21 @@ class ElbCalReminderService
      */
     private $l;
 
-    public function __construct(IL10N $l)
+    /**
+     * @var CalendarDefaultRemindersMapper
+     */
+    private $mapper;
+
+    /**
+     * ElbCalReminderService constructor.
+     * @param IL10N $l
+     * @param CalendarDefaultRemindersMapper $mapper
+     */
+    public function __construct(IL10N $l,
+                                CalendarDefaultRemindersMapper $mapper)
     {
         $this->l = $l;
+        $this->mapper = $mapper;
     }
 
     public function getAvailableReminders()
@@ -46,6 +59,16 @@ class ElbCalReminderService
             259200 => $this->l->t('6 months before the event starts'),
             525600 => $this->l->t('1 year before the event starts'),
         ];
+    }
+
+    /**
+     * Fetch all default calendar reminders
+     *
+     * @return array
+     */
+    public function findAll(): array
+    {
+        return $this->mapper->findAll();
     }
 
 }
