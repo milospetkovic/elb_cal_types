@@ -110,9 +110,17 @@ export default {
 		})
 	},
     computed: {
+    	/**
+		 * Check up if sidebar should be visible
+		 * @returns {Boolean}
+         */
 		showSidebar() {
 		    return (this.selectedOpenSidebar && this.currentCalTypeID > 0)
         },
+		/**
+		 * Show toggle button for sidebar if calendar type is selected/created
+		 * @returns {Boolean}
+		 */
 		showToggleSidebarButton() {
             return (this.currentCalTypeID > 0)
         },
@@ -287,6 +295,9 @@ export default {
 				return false;
             }
 		},
+		/**
+         * Set property to show/hide sidebar
+		 */
 		toggleSidebar() {
 			this.selectedOpenSidebar = !this.selectedOpenSidebar
         }
