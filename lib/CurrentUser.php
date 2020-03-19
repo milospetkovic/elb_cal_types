@@ -71,4 +71,17 @@ class CurrentUser
         return ['isSuperAdmin' => $isSuperAdmin];
     }
 
+    /**
+     * Get one super admin user id from super admin user group (needed for first migration)
+     *
+     * @return string
+     */
+    public function getOneUserFromAdminGroup()
+    {
+        $stmt = $this->connection->prepare('SELECT gu.uid as user_id FROM `*PREFIX*group_user` as gu where `gu`.`gid`= "admin" LIMIT 1' );
+        $stmt->execute();
+        $row = $stmt->fetch();
+        return $row['user_id'];
+    }
+
 }

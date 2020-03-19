@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace OCA\ElbCalTypes\Migration;
 
 use Closure;
-use OCA\Activity\CurrentUser;
+
+use OCA\ElbCalTypes\CurrentUser;
 use OCA\ElbCalTypes\Service\ElbCalReminderService;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
@@ -70,9 +71,11 @@ class Version100000000Date20200319134816 extends SimpleMigrationStep
                         'minutes_before_event' => $query->createParameter('minutes_before_event'),
                     ]);
 
+                $userAuthorID = $this->currentUser->getOneUserFromAdminGroup();
+
                 foreach ($this->calReminderService->getAvailableReminders() as $min => $title) {
                     $query->setParameter('created_at', date('Y-m-d H:i:s', time()));
-                    $query->setParameter('user_author', 'admin2');
+                    $query->setParameter('user_author', $userAuthorID);
                     $query->setParameter('title', $title);
                     $query->setParameter('minutes_before_event', $min);
 
