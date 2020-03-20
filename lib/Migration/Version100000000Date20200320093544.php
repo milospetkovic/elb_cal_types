@@ -67,7 +67,7 @@ class Version100000000Date20200320093544 extends SimpleMigrationStep {
 
             $table->addIndex(['user_author'], 'idx_ectr_uauthor');
 
-            $table->addForeignKeyConstraint('oc_elb_calendar_types', ['fk_elb_cal_type'], ['id'], [], 'frgk_ect_id');
+            $table->addForeignKeyConstraint('oc_elb_calendar_types', ['fk_elb_cal_type'], ['id'], [ 'onDelete' => 'CASCADE' ], 'frgk_ect_id');
 
             $table->addForeignKeyConstraint('oc_elb_cal_def_reminders', ['fk_elb_def_reminder'], ['id'], [], 'frgk_ectdr_id');
         }
