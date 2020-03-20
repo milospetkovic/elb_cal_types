@@ -21,14 +21,19 @@ class CalendarDefaultRemindersMapper extends QBMapper
     /**
      * Fetch default calendar reminders
      *
+     * @param bool $entities
      * @return array
      */
-    public function findAll(): array
+    public function findAll($entities=true): array
     {
         $qb = $this->db->getQueryBuilder();
         $qb->select('*')
             ->from('elb_cal_def_reminders');
-        return $this->findEntities($qb);
+
+        if ($entities) {
+            return $this->findEntities($qb);
+        }
+        return $qb->execute()->fetchAll();
     }
 
 }

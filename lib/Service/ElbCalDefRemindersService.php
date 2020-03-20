@@ -5,6 +5,7 @@ namespace OCA\ElbCalTypes\Service;
 
 
 use OCA\ElbCalTypes\Db\CalendarDefaultRemindersMapper;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\IL10N;
 
 class ElbCalDefRemindersService
@@ -64,11 +65,24 @@ class ElbCalDefRemindersService
     /**
      * Fetch all default calendar reminders
      *
+     * @param bool $getEntities
      * @return array
      */
-    public function findAll(): array
+    public function findAll($getEntities=true): array
     {
-        return $this->mapper->findAll();
+        return $this->mapper->findAll($getEntities);
+    }
+
+    public function getTranslatedTitlesForEachDefaultReminder()
+    {
+        $out = [];
+        $rows = $this->findAll(false);
+        if (count($rows)) {
+            foreach ($rows as $ind => $obj) {
+                $out[$obj['id']] = $this->l->t($obj['title']);
+            }
+        }
+        return $out;
     }
 
 }
