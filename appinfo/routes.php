@@ -14,6 +14,6 @@ return [
     'routes' => [
         [ 'name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         [ 'name' => 'user#isusersuperadmin', 'url' => '/isusersuperadmin', 'verb' => 'POST'],
-        [ 'name' => 'elbcalreminder#getallreminders', 'url' => '/getallreminders', 'verb' => 'POST'],
+        [ 'name' => 'elbcalreminder#getdefaultreminders', 'url' => '/getdefaultreminders', 'verb' => 'POST'],
     ]
 ];

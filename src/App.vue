@@ -138,8 +138,8 @@ export default {
 			this.isAdminUser = result.data.isSuperAdmin
 		}),
 		// Perform ajax call to fetch default reminders
-		axios.post(OC.generateUrl('/apps/elb_cal_types/getallreminders')).then((result) => {
-			console.log('Result get all reminders: ', result);
+		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
+			console.log('Result get default reminders: ', result);
 			this.defaultCalReminders = result.data
 		})
 	},

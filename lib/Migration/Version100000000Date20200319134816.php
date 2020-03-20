@@ -7,7 +7,7 @@ namespace OCA\ElbCalTypes\Migration;
 use Closure;
 
 use OCA\ElbCalTypes\CurrentUser;
-use OCA\ElbCalTypes\Service\ElbCalReminderService;
+use OCA\ElbCalTypes\Service\ElbCalDefRemindersService;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
@@ -23,7 +23,7 @@ class Version100000000Date20200319134816 extends SimpleMigrationStep
      */
     private $connection;
     /**
-     * @var ElbCalReminderService
+     * @var ElbCalDefRemindersService
      */
     private $calReminderService;
     /**
@@ -32,7 +32,7 @@ class Version100000000Date20200319134816 extends SimpleMigrationStep
     private $currentUser;
 
     public function __construct(IDBConnection $connection,
-                                ElbCalReminderService $calReminderService,
+                                ElbCalDefRemindersService $calReminderService,
                                 CurrentUser $currentUser)
     {
         $this->connection = $connection;
@@ -61,7 +61,7 @@ class Version100000000Date20200319134816 extends SimpleMigrationStep
 
         if ($schema->hasTable('elb_cal_def_reminders')) {
 
-            if (count($this->calReminderService->getAvailableReminders())) {
+            if (count($this->calReminderService->returnDefaultDefinedReminders())) {
                 $query = $this->connection->getQueryBuilder();
                 $query->insert('elb_cal_def_reminders')
                     ->values([
@@ -73,7 +73,7 @@ class Version100000000Date20200319134816 extends SimpleMigrationStep
 
                 $userAuthorID = $this->currentUser->getOneUserFromAdminGroup();
 
-                foreach ($this->calReminderService->getAvailableReminders() as $min => $title) {
+                foreach ($this->calReminderService->returnDefaultDefinedReminders() as $min => $title) {
                     $query->setParameter('created_at', date('Y-m-d H:i:s', time()));
                     $query->setParameter('user_author', $userAuthorID);
                     $query->setParameter('title', $title);

@@ -7,7 +7,7 @@ namespace OCA\ElbCalTypes\Service;
 use OCA\ElbCalTypes\Db\CalendarDefaultRemindersMapper;
 use OCP\IL10N;
 
-class ElbCalReminderService
+class ElbCalDefRemindersService
 {
     /**
      * @var IL10N
@@ -20,7 +20,7 @@ class ElbCalReminderService
     private $mapper;
 
     /**
-     * ElbCalReminderService constructor.
+     * ElbCalDefRemindersService constructor.
      * @param IL10N $l
      * @param CalendarDefaultRemindersMapper $mapper
      */
@@ -31,7 +31,7 @@ class ElbCalReminderService
         $this->mapper = $mapper;
     }
 
-    public function getAvailableReminders()
+    public function returnDefaultDefinedReminders()
     {
         return [
             0 => $this->l->t('at the event\'s start'),

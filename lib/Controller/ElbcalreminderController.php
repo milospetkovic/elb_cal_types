@@ -4,33 +4,33 @@
 namespace OCA\ElbCalTypes\Controller;
 
 
-use OCA\ElbCalTypes\Service\ElbCalReminderService;
+use OCA\ElbCalTypes\Service\ElbCalDefRemindersService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 
 class ElbcalreminderController extends Controller
 {
     /**
-     * @var ElbCalReminderService
+     * @var ElbCalDefRemindersService
      */
-    private $calReminderService;
+    private $calDefReminderService;
 
     /**
      * ElbcalreminderController constructor.
-     * @param ElbCalReminderService $calReminderService
+     * @param ElbCalDefRemindersService $calDefReminderService
      */
-    public function __construct(ElbCalReminderService $calReminderService)
+    public function __construct(ElbCalDefRemindersService $calDefReminderService)
     {
-        $this->calReminderService = $calReminderService;
+        $this->calDefReminderService = $calDefReminderService;
     }
 
     /**
      * Get all default calendar reminders
      *
      */
-    public function getallreminders()
+    public function getdefaultreminders()
     {
-        return new JSONResponse($this->calReminderService->findAll());
+        return new JSONResponse($this->calDefReminderService->findAll());
     }
 
 }
