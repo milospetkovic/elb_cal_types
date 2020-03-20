@@ -8,9 +8,7 @@ use OCP\AppFramework\Db\Entity;
 class CalendarDefaultReminders extends Entity implements JsonSerializable {
 
     protected $createdAt;
-    protected $modifiedAt;
     protected $userAuthor;
-    protected $userModifier;
     protected $title;
     protected $minutesBeforeEvent;
 
@@ -19,7 +17,6 @@ class CalendarDefaultReminders extends Entity implements JsonSerializable {
         return [
             'id' => $this->id,
             'user_author' => $this->userAuthor,
-            'user_modifier' => $this->userModifier,
             'title' => $this->title,
             'minutes_before_event' => $this->minutesBeforeEvent
         ];
