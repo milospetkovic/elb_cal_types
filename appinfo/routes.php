@@ -16,6 +16,6 @@ return [
         [ 'name' => 'user#isusersuperadmin', 'url' => '/isusersuperadmin', 'verb' => 'POST'],
         [ 'name' => 'elbcaldefreminder#getdefaultreminders', 'url' => '/getdefaultreminders', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypereminder#getassignedreminders', 'url' => '/getassignedreminders', 'verb' => 'POST'],
-        //[ 'name' => 'elbcalreminder#assigndefremindtocaltype', 'url' => '/assigndefremindtocaltype', 'verb' => 'POST'],
+        [ 'name' => 'elbcaltypereminder#assigndefreminderstocaltype', 'url' => '/assigndefreminderstocaltype', 'verb' => 'POST'],
     ]
 ];

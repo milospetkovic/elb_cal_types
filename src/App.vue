@@ -72,10 +72,17 @@
                             <input :id="'link-checkbox'+ defCal.id"
                                    name="link-checkbox[]"
                                    class="checkbox link-checkbox"
+                                   v-model="modelDefaultCalReminder"
+                                   :value="defCal.id"
                                    type="checkbox">
                             <label :for="'link-checkbox'+ defCal.id" class="link-checkbox-label">{{ t('elbcaltypes', defCal.title) }}</label>
                         </li>
                     </ul>
+
+                    <div class="app-sidebar-tab__buttons">
+                        <button class="primary" @click="saveRemindersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
+                    </div>
+
                 </div>
                 <div v-else>
                     {{ t('elbcaltypes', 'No default reminders available to assign it to the selected calendar type') }}
@@ -143,7 +150,8 @@ export default {
 			isAdminUser: false,
             defaultCalReminders: [],
 			selectedOpenSidebar: true,
-            assignedReminders: []
+            assignedReminders: [],
+			modelDefaultCalReminder: []
         }
     },
 	beforeMount() {
@@ -379,8 +387,33 @@ export default {
 		toggleSidebar() {
 			this.selectedOpenSidebar = !this.selectedOpenSidebar
         },
-        saveRemindersForCalendarType() {
-			alert('save function')
+		/**
+         * Assign selected default reminder(s) to the selected calendar type
+		 */
+		async saveRemindersForCalendarType() {
+
+			if (this.modelDefaultCalReminder.length) {
+
+				let data = {
+					selectedDefReminders: this.modelDefaultCalReminder,
+					calendarTypeID: this.currentCalTypeID
+				}
+
+				let dataJson = JSON.stringify(data);
+
+				console.log('Data for sending: ', data);
+				console.log('JSON Data for sending: ', dataJson);
+
+				try {
+					await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype', dataJson))
+				} catch (e) {
+					console.error(e)
+					OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
+				}
+
+			} else {
+				alert(t('elb_cal_types', 'Please select at least one reminder'))
+			}
         }
 	},
 }
@@ -415,5 +448,11 @@ export default {
     }
     textarea {
         width: 100%;
+    }
+    .app-sidebar-tab__buttons button {
+        width: 100%;
+    }
+    #content #app-sidebar .app-sidebar-header > .app-sidebar__close.icon-close {
+        top: 10px;
     }
 </style>

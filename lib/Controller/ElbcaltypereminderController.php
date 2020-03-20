@@ -33,4 +33,14 @@ class ElbcaltypereminderController extends Controller
         return new JSONResponse($this->calTypeReminderService->returnAssignedRemindersForCalendarTypes());
     }
 
+    public function assigndefreminderstocaltype($data)
+    {
+
+        var_dump($data);
+            die('STOP');
+
+    }
+
+
+
 }
