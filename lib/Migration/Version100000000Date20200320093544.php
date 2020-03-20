@@ -51,6 +51,12 @@ class Version100000000Date20200320093544 extends SimpleMigrationStep {
                 'length' => 40,
             ]);
 
+            $table->addColumn('fk_elb_cal_type', 'integer', [
+                'notnull' => true,
+                'length' => 11,
+                'unsigned' => false
+            ]);
+
             $table->addColumn('fk_elb_def_reminder', 'integer', [
                 'notnull' => true,
                 'length' => 11,
@@ -60,6 +66,8 @@ class Version100000000Date20200320093544 extends SimpleMigrationStep {
             $table->setPrimaryKey(['id']);
 
             $table->addIndex(['user_author'], 'idx_ectr_uauthor');
+
+            $table->addForeignKeyConstraint('oc_elb_calendar_types', ['fk_elb_cal_type'], ['id'], [], 'frgk_ect_id');
 
             $table->addForeignKeyConstraint('oc_elb_cal_def_reminders', ['fk_elb_def_reminder'], ['id'], [], 'frgk_ectdr_id');
         }
