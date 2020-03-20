@@ -30,7 +30,7 @@ class ElbcaltypereminderController extends Controller
      */
     public function getassignedreminders()
     {
-        return new JSONResponse($this->calTypeReminderService->findAll());
+        return new JSONResponse($this->calTypeReminderService->returnAssignedRemindersForCalendarTypes());
     }
 
 }

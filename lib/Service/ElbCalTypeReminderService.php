@@ -36,4 +36,11 @@ class ElbCalTypeReminderService
         return $this->mapper->findAll();
     }
 
+    public function returnAssignedRemindersForCalendarTypes()
+    {
+        $results = $this->mapper->getAssignedRemindersForCalendarTypes();
+        var_dump($results);
+        die('stop');
+    }
+
 }

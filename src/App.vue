@@ -353,6 +353,9 @@ export default {
 		 */
 		toggleSidebar() {
 			this.selectedOpenSidebar = !this.selectedOpenSidebar
+        },
+        saveRemindersForCalendarType() {
+			alert('save function')
         }
 	},
 }
