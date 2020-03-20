@@ -20,6 +20,14 @@
 
         <AppContent>
 
+            <h2 class="pull-left" v-if="currentCalTypeID === -1">
+                {{ t('elbcaltypes', 'Create a new calendar type') }}
+            </h2>
+
+            <h2 class="pull-left" v-else-if="currentCalTypeID > 0">
+                {{ t('elbcaltypes', 'Update calendar type') }}
+            </h2>
+
             <button v-show="showToggleSidebarButton" @click="toggleSidebar" class="pull-right">
                 {{ t('elbcaltypes', 'Toggle sidebar') }}
             </button>
@@ -37,9 +45,14 @@
                        :disabled="updating || !savePossible"
                        @click="saveCalType">
             </div>
-            <div v-else id="emptycontent">
+            <div v-else-if="!calTypes.length" class="emptycontent">
                 <div class="icon-file" />
                 <h2>{{ t('elbcaltypes', 'Create a new calendar type to get started') }}</h2>
+            </div>
+
+            <div v-else class="emptycontent">
+                <div class="icon-file" />
+                <h2>{{ t('elbcaltypes', 'Create a new calendar type or update existing') }}</h2>
             </div>
 
         </AppContent>
@@ -54,21 +67,28 @@
             </AppSidebarTab>
 
             <AppSidebarTab id="avail-reminders" :name="t('elbcaltypes', 'Available reminders')" icon="icon-edit">
-                Available reminders
+
                 <div v-if="defaultCalReminders.length">
-
-                    <ul v-for="defCal in defaultCalReminders">
-                        <li>{{ t('elbcaltypes', defCal.title) }}</li>
+                    <p>
+                        {{ t('elbcaltypes', 'Select reminder to assign it to the selected calendar type') }}
+                    </p>
+                    <ul class="reminders-for-cal-type">
+                        <li v-for="defCal in defaultCalReminders">
+                            <input :id="'link-checkbox'+ defCal.id"
+                                   name="link-checkbox[]"
+                                   class="checkbox link-checkbox"
+                                   type="checkbox">
+                            <label :for="'link-checkbox'+ defCal.id" class="link-checkbox-label">{{ t('elbcaltypes', defCal.title) }}</label>
+                        </li>
                     </ul>
-
                 </div>
                 <div v-else>
-                    NEMA
+                    {{ t('elbcaltypes', 'No default reminders available to assign it to the selected calendar type') }}
                 </div>
 
             </AppSidebarTab>
 
-            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-file" >
+            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-reminder" >
                 Assigned reminders
             </AppSidebarTab>
 
@@ -86,7 +106,8 @@ import {
     AppNavigationSettings,
     Multiselect,
 	AppSidebar,
-	AppSidebarTab
+	AppSidebarTab,
+    ActionCheckbox,
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
@@ -102,6 +123,7 @@ export default {
         Multiselect,
 		AppSidebar,
 		AppSidebarTab,
+		ActionCheckbox
     },
     data: function() {
         return {
@@ -336,6 +358,12 @@ export default {
 }
 </script>
 <style scoped>
+    ul.reminders-for-cal-type {
+        padding: 10px 4px;
+    }
+    ul.reminders-for-cal-type li {
+        padding: 3px 0;
+    }
     #app-content > div {
         width: 100%;
         height: 100%;
