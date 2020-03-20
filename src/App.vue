@@ -142,7 +142,7 @@ export default {
 			updating: false,
 			isAdminUser: false,
             defaultCalReminders: [],
-			selectedOpenSidebar: false,
+			selectedOpenSidebar: true,
             assignedReminders: []
         }
     },
