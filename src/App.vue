@@ -84,7 +84,22 @@
             </AppSidebarTab>
 
             <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit" >
-                Assigned reminders
+
+                {{ t('elbcaltypes', 'Assigned reminders for selected calendar type') }}
+
+                <div v-if="assignedRemindersForCalTypeID">
+                    <ul class="assigned-reminders-for-cal-type">
+                        <li v-for="calTypeReminder in assignedReminders[currentCalTypeID]">
+                            {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right" ></button>
+                        </li>
+                    </ul>
+                </div>
+                <div v-else>
+                    <p class="text-warning">
+                        {{ t('elbcaltypes', 'The selected calendar type doesn\' have assigned reminder') }}
+                    </p>
+                </div>
+
             </AppSidebarTab>
 
         </AppSidebar>
@@ -143,11 +158,20 @@ export default {
 		}),
         // Perform ajax call to fetch assigned reminders to calendar types
         axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedreminders')).then((result) => {
-            console.log('Result get assigned reminders to calendar types: ', result);
+            //console.log('Result get assigned reminders to calendar types: ', result);
             this.assignedReminders = result.data
+			console.log('Data assigned reminders to calendar types: ', this.assignedReminders);
+
         })
 	},
     computed: {
+		assignedRemindersForCalTypeID() {
+			if (this.assignedReminders[this.currentCalTypeID] !== undefined) {
+				//console.log('test: ', this.assignedReminders[this.currentCalTypeID].length)
+				return this.assignedReminders[this.currentCalTypeID]
+			}
+            return false
+		},
     	/**
 		 * Check up if sidebar should be visible
 		 * @returns {Boolean}
@@ -250,6 +274,7 @@ export default {
 				return
 			}
 			this.currentCalTypeID = calType.id
+			this.assignedRemindersForCalTypeID
 			this.$nextTick(() => {
 				this.$refs.content.focus()
 			})
@@ -363,6 +388,14 @@ export default {
 <style scoped>
     ul.reminders-for-cal-type {
         padding: 10px 4px;
+    }
+    ul.assigned-reminders-for-cal-type li {
+        padding: 6px 0;
+    }
+    ul.assigned-reminders-for-cal-type button {
+        background-color: transparent;
+        opacity: 1;
+        border: none;
     }
     ul.reminders-for-cal-type li {
         padding: 3px 0;
