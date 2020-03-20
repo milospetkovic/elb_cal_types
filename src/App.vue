@@ -127,7 +127,8 @@ export default {
 			updating: false,
 			isAdminUser: false,
             defaultCalReminders: [],
-			selectedOpenSidebar: false
+			selectedOpenSidebar: false,
+            assignedReminders: []
         }
     },
 	beforeMount() {
@@ -139,7 +140,12 @@ export default {
 		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
 			console.log('Result get default reminders: ', result);
 			this.defaultCalReminders = result.data
-		})
+		}),
+        // Perform ajax call to fetch assigned reminders to calendar types
+        axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedreminders')).then((result) => {
+            console.log('Result get assigned reminders to calendar types: ', result);
+            this.assignedReminders = result.data
+        })
 	},
     computed: {
     	/**

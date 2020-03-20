@@ -14,6 +14,8 @@ return [
     'routes' => [
         [ 'name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         [ 'name' => 'user#isusersuperadmin', 'url' => '/isusersuperadmin', 'verb' => 'POST'],
-        [ 'name' => 'elbcalreminder#getdefaultreminders', 'url' => '/getdefaultreminders', 'verb' => 'POST'],
+        [ 'name' => 'elbcaldefreminder#getdefaultreminders', 'url' => '/getdefaultreminders', 'verb' => 'POST'],
+        //[ 'name' => 'elbcalreminder#getassignedreminders', 'url' => '/getassignedreminders', 'verb' => 'POST'],
+        //[ 'name' => 'elbcalreminder#assigndefremindtocaltype', 'url' => '/assigndefremindtocaltype', 'verb' => 'POST'],
     ]
 ];
