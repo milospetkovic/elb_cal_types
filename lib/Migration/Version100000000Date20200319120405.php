@@ -34,9 +34,9 @@ class Version100000000Date20200319120405 extends SimpleMigrationStep {
         /** @var ISchemaWrapper $schema */
         $schema = $schemaClosure();
 
-        if (!$schema->hasTable('elb_cal_type_reminders')) {
+        if (!$schema->hasTable('elb_cal_def_reminders')) {
 
-            $table = $schema->createTable('elb_cal_type_reminders');
+            $table = $schema->createTable('elb_cal_def_reminders');
 
             $table->addColumn('id', 'integer', [
                 'autoincrement' => true,
@@ -52,9 +52,15 @@ class Version100000000Date20200319120405 extends SimpleMigrationStep {
                 'length' => 40,
             ]);
 
-            $table->addColumn('fk_elb_def_reminder', 'string', [
+            $table->addColumn('title', 'string', [
                 'notnull' => true,
                 'length' => 100
+            ]);
+
+            $table->addColumn('minutes_before_event', 'integer', [
+                'notnull' => true,
+                'unsigned' => false,
+                'length' => 11
             ]);
 
             $table->setPrimaryKey(['id']);
