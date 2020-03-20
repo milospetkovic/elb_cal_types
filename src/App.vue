@@ -1,6 +1,5 @@
 <template>
     <div id="content" class="app-elb-cal-types">
-
         <AppNavigation>
             <AppNavigationNew v-if="permissionToManageCalendarTypes"
                               :text="t('elbcaltypes', 'New calendar type')"
@@ -89,7 +88,6 @@
             </AppSidebarTab>
 
         </AppSidebar>
-
     </div>
 </template>
 
@@ -360,10 +358,12 @@ export default {
     ul.reminders-for-cal-type li {
         padding: 3px 0;
     }
+    #app-content {
+        padding: 20px;
+    }
     #app-content > div {
         width: 100%;
         height: 100%;
-        padding: 20px;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
