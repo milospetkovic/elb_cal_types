@@ -395,17 +395,12 @@ export default {
 			if (this.modelDefaultCalReminder.length) {
 
 				let data = {
-					selectedDefReminders: this.modelDefaultCalReminder,
-					calendarTypeID: this.currentCalTypeID
+					caltypeid: this.currentCalTypeID,
+					reminders: this.modelDefaultCalReminder,
 				}
 
-				let dataJson = JSON.stringify(data);
-
-				console.log('Data for sending: ', data);
-				console.log('JSON Data for sending: ', dataJson);
-
 				try {
-					await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype', dataJson))
+					await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype'), data)
 				} catch (e) {
 					console.error(e)
 					OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))

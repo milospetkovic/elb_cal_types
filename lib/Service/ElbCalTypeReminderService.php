@@ -4,6 +4,7 @@
 namespace OCA\ElbCalTypes\Service;
 
 
+use OCA\ElbCalTypes\Db\CalendarTypeReminder;
 use OCA\ElbCalTypes\Db\CalendarTypeReminderMapper;
 use OCP\IL10N;
 
@@ -59,6 +60,20 @@ class ElbCalTypeReminderService
             }
         }
         return $out;
+    }
+
+    public function assignedRemindersForCalendarTypeID($data)
+    {
+        $calendarTypeID = $data['caltypeid'];
+        $defReminders = $data['reminders'];
+        foreach ($defReminders as $key => $defReminderID) {
+            $calTypeReminder = new CalendarTypeReminder();
+            $calTypeReminder->setFkElbCalType($calendarTypeID);
+            $calTypeReminder->setFkElbDefReminder($defReminderID);
+            $calTypeReminder->setUserAuthor('admin2');
+            $calTypeReminder->setCreatedAt(date('Y-m-d H:i:s', time()));
+            $this->mapper->insert($calTypeReminder);
+        }
     }
 
 }
