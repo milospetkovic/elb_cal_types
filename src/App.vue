@@ -90,7 +90,7 @@
 
             </AppSidebarTab>
 
-            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit" >
+            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders') + ' (' + countAssignedRemindersForCalTypeID + ')'" icon="icon-edit" >
 
                 {{ t('elbcaltypes', 'Assigned reminders for selected calendar type') }}
 
@@ -175,11 +175,17 @@ export default {
     computed: {
 		assignedRemindersForCalTypeID() {
 			if (this.assignedReminders[this.currentCalTypeID] !== undefined) {
-				//console.log('test: ', this.assignedReminders[this.currentCalTypeID].length)
 				return this.assignedReminders[this.currentCalTypeID]
 			}
             return false
 		},
+        countAssignedRemindersForCalTypeID() {
+			if (this.assignedReminders[this.currentCalTypeID] !== undefined && this.currentCalTypeID > 0) {
+				console.log('count rem for cal type id', this.assignedReminders[this.currentCalTypeID])
+				return Object.keys(this.assignedReminders[this.currentCalTypeID]).length
+			}
+			return 0
+        },
     	/**
 		 * Check up if sidebar should be visible
 		 * @returns {Boolean}
