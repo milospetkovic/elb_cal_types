@@ -62,7 +62,7 @@ class ElbCalTypeReminderService
         return $out;
     }
 
-    public function assignedRemindersForCalendarTypeID($data)
+    public function assignRemindersForCalendarTypeID($data)
     {
         $calendarTypeID = $data['caltypeid'];
         $defReminders = $data['reminders'];
