@@ -9,7 +9,11 @@
                               @click="newCalendarType" />
 
             <ul v-if="permissionToManageCalendarTypes">
-                <AppNavigationItem v-for="calType in calTypes" :key="calType.id" :item="calTypeEntry(calType)" :icon="'icon-user'" />
+                <template v-for="calType in calTypes">
+                    <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
+                        <AppNavigationCounter>10</AppNavigationCounter>
+                    </AppNavigationItem>
+                </template>
             </ul>
 
             <AppNavigationSettings>
@@ -134,6 +138,7 @@ import {
 	AppSidebar,
 	AppSidebarTab,
     ActionCheckbox,
+	AppNavigationCounter,
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
@@ -149,7 +154,8 @@ export default {
         Multiselect,
 		AppSidebar,
 		AppSidebarTab,
-		ActionCheckbox
+		ActionCheckbox,
+		AppNavigationCounter
     },
     data: function() {
         return {
