@@ -165,13 +165,7 @@ export default {
 			console.log('Result get default reminders: ', result);
 			this.defaultCalReminders = result.data
 		}),
-        // Perform ajax call to fetch assigned reminders to calendar types
-        axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedreminders')).then((result) => {
-            //console.log('Result get assigned reminders to calendar types: ', result);
-            this.assignedRemForCalTypes = result.data
-			console.log('Data assigned reminders to calendar types: ', this.assignedRemForCalTypes);
-
-        })
+        this.fetchAssignedReminders()
 	},
     computed: {
 		assignedRemindersForCalTypeID() {
@@ -280,6 +274,16 @@ export default {
         this.loading = false
     },
     methods: {
+    	/**
+         * Perform ajax call to fetch assigned reminders to calendar types
+         */
+    	fetchAssignedReminders() {
+			axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedreminders')).then((result) => {
+				//console.log('Result get assigned reminders to calendar types: ', result);
+				this.assignedRemForCalTypes = result.data
+				console.log('Data assigned reminders to calendar types: ', this.assignedRemForCalTypes);
+			})
+		},
 		/**
 		 * Create a new calendar type and focus the calendar type content field automatically
 		 * @param {Object} calType calType object
@@ -399,6 +403,7 @@ export default {
 		 */
 		async saveRemindersForCalendarType() {
 
+			let res
 			if (this.modelDefaultCalReminder.length) {
 
 				let data = {
@@ -407,7 +412,10 @@ export default {
 				}
 
 				try {
-					await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype'), data)
+					res = await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype'), data)
+					this.fetchAssignedReminders()
+					console.log('response from assign rem: ', res);
+
 				} catch (e) {
 					console.error(e)
 					OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
@@ -426,6 +434,7 @@ export default {
 
             try {
 				await axios.post(OC.generateUrl('/apps/elb_cal_types/removereminderforcaltype'), data)
+                this.$delete(this.assignedRemForCalTypes[this.currentCalTypeID], id)
             } catch (e) {
                 console.error(e)
                 OCP.Toast.error(t('elb_cal_types', 'Could not remove reminder for calendar type'))
