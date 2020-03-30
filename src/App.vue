@@ -90,13 +90,13 @@
 
             </AppSidebarTab>
 
-            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders') + ' (' + countAssignedRemindersForCalTypeID + ')'" icon="icon-edit" >
+            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders') + ' (' + countAssignedRemindersForCalTypeID + ')'" icon="icon-edit" :class="'active'" >
 
                 {{ t('elbcaltypes', 'Assigned reminders for selected calendar type') }}
 
                 <div v-if="assignedRemindersForCalTypeID">
                     <ul class="assigned-reminders-for-cal-type">
-                        <li v-for="calTypeReminder in assignedReminders[currentCalTypeID]">
+                        <li v-for="calTypeReminder in assignedRemForCalTypes[currentCalTypeID]">
                             {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right" ></button>
                         </li>
                     </ul>
@@ -151,7 +151,8 @@ export default {
             defaultCalReminders: [],
 			selectedOpenSidebar: true,
             assignedReminders: [],
-			modelDefaultCalReminder: []
+			modelDefaultCalReminder: [],
+			assignedRemForCalTypes: [],
         }
     },
 	beforeMount() {
@@ -167,22 +168,22 @@ export default {
         // Perform ajax call to fetch assigned reminders to calendar types
         axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedreminders')).then((result) => {
             //console.log('Result get assigned reminders to calendar types: ', result);
-            this.assignedReminders = result.data
-			console.log('Data assigned reminders to calendar types: ', this.assignedReminders);
+            this.assignedRemForCalTypes = result.data
+			console.log('Data assigned reminders to calendar types: ', this.assignedRemForCalTypes);
 
         })
 	},
     computed: {
 		assignedRemindersForCalTypeID() {
-			if (this.assignedReminders[this.currentCalTypeID] !== undefined) {
-				return this.assignedReminders[this.currentCalTypeID]
+			if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined) {
+				return this.assignedRemForCalTypes[this.currentCalTypeID]
 			}
             return false
 		},
         countAssignedRemindersForCalTypeID() {
-			if (this.assignedReminders[this.currentCalTypeID] !== undefined && this.currentCalTypeID > 0) {
-				console.log('count rem for cal type id', this.assignedReminders[this.currentCalTypeID])
-				return Object.keys(this.assignedReminders[this.currentCalTypeID]).length
+			if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined && this.currentCalTypeID > 0) {
+				console.log('count rem for cal type id', this.assignedRemForCalTypes[this.currentCalTypeID])
+				return Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).length
 			}
 			return 0
         },
@@ -305,7 +306,7 @@ export default {
 		 * The calendar type is not yet saved, therefore an id of -1 is used until it
 		 * has been persisted in the backend
 		 */
-		newCalendarType(e) {
+		newCalendarType() {
 			if (this.currentCalTypeID !== -1) {
 				let alreadyStartedCreating = this.calTypes.findIndex((calType) => calType.id == -1)
                 if (alreadyStartedCreating === -1) {
@@ -415,7 +416,21 @@ export default {
 			} else {
 				alert(t('elb_cal_types', 'Please select at least one reminder'))
 			}
-        }
+        },
+		async removeReminderForCalendarType() {
+
+            let data = {
+                caltypeid: this.currentCalTypeID,
+                reminders: this.modelDefaultCalReminder,
+            }
+
+            try {
+                await axios.patch(OC.generateUrl('/apps/elb_cal_types/removereminderforcaltype'), data)
+            } catch (e) {
+                console.error(e)
+                OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
+            }
+		},
 	},
 }
 </script>
@@ -456,4 +471,5 @@ export default {
     #content #app-sidebar .app-sidebar-header > .app-sidebar__close.icon-close {
         top: 10px;
     }
+
 </style>

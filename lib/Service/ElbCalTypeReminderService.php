@@ -4,6 +4,7 @@
 namespace OCA\ElbCalTypes\Service;
 
 
+use OCA\Activity\CurrentUser;
 use OCA\ElbCalTypes\Db\CalendarTypeReminder;
 use OCA\ElbCalTypes\Db\CalendarTypeReminderMapper;
 use OCP\IL10N;
@@ -23,14 +24,20 @@ class ElbCalTypeReminderService
      * @var ElbCalDefRemindersService
      */
     private $defaultReminderService;
+    /**
+     * @var CurrentUser
+     */
+    private $currentUser;
 
     public function __construct(IL10N $l,
                                 CalendarTypeReminderMapper $mapper,
-                                ElbCalDefRemindersService $defaultReminderService)
+                                ElbCalDefRemindersService $defaultReminderService,
+                                CurrentUser $currentUser)
     {
         $this->l = $l;
         $this->mapper = $mapper;
         $this->defaultReminderService = $defaultReminderService;
+        $this->currentUser = $currentUser;
     }
 
     /**
@@ -70,10 +77,11 @@ class ElbCalTypeReminderService
             $calTypeReminder = new CalendarTypeReminder();
             $calTypeReminder->setFkElbCalType($calendarTypeID);
             $calTypeReminder->setFkElbDefReminder($defReminderID);
-            $calTypeReminder->setUserAuthor('admin2');
+            $calTypeReminder->setUserAuthor($this->currentUser->getUID());
             $calTypeReminder->setCreatedAt(date('Y-m-d H:i:s', time()));
             $this->mapper->insert($calTypeReminder);
         }
+        return [];
     }
 
 }
