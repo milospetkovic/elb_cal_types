@@ -178,7 +178,6 @@ export default {
 		},
         countAssignedRemindersForCalTypeID() {
 			if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined && this.currentCalTypeID > 0) {
-				console.log('count rem for cal type id', this.assignedRemForCalTypes[this.currentCalTypeID])
 				return Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).length
 			}
 			return 0
@@ -295,6 +294,9 @@ export default {
 			}
 			return response
 		},
+        uncheckSelectedAvailableReminders() {
+			this.modelDefaultCalReminder = []
+        },
     	/**
          * Perform ajax call to fetch assigned reminders to calendar types
          */
@@ -314,6 +316,7 @@ export default {
 				return
 			}
 			this.currentCalTypeID = calType.id
+			this.uncheckSelectedAvailableReminders()
 			this.assignedRemindersForCalTypeID
 			this.$nextTick(() => {
 				this.$refs.content.focus()
@@ -435,8 +438,7 @@ export default {
 				try {
 					res = await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype'), data)
 					this.fetchAssignedReminders()
-					console.log('response from assign rem: ', res);
-
+					this.uncheckSelectedAvailableReminders()
 				} catch (e) {
 					console.error(e)
 					OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
