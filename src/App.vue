@@ -71,6 +71,7 @@
                         <li v-for="defCal in defaultCalReminders">
                             <input :id="'link-checkbox'+ defCal.id"
                                    name="link-checkbox[]"
+                                   :disabled="checkIfDefCalReminderIsAssignedToCalTypeID(defCal.id)"
                                    class="checkbox link-checkbox"
                                    v-model="modelDefaultCalReminder"
                                    :value="defCal.id"
@@ -90,7 +91,8 @@
 
             </AppSidebarTab>
 
-            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders') + ' (' + countAssignedRemindersForCalTypeID + ')'" icon="icon-edit" :class="'active'" >
+            <!-- <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders') + ' (' + countAssignedRemindersForCalTypeID + ')'" icon="icon-edit" :class="'active'" > -->
+            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit">
 
                 {{ t('elbcaltypes', 'Assigned reminders for selected calendar type') }}
 
@@ -274,6 +276,25 @@ export default {
         this.loading = false
     },
     methods: {
+		checkIfDefCalReminderIsAssignedToCalTypeID(defRemID) {
+
+			let response = false
+
+			if (this.assignedRemForCalTypes && this.currentCalTypeID > 0) {
+
+				if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined) {
+
+					Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).forEach(key => {
+						let calRemObj = this.assignedRemForCalTypes[this.currentCalTypeID][key]
+                        if (calRemObj.cal_def_reminder_id == defRemID) {
+                        	response = true
+                            return
+                        }
+					})
+				}
+			}
+			return response
+		},
     	/**
          * Perform ajax call to fetch assigned reminders to calendar types
          */
