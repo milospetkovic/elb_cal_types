@@ -97,7 +97,7 @@
                 <div v-if="assignedRemindersForCalTypeID">
                     <ul class="assigned-reminders-for-cal-type">
                         <li v-for="calTypeReminder in assignedRemForCalTypes[currentCalTypeID]">
-                            {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right" ></button>
+                            {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
                         </li>
                     </ul>
                 </div>
@@ -417,18 +417,18 @@ export default {
 				alert(t('elb_cal_types', 'Please select at least one reminder'))
 			}
         },
-		async removeReminderForCalendarType() {
+		async removeReminderForCalendarType(id) {
 
             let data = {
                 caltypeid: this.currentCalTypeID,
-                reminders: this.modelDefaultCalReminder,
+                caltyperemid: id
             }
 
             try {
-                await axios.patch(OC.generateUrl('/apps/elb_cal_types/removereminderforcaltype'), data)
+				await axios.post(OC.generateUrl('/apps/elb_cal_types/removereminderforcaltype'), data)
             } catch (e) {
                 console.error(e)
-                OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
+                OCP.Toast.error(t('elb_cal_types', 'Could not remove reminder for calendar type'))
             }
 		},
 	},

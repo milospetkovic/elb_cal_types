@@ -17,5 +17,6 @@ return [
         [ 'name' => 'elbcaldefreminder#getdefaultreminders', 'url' => '/getdefaultreminders', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypereminder#getassignedreminders', 'url' => '/getassignedreminders', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypereminder#assigndefreminderstocaltype', 'url' => '/assigndefreminderstocaltype', 'verb' => 'POST'],
+        [ 'name' => 'elbcaltypereminder#removereminderforcaltype', 'url' => '/removereminderforcaltype', 'verb' => 'POST'],
     ]
 ];

@@ -84,4 +84,12 @@ class ElbCalTypeReminderService
         return [];
     }
 
+    public function removeReminderForCalendarTypeID($data)
+    {
+        $linkID = $data['caltyperemid'];
+        $calTypeReminder = new CalendarTypeReminder();
+        $calTypeReminder->id = $linkID;
+        return $this->mapper->delete($calTypeReminder);
+    }
+
 }
