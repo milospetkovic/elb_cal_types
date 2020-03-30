@@ -58,6 +58,7 @@ class ElbCalTypeReminderService
             $transForDefReminders = $this->defaultReminderService->getTranslatedTitlesForEachDefaultReminder();
             foreach ($results as $res) {
                 $out[$res['cal_type_id']][$res['link_id']] = [
+                    'minutes_before_event' => $res['minutes_before_event'],
                     'calendar_type_id' => $res['cal_type_id'],
                     'link_id' => $res['link_id'],
                     'cal_def_reminder_id' => $res['cal_def_reminder_id'],

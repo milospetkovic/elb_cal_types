@@ -98,7 +98,12 @@
 
                 <div v-if="assignedRemindersForCalTypeID">
                     <ul class="assigned-reminders-for-cal-type">
-                        <li v-for="calTypeReminder in assignedRemForCalTypes[currentCalTypeID]">
+                        <!--
+                        <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
+                            {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
+                        </li>
+                        -->
+                        <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
                             {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
                         </li>
                     </ul>
@@ -170,6 +175,15 @@ export default {
         this.fetchAssignedReminders()
 	},
     computed: {
+		listAssignedRemindersForCalTypeID() {
+            let ret = {}
+			Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).forEach(key => {
+				let calRemObjID = this.assignedRemForCalTypes[this.currentCalTypeID][key]['minutes_before_event']
+				let calRemObj = this.assignedRemForCalTypes[this.currentCalTypeID][key]
+				ret[calRemObjID] = { 'cal_def_reminder_title_trans': calRemObj.cal_def_reminder_title_trans, 'link_id': calRemObj.link_id}
+			})
+			return ret
+		},
 		assignedRemindersForCalTypeID() {
 			if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined) {
 				return this.assignedRemForCalTypes[this.currentCalTypeID]

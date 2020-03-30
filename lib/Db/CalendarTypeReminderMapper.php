@@ -31,7 +31,7 @@ class CalendarTypeReminderMapper extends QBMapper
     {
         $qb = $this->db->getQueryBuilder();
         $qb->select('ctr.id as link_id', 'ctr.fk_elb_cal_type as cal_type_id',
-            'ctr.fk_elb_def_reminder as cal_def_reminder_id', 'cdf.title as cal_def_reminder_title')
+            'ctr.fk_elb_def_reminder as cal_def_reminder_id', 'cdf.title as cal_def_reminder_title', 'cdf.minutes_before_event')
             ->from('elb_cal_type_reminders', 'ctr')
             ->rightJoin('ctr', 'elb_calendar_types', 'ct', $qb->expr()->eq('ctr.fk_elb_cal_type', 'ct.id'))
             ->rightJoin('ctr', 'elb_cal_def_reminders', 'cdf', $qb->expr()->eq('ctr.fk_elb_def_reminder', 'cdf.id'))
