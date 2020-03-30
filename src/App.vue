@@ -67,6 +67,9 @@
                     <p>
                         {{ t('elbcaltypes', 'Select reminder to assign it to the selected calendar type') }}
                     </p>
+
+                    <hr>
+
                     <ul class="reminders-for-cal-type">
                         <li v-for="defCal in defaultCalReminders">
                             <input :id="'link-checkbox'+ defCal.id"
@@ -86,6 +89,9 @@
 
                 </div>
                 <div v-else>
+
+                    <hr>
+
                     {{ t('elbcaltypes', 'No default reminders available to assign it to the selected calendar type') }}
                 </div>
 
@@ -96,13 +102,10 @@
 
                 {{ t('elbcaltypes', 'Assigned reminders for selected calendar type') }}
 
+                <hr>
+
                 <div v-if="assignedRemindersForCalTypeID">
                     <ul class="assigned-reminders-for-cal-type">
-                        <!--
-                        <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
-                            {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
-                        </li>
-                        -->
                         <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
                             {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
                         </li>
@@ -169,12 +172,15 @@ export default {
 		}),
 		// Perform ajax call to fetch default reminders
 		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
-			console.log('Result get default reminders: ', result);
 			this.defaultCalReminders = result.data
 		}),
+        // fetch assigned reminders for calendar types
         this.fetchAssignedReminders()
 	},
     computed: {
+    	/**
+         * Sort assigned reminder for the selected calendar type by reminder timeline
+         */
 		listAssignedRemindersForCalTypeID() {
             let ret = {}
 			Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).forEach(key => {
@@ -184,12 +190,18 @@ export default {
 			})
 			return ret
 		},
+        /**
+         * Check up if selected calendar type has at least one assigned reminder
+         */
 		assignedRemindersForCalTypeID() {
 			if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined) {
 				return this.assignedRemForCalTypes[this.currentCalTypeID]
 			}
             return false
 		},
+        /**
+         * Count assigned reminders for the selected calendar type
+         */
         countAssignedRemindersForCalTypeID() {
 			if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined && this.currentCalTypeID > 0) {
 				return Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).length
@@ -289,6 +301,10 @@ export default {
         this.loading = false
     },
     methods: {
+
+    	/**
+         * Check up if default reminder id is already assigned to the selected calendar type id
+         */
 		checkIfDefCalReminderIsAssignedToCalTypeID(defRemID) {
 
 			let response = false
@@ -308,6 +324,9 @@ export default {
 			}
 			return response
 		},
+        /**
+         * Uncheck all checked checkboxes for available reminders
+         */
         uncheckSelectedAvailableReminders() {
 			this.modelDefaultCalReminder = []
         },
@@ -316,9 +335,7 @@ export default {
          */
     	fetchAssignedReminders() {
 			axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedreminders')).then((result) => {
-				//console.log('Result get assigned reminders to calendar types: ', result);
 				this.assignedRemForCalTypes = result.data
-				console.log('Data assigned reminders to calendar types: ', this.assignedRemForCalTypes);
 			})
 		},
 		/**
@@ -462,6 +479,11 @@ export default {
 				alert(t('elb_cal_types', 'Please select at least one reminder'))
 			}
         },
+		/**
+         * Delete assigned reminder for a calendar type by it's link id
+		 * @param id
+		 * @returns {Promise<void>}
+		 */
 		async removeReminderForCalendarType(id) {
 
             let data = {
@@ -516,6 +538,9 @@ export default {
     }
     #content #app-sidebar .app-sidebar-header > .app-sidebar__close.icon-close {
         top: 10px;
+    }
+    #app-sidebar hr {
+        opacity: 0.1;
     }
 
 </style>
