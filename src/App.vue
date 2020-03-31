@@ -14,10 +14,16 @@
                         <AppNavigationCounter>10</AppNavigationCounter>
                     </AppNavigationItem>
                 </template>
+
+                <AppNavigationItem :item="manageCalTypeForGroupFolders()"
+                                   icon="icon-category-enabled"
+                                   :pinned="true" />
             </ul>
 
-            <AppNavigationSettings>
-                Example settings
+
+
+            <AppNavigationSettings v-if="permissionToManageCalendarTypes">
+                {{ t('elbcaltypes', 'Manage calendar types to group folders') }}
             </AppNavigationSettings>
         </AppNavigation>
 
@@ -151,7 +157,6 @@ export default {
         AppNavigationItem,
         AppNavigationNew,
         AppNavigationSettings,
-        Multiselect,
 		AppSidebar,
 		AppSidebarTab,
 		ActionCheckbox,
@@ -169,6 +174,7 @@ export default {
             assignedReminders: [],
 			modelDefaultCalReminder: [],
 			assignedRemForCalTypes: [],
+			showMascForManagingCalTypesForGroupFolders: false,
         }
     },
 	beforeMount() {
@@ -283,6 +289,16 @@ export default {
                 }
             }
         },
+		manageCalTypeForGroupFolders() {
+			return () => {
+				return {
+					text: 'Manage calendar types for group folders',
+					action: () => this.showMascForManagingCalTypesForGroupFolders,
+					classes: this.showMascForManagingCalTypesForGroupFolders ? 'active' : '',
+				}
+			}
+		},
+
         /**
          * Returns true if a calendar type is selected and its title is not empty
          * @returns {Boolean}
