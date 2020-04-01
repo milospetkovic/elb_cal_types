@@ -574,22 +574,22 @@ export default {
             }
 		},
 		/**
-		 * Assign selected default reminder(s) to the selected calendar type
+		 * Assign selected group folder(s) to the selected calendar type
 		 */
 		async saveGroupFoldersForCalendarType() {
 
 			let res
-			if (this.modelDefaultCalReminder.length) {
+			if (this.modelGroupFolder.length) {
 
 				let data = {
 					caltypeid: this.currentCalTypeID,
-					groupfolders: this.modelDefaultCalReminder,
+					groupfolders: this.modelGroupFolder,
 				}
 
 				try {
-					res = await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype'), data)
-					this.fetchAssignedReminders()
-					this.uncheckSelectedAvailableReminders()
+					res = await axios.post(OC.generateUrl('/apps/elb_cal_types/assigngroupfolderstocaltype'), data)
+					this.fetchAssignedGroupFolders()
+					this.uncheckSelectedGroupFolders()
 				} catch (e) {
 					console.error(e)
 					OCP.Toast.error(t('elb_cal_types', 'Could not assign group folder(s)'))

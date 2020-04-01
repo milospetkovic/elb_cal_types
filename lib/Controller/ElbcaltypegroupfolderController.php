@@ -34,4 +34,14 @@ class ElbcaltypegroupfolderController extends Controller
         return new JSONResponse($this->calTypeGroupFolderService->returnAssignedGroupFoldersForCalendarTypes());
     }
 
+    /**
+     * Assign group folder(s) for calendar type
+     *
+     * @return JSONResponse
+     */
+    public function assigngroupfolderstocaltype()
+    {
+        return new JSONResponse($this->calTypeGroupFolderService->assignGroupFoldersForCalendarTypeID($this->request->params));
+    }
+
 }
