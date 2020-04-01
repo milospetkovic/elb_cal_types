@@ -16,9 +16,6 @@
                 </template>
             </ul>
 
-            <AppNavigationSettings>
-                Example settings
-            </AppNavigationSettings>
         </AppNavigation>
 
         <AppContent>
@@ -65,6 +62,27 @@
                     :subtitle="getTitleOfCurrentCalType"
                     @close="toggleSidebar">
 
+            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit">
+
+                {{ t('elbcaltypes', 'Assigned reminders for the selected calendar type') }}
+
+                <hr>
+
+                <div v-if="assignedRemindersForCalTypeID">
+                    <ul class="assigned-reminders-for-cal-type">
+                        <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
+                            {{ calTypeReminder.cal_def_reminder_title_trans }}<button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
+                        </li>
+                    </ul>
+                </div>
+                <div v-else>
+                    <p class="text-warning">
+                        {{ t('elbcaltypes', 'The selected calendar type doesn\' have assigned reminder') }}
+                    </p>
+                </div>
+
+            </AppSidebarTab>
+
             <AppSidebarTab id="avail-reminders" :name="t('elbcaltypes', 'Available reminders')" icon="icon-edit">
 
                 <div v-if="defaultCalReminders.length">
@@ -101,25 +119,24 @@
 
             </AppSidebarTab>
 
-            <!-- <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders') + ' (' + countAssignedRemindersForCalTypeID + ')'" icon="icon-edit" :class="'active'" > -->
-            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit">
+            <AppSidebarTab id="assigned-group-folders" :name="t('elbcaltypes', 'Group folders')" icon="icon-user">
 
-                {{ t('elbcaltypes', 'Assigned reminders for selected calendar type') }}
+                <p>
+                    {{ t('elbcaltypes', 'Assign the selected calendar type to group folder(s)') }}
+                </p>
 
                 <hr>
 
-                <div v-if="assignedRemindersForCalTypeID">
-                    <ul class="assigned-reminders-for-cal-type">
-                        <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
-                            {{ calTypeReminder.cal_def_reminder_title_trans }}<button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
-                        </li>
-                    </ul>
-                </div>
-                <div v-else>
-                    <p class="text-warning">
-                        {{ t('elbcaltypes', 'The selected calendar type doesn\' have assigned reminder') }}
-                    </p>
-                </div>
+                <ul class="reminders-for-cal-type">
+                    <li v-for="gf in groupFolders">
+                        <input :id="'gf-checkbox'+ gf.id"
+                               name="gf-checkbox[]"
+                               class="checkbox gf-checkbox"
+                               :value="gf.id"
+                               type="checkbox">
+                        <label :for="'gf-checkbox'+ gf.id" class="gf-checkbox-label">{{ t('elbcaltypes', gf.name) }}</label>
+                    </li>
+                </ul>
 
             </AppSidebarTab>
 
