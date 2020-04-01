@@ -115,6 +115,7 @@
                     <hr>
 
                     {{ t('elbcaltypes', 'No default reminders available to assign it to the selected calendar type') }}
+
                 </div>
 
             </AppSidebarTab>
@@ -599,6 +600,26 @@ export default {
 
 			} else {
 				alert(t('elb_cal_types', 'Please select at least one group folder'))
+			}
+		},
+		/**
+		 * Delete assigned group folder for a calendar type by it's link id
+		 * @param id
+		 * @returns {Promise<void>}
+		 */
+		async removeGroupFolderForCalendarType(id) {
+
+			let data = {
+				caltypeid: this.currentCalTypeID,
+				caltyperemid: id
+			}
+
+			try {
+				await axios.post(OC.generateUrl('/apps/elb_cal_types/removereminderforcaltype'), data)
+				this.$delete(this.assignedRemForCalTypes[this.currentCalTypeID], id)
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elb_cal_types', 'Could not remove reminder for calendar type'))
 			}
 		},
 	},
