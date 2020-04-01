@@ -51,7 +51,14 @@ class ElbCalTypeGroupFolderService
             $this->mapper->insert($gf);
         }
         return [];
+    }
 
+    public function removeGroupFolderForCalendarTypeID($data)
+    {
+        $linkID = $data['linkid'];
+        $calTypeGF = new CalendarTypeGroupFolder();
+        $calTypeGF->id = $linkID;
+        return $this->mapper->delete($calTypeGF);
     }
 
 }

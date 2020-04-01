@@ -138,7 +138,7 @@
                                :value="gf.folder_id"
                                type="checkbox">
                         <label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
-                        <button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.link_id)"></button>
+                        <button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)"></button>
                     </li>
                 </ul>
 
@@ -603,20 +603,31 @@ export default {
 			}
 		},
 		/**
-		 * Delete assigned group folder for a calendar type by it's link id
-		 * @param id
+		 * Delete assigned group folder for the calendar type
+		 * @param gfID
 		 * @returns {Promise<void>}
 		 */
-		async removeGroupFolderForCalendarType(id) {
+		async removeGroupFolderForCalendarType(gfID) {
+
+			let linkID = false
+
+			Object.keys(this.assignedGroupFoldersForCalTypes[this.currentCalTypeID]).forEach(key => {
+				let gfObj = this.assignedGroupFoldersForCalTypes[this.currentCalTypeID][key]
+
+				if (gfObj.gf_id == gfID) {
+					linkID = key
+					return
+				}
+			})
 
 			let data = {
 				caltypeid: this.currentCalTypeID,
-				caltyperemid: id
+				linkid: linkID
 			}
 
 			try {
-				await axios.post(OC.generateUrl('/apps/elb_cal_types/removereminderforcaltype'), data)
-				this.$delete(this.assignedRemForCalTypes[this.currentCalTypeID], id)
+				await axios.post(OC.generateUrl('/apps/elb_cal_types/removegroupfolderforcaltype'), data)
+				this.$delete(this.assignedGroupFoldersForCalTypes[this.currentCalTypeID], linkID)
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('elb_cal_types', 'Could not remove reminder for calendar type'))
