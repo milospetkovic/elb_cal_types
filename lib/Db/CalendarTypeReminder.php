@@ -10,7 +10,7 @@ use OCP\AppFramework\Db\Entity;
 class CalendarTypeReminder extends Entity implements JsonSerializable
 {
     protected $fkElbCalType;
-    protected $fkElbDefReminder;
+    protected $fkGroupFolder;
     protected $userAuthor;
     protected $createdAt;
 
@@ -19,7 +19,7 @@ class CalendarTypeReminder extends Entity implements JsonSerializable
         return [
             'id' => $this->id,
             'fk_elb_cal_type' => $this->fkElbCalType,
-            'fk_elb_def_reminder' => $this->fkElbDefReminder,
+            'fk_group_folder' => $this->fkGroupFolder,
             'user_author' => $this->userAuthor,
             'created_at' => $this->createdAt,
         ];
