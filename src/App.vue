@@ -9,19 +9,16 @@
                               @click="newCalendarType" />
 
             <ul v-if="permissionToManageCalendarTypes">
-
                 <template v-for="calType in calTypes">
-                    <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user"></AppNavigationItem>
+                    <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
+                        <AppNavigationCounter>10</AppNavigationCounter>
+                    </AppNavigationItem>
                 </template>
-
-                <AppNavigationItem :item="manageCalTypeForGroupFolders()"
-                                   :key="-2"
-                                   icon="icon-category-enabled"
-                                   :pinned="true"></AppNavigationItem>
             </ul>
 
-
-
+            <AppNavigationSettings>
+                Example settings
+            </AppNavigationSettings>
         </AppNavigation>
 
         <AppContent>
@@ -137,7 +134,6 @@ import {
     AppNavigationItem,
     AppNavigationNew,
     AppNavigationSettings,
-    Multiselect,
 	AppSidebar,
 	AppSidebarTab,
     ActionCheckbox,
@@ -171,7 +167,6 @@ export default {
             assignedReminders: [],
 			modelDefaultCalReminder: [],
 			assignedRemForCalTypes: [],
-			showMascForManagingCalTypesForGroupFolders: false,
         }
     },
 	beforeMount() {
@@ -286,16 +281,6 @@ export default {
                 }
             }
         },
-		manageCalTypeForGroupFolders() {
-			return () => {
-				return {
-					text: 'Manage calendar types for group folders',
-					action: () => this.showManageCalTypesForGroupFoldersMask(),
-					classes: this.showMascForManagingCalTypesForGroupFolders ? 'active' : '',
-				}
-			}
-		},
-
         /**
          * Returns true if a calendar type is selected and its title is not empty
          * @returns {Boolean}
@@ -320,10 +305,6 @@ export default {
         this.loading = false
     },
     methods: {
-
-		showManageCalTypesForGroupFoldersMask() {
-			this.showMascForManagingCalTypesForGroupFolders = !this.showMascForManagingCalTypesForGroupFolders
-        },
 
     	/**
          * Check up if default reminder id is already assigned to the selected calendar type id
