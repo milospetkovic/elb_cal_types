@@ -185,6 +185,7 @@ export default {
 			modelDefaultCalReminder: [],
 			assignedRemForCalTypes: [],
             groupFolders: [],
+			assignedGroupFoldersForCalTypes: [],
         }
     },
 	beforeMount() {
@@ -201,7 +202,9 @@ export default {
         // Perform ajax call to fetch all group folders
         axios.get(OC.generateUrl('/apps/elb_cal_types/getallgroupfolders')).then((result) => {
             this.groupFolders = result.data
-        })
+        }),
+		// fetch assigned group folders for calendar types
+		this.fetchAssignedGroupFolders()
 	},
     computed: {
     	/**
@@ -364,6 +367,15 @@ export default {
 				this.assignedRemForCalTypes = result.data
 			})
 		},
+		/**
+		 * Perform ajax call to fetch assigned group folders to calendar types
+		 */
+		fetchAssignedGroupFolders(){
+			axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedgroupfolders')).then((result) => {
+				this.assignedGroupFoldersForCalTypes = result.data
+                console.log('fetched assigned group folders: ', this.assignedGroupFoldersForCalTypes)
+			})
+        },
 		/**
 		 * Create a new calendar type and focus the calendar type content field automatically
 		 * @param {Object} calType calType object

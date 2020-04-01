@@ -5,7 +5,9 @@ namespace OCA\ElbCalTypes\Controller;
 
 
 
+use OCA\ElbCalTypes\Service\ElbCalTypeGroupFolderService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class ElbcaltypegroupfolderController extends Controller
@@ -22,6 +24,14 @@ class ElbcaltypegroupfolderController extends Controller
     {
         parent::__construct($appName, $request);
         $this->calTypeGroupFolderService = $calTypeGroupFolderService;
+    }
+
+    /**
+     * Get assigned group folders for calendar types
+     */
+    public function getassignedgroupfolders()
+    {
+        return new JSONResponse($this->calTypeGroupFolderService->returnAssignedGroupFoldersForCalendarTypes());
     }
 
 }

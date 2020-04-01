@@ -43,6 +43,11 @@ class ElbcaltypereminderController extends Controller
         return new JSONResponse($this->calTypeReminderService->assignRemindersForCalendarTypeID($this->request->params));
     }
 
+    /**
+     * Remove reminder assigned for calendar type
+     *
+     * @return JSONResponse
+     */
     public function removereminderforcaltype()
     {
         return new JSONResponse($this->calTypeReminderService->removeReminderForCalendarTypeID($this->request->params));
