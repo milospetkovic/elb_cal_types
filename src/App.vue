@@ -373,7 +373,8 @@ export default {
 
 					Object.keys(this.assignedGroupFoldersForCalTypes[this.currentCalTypeID]).forEach(key => {
 						let gfObj = this.assignedGroupFoldersForCalTypes[this.currentCalTypeID][key]
-						if (gfObj.fk_group_folder == gfID) {
+
+						if (gfObj.gf_id == gfID) {
 							response = true
 							return
 						}
