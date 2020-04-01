@@ -18,5 +18,6 @@ return [
         [ 'name' => 'elbcaltypereminder#getassignedreminders', 'url' => '/getassignedreminders', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypereminder#assigndefreminderstocaltype', 'url' => '/assigndefreminderstocaltype', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypereminder#removereminderforcaltype', 'url' => '/removereminderforcaltype', 'verb' => 'POST'],
+        [ 'name' => 'elbgroupfolder#getallgroupfolders', 'url' => '/getallgroupfolders', 'verb' => 'GET'],
     ]
 ];

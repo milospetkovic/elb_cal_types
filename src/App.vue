@@ -134,7 +134,7 @@
                                class="checkbox gf-checkbox"
                                :value="gf.id"
                                type="checkbox">
-                        <label :for="'gf-checkbox'+ gf.id" class="gf-checkbox-label">{{ t('elbcaltypes', gf.name) }}</label>
+                        <label :for="'gf-checkbox'+ gf.id" class="gf-checkbox-label">{{ t('elbcaltypes', gf.mountPoint) }}</label>
                     </li>
                 </ul>
 
@@ -184,6 +184,7 @@ export default {
             assignedReminders: [],
 			modelDefaultCalReminder: [],
 			assignedRemForCalTypes: [],
+            groupFolders: [],
         }
     },
 	beforeMount() {
@@ -196,7 +197,11 @@ export default {
 			this.defaultCalReminders = result.data
 		}),
         // fetch assigned reminders for calendar types
-        this.fetchAssignedReminders()
+        this.fetchAssignedReminders(),
+        // Perform ajax call to fetch all group folders
+        axios.get(OC.generateUrl('/apps/elb_cal_types/getallgroupfolders')).then((result) => {
+            this.groupFolders = result.data
+        })
 	},
     computed: {
     	/**
