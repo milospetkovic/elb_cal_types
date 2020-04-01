@@ -127,14 +127,14 @@
 
                 <hr>
 
-                <ul class="reminders-for-cal-type">
+                <ul v-if="groupFolders.length" class="group-folders-for-cal-type">
                     <li v-for="gf in groupFolders">
-                        <input :id="'gf-checkbox'+ gf.id"
+                        <input :id="'gf-checkbox'+ gf.folder_id"
                                name="gf-checkbox[]"
                                class="checkbox gf-checkbox"
-                               :value="gf.id"
+                               :value="gf.folder_id"
                                type="checkbox">
-                        <label :for="'gf-checkbox'+ gf.id" class="gf-checkbox-label">{{ t('elbcaltypes', gf.mountPoint) }}</label>
+                        <label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
                     </li>
                 </ul>
 
