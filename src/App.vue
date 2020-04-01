@@ -122,7 +122,7 @@
             <AppSidebarTab id="assigned-group-folders" :name="t('elbcaltypes', 'Group folders')" icon="icon-user">
 
                 <p>
-                    {{ t('elbcaltypes', 'Assign the selected calendar type to group folder(s)') }}
+                    {{ t('elbcaltypes', 'Assign group folder(s) to the selected calendar type') }}
                 </p>
 
                 <hr>
@@ -137,6 +137,7 @@
                                :value="gf.folder_id"
                                type="checkbox">
                         <label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
+                        <button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.link_id)"></button>
                     </li>
                 </ul>
 
@@ -604,13 +605,19 @@ export default {
 }
 </script>
 <style scoped>
-    ul.reminders-for-cal-type {
+    ul.reminders-for-cal-type,
+    ul.group-folders-for-cal-type {
         padding: 10px 4px;
     }
     ul.assigned-reminders-for-cal-type li {
         padding: 6px 0;
     }
     ul.assigned-reminders-for-cal-type button {
+        background-color: transparent;
+        opacity: 1;
+        border: none;
+    }
+    ul.group-folders-for-cal-type button.icon-delete {
         background-color: transparent;
         opacity: 1;
         border: none;
