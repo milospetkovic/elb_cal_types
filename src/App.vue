@@ -388,6 +388,12 @@ export default {
         uncheckSelectedAvailableReminders() {
 			this.modelDefaultCalReminder = []
         },
+		/**
+		 * Uncheck all checked checkboxes for group folders
+		 */
+		uncheckSelectedGroupFolders() {
+			this.modelGroupFolder = []
+        },
     	/**
          * Perform ajax call to fetch assigned reminders to calendar types
          */
@@ -415,6 +421,7 @@ export default {
 			}
 			this.currentCalTypeID = calType.id
 			this.uncheckSelectedAvailableReminders()
+			this.uncheckSelectedGroupFolders()
 			this.assignedRemindersForCalTypeID
 			this.$nextTick(() => {
 				this.$refs.content.focus()
@@ -585,11 +592,11 @@ export default {
 					this.uncheckSelectedAvailableReminders()
 				} catch (e) {
 					console.error(e)
-					OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
+					OCP.Toast.error(t('elb_cal_types', 'Could not assign group folder(s)'))
 				}
 
 			} else {
-				alert(t('elb_cal_types', 'Please select at least one reminder'))
+				alert(t('elb_cal_types', 'Please select at least one group folder'))
 			}
 		},
 	},
