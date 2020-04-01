@@ -540,7 +540,8 @@ export default {
         opacity: 1;
         border: none;
     }
-    ul.reminders-for-cal-type li {
+    ul.reminders-for-cal-type li,
+    ul.group-folders-for-cal-type li {
         padding: 3px 0;
     }
     #app-content {
