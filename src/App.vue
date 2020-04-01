@@ -20,9 +20,7 @@
                                    :pinned="true"></AppNavigationItem>
             </ul>
 
-            <AppNavigationSettings v-if="permissionToManageCalendarTypes">
-                {{ t('elbcaltypes', 'Manage calendar types to group folders') }}
-            </AppNavigationSettings>
+
 
         </AppNavigation>
 
