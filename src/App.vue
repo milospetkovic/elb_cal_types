@@ -111,7 +111,7 @@
                 <div v-if="assignedRemindersForCalTypeID">
                     <ul class="assigned-reminders-for-cal-type">
                         <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
-                            {{ calTypeReminder.cal_def_reminder_title_trans }} {{ calTypeReminder.link_id }} <button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
+                            {{ calTypeReminder.cal_def_reminder_title_trans }}<button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
                         </li>
                     </ul>
                 </div>
