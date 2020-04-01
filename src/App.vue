@@ -131,12 +131,18 @@
                     <li v-for="gf in groupFolders">
                         <input :id="'gf-checkbox'+ gf.folder_id"
                                name="gf-checkbox[]"
+                               :disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
                                class="checkbox gf-checkbox"
+                               v-model="modelGroupFolder"
                                :value="gf.folder_id"
                                type="checkbox">
                         <label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
                     </li>
                 </ul>
+
+                <div class="app-sidebar-tab__buttons">
+                    <button class="primary" @click="saveGroupFoldersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
+                </div>
 
             </AppSidebarTab>
 
@@ -184,6 +190,7 @@ export default {
             assignedReminders: [],
 			modelDefaultCalReminder: [],
 			assignedRemForCalTypes: [],
+			modelGroupFolder: [],
             groupFolders: [],
 			assignedGroupFoldersForCalTypes: [],
         }
@@ -202,6 +209,7 @@ export default {
         // Perform ajax call to fetch all group folders
         axios.get(OC.generateUrl('/apps/elb_cal_types/getallgroupfolders')).then((result) => {
             this.groupFolders = result.data
+			console.log('fetched group folders: ', this.groupFolders)
         }),
 		// fetch assigned group folders for calendar types
 		this.fetchAssignedGroupFolders()
@@ -330,7 +338,6 @@ export default {
         this.loading = false
     },
     methods: {
-
     	/**
          * Check up if default reminder id is already assigned to the selected calendar type id
          */
@@ -348,6 +355,28 @@ export default {
                         	response = true
                             return
                         }
+					})
+				}
+			}
+			return response
+		},
+		/**
+		 * Check up if group folder id is already assigned to the selected calendar type id
+		 */
+		checkIfGroupFolderIsAssignedToCalTypeID(gfID) {
+
+			let response = false
+
+			if (this.assignedGroupFoldersForCalTypes && this.currentCalTypeID > 0) {
+
+				if (this.assignedGroupFoldersForCalTypes[this.currentCalTypeID] !== undefined) {
+
+					Object.keys(this.assignedGroupFoldersForCalTypes[this.currentCalTypeID]).forEach(key => {
+						let gfObj = this.assignedGroupFoldersForCalTypes[this.currentCalTypeID][key]
+						if (gfObj.fk_group_folder == gfID) {
+							response = true
+							return
+						}
 					})
 				}
 			}
@@ -496,7 +525,7 @@ export default {
 		 */
 		async saveRemindersForCalendarType() {
 
-			let res
+			let res = false
 			if (this.modelDefaultCalReminder.length) {
 
 				let data = {
@@ -536,6 +565,32 @@ export default {
                 console.error(e)
                 OCP.Toast.error(t('elb_cal_types', 'Could not remove reminder for calendar type'))
             }
+		},
+		/**
+		 * Assign selected default reminder(s) to the selected calendar type
+		 */
+		async saveGroupFoldersForCalendarType() {
+
+			let res
+			if (this.modelDefaultCalReminder.length) {
+
+				let data = {
+					caltypeid: this.currentCalTypeID,
+					groupfolders: this.modelDefaultCalReminder,
+				}
+
+				try {
+					res = await axios.post(OC.generateUrl('/apps/elb_cal_types/assigndefreminderstocaltype'), data)
+					this.fetchAssignedReminders()
+					this.uncheckSelectedAvailableReminders()
+				} catch (e) {
+					console.error(e)
+					OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
+				}
+
+			} else {
+				alert(t('elb_cal_types', 'Please select at least one reminder'))
+			}
 		},
 	},
 }

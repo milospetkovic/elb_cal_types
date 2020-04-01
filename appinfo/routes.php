@@ -20,5 +20,6 @@ return [
         [ 'name' => 'elbcaltypereminder#removereminderforcaltype', 'url' => '/removereminderforcaltype', 'verb' => 'POST'],
         [ 'name' => 'elbgroupfolder#getallgroupfolders', 'url' => '/getallgroupfolders', 'verb' => 'GET'],
         [ 'name' => 'elbcaltypegroupfolder#getassignedgroupfolders', 'url' => '/getassignedgroupfolders', 'verb' => 'POST'],
+        [ 'name' => 'elbcaltypegroupfolder#assigngroupfolderstocaltype', 'url' => '/assigngroupfolderstocaltype', 'verb' => 'POST'],
     ]
 ];
