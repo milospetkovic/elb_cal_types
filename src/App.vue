@@ -9,22 +9,21 @@
                               @click="newCalendarType" />
 
             <ul v-if="permissionToManageCalendarTypes">
+
                 <template v-for="calType in calTypes">
-                    <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
-                        <AppNavigationCounter>10</AppNavigationCounter>
-                    </AppNavigationItem>
+                    <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user"></AppNavigationItem>
                 </template>
 
                 <AppNavigationItem :item="manageCalTypeForGroupFolders()"
+                                   :key="-2"
                                    icon="icon-category-enabled"
-                                   :pinned="true" />
+                                   :pinned="true"></AppNavigationItem>
             </ul>
-
-
 
             <AppNavigationSettings v-if="permissionToManageCalendarTypes">
                 {{ t('elbcaltypes', 'Manage calendar types to group folders') }}
             </AppNavigationSettings>
+
         </AppNavigation>
 
         <AppContent>
@@ -293,7 +292,7 @@ export default {
 			return () => {
 				return {
 					text: 'Manage calendar types for group folders',
-					action: () => this.showMascForManagingCalTypesForGroupFolders,
+					action: () => this.showManageCalTypesForGroupFoldersMask(),
 					classes: this.showMascForManagingCalTypesForGroupFolders ? 'active' : '',
 				}
 			}
@@ -323,6 +322,10 @@ export default {
         this.loading = false
     },
     methods: {
+
+		showManageCalTypesForGroupFoldersMask() {
+			this.showMascForManagingCalTypesForGroupFolders = !this.showMascForManagingCalTypesForGroupFolders
+        },
 
     	/**
          * Check up if default reminder id is already assigned to the selected calendar type id
