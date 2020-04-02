@@ -1,15 +1,15 @@
 <template>
-	<div v-if="permissionToManageCalendarTypes">
+	<div v-if="isSuperAdminUser">
 		<div id="content" class="app-elb-cal-types">
 			<AppNavigation>
-				<AppNavigationNew v-if="permissionToManageCalendarTypes"
+				<AppNavigationNew
 					:text="t('elbcaltypes', 'New calendar type')"
 					:disabled="false"
 					button-id="new-caltype-button"
 					button-class="icon-add"
 					@click="newCalendarType" />
 
-				<ul v-if="permissionToManageCalendarTypes">
+				<ul>
 					<template v-for="calType in calTypes">
 						<AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
 							<AppNavigationCounter>10</AppNavigationCounter>
@@ -170,13 +170,18 @@ export default {
 		AppSidebarTab,
 		AppNavigationCounter,
 	},
+	props: {
+		isSuperAdminUser: {
+			type: Boolean,
+			default: false
+		},
+	},
 	data: function() {
 		return {
 			calTypes: [],
 			currentCalTypeID: null,
 			loading: true,
 			updating: false,
-			isAdminUser: false,
 			defaultCalReminders: [],
 			selectedOpenSidebar: true,
 			assignedReminders: [],
@@ -236,13 +241,6 @@ export default {
 			return (this.currentCalTypeID > 0)
 		},
 		/**
-		 * Check up if managing calendar types is allowed
-		 * @returns {Boolean}
-		 */
-		permissionToManageCalendarTypes() {
-			return (!this.loading && this.isAdminUser)
-		},
-		/**
 		 * Return the currently selected calendar type
 		 * @returns {Object|null}
 		 */
@@ -299,10 +297,6 @@ export default {
 		},
 	},
 	beforeMount() {
-		// Perform ajax call to check up if current logged in user belongs to the super admin user group
-		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
-			this.isAdminUser = result.data.isSuperAdmin
-		})
 		// Perform ajax call to fetch default reminders
 		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
 			this.defaultCalReminders = result.data
