@@ -160,7 +160,7 @@ import {
 import axios from '@nextcloud/axios'
 
 export default {
-	name: 'App',
+	name: 'ManageCalendarTypes',
 	components: {
 		AppContent,
 		AppNavigation,
