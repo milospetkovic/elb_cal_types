@@ -1,154 +1,156 @@
 <template>
-    <div id="content" class="app-elb-cal-types">
-        <AppNavigation>
-            <AppNavigationNew v-if="permissionToManageCalendarTypes"
-                              :text="t('elbcaltypes', 'New calendar type')"
-                              :disabled="false"
-                              button-id="new-caltype-button"
-                              button-class="icon-add"
-                              @click="newCalendarType" />
+    <div v-if="permissionToManageCalendarTypes">
+        <div id="content" class="app-elb-cal-types">
+            <AppNavigation>
+                <AppNavigationNew v-if="permissionToManageCalendarTypes"
+                                  :text="t('elbcaltypes', 'New calendar type')"
+                                  :disabled="false"
+                                  button-id="new-caltype-button"
+                                  button-class="icon-add"
+                                  @click="newCalendarType" />
 
-            <ul v-if="permissionToManageCalendarTypes">
-                <template v-for="calType in calTypes">
-                    <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
-                        <AppNavigationCounter>10</AppNavigationCounter>
-                    </AppNavigationItem>
-                </template>
-            </ul>
+                <ul v-if="permissionToManageCalendarTypes">
+                    <template v-for="calType in calTypes">
+                        <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
+                            <AppNavigationCounter>10</AppNavigationCounter>
+                        </AppNavigationItem>
+                    </template>
+                </ul>
 
-        </AppNavigation>
+            </AppNavigation>
 
-        <AppContent>
+            <AppContent>
 
-            <h2 class="pull-left" v-if="currentCalTypeID === -1">
-                {{ t('elbcaltypes', 'Create a new calendar type') }}
-            </h2>
+                <h2 class="pull-left" v-if="currentCalTypeID === -1">
+                    {{ t('elbcaltypes', 'Create a new calendar type') }}
+                </h2>
 
-            <h2 class="pull-left" v-else-if="currentCalTypeID > 0">
-                {{ t('elbcaltypes', 'Update calendar type') }}
-            </h2>
+                <h2 class="pull-left" v-else-if="currentCalTypeID > 0">
+                    {{ t('elbcaltypes', 'Update calendar type') }}
+                </h2>
 
-            <button v-show="showToggleSidebarButton" @click="toggleSidebar" class="pull-right">
-                {{ t('elbcaltypes', 'Toggle sidebar') }}
-            </button>
+                <button v-show="showToggleSidebarButton" @click="toggleSidebar" class="pull-right">
+                    {{ t('elbcaltypes', 'Toggle sidebar') }}
+                </button>
 
-            <div v-if="currentCalType">
-                <input ref="title"
-                       :placeholder="t('elbcaltypes', 'Name for calendar type')"
-                       v-model="currentCalType.title"
-                       type="text"
-                       :disabled="updating">
-                <textarea ref="content" v-model="currentCalType.description" :disabled="updating" rows="15" :placeholder="t('elbcaltypes', 'Description for calendar type')"/>
-                <input type="button"
-                       class="primary"
-                       :value="t('elbcaltypes', 'Save')"
-                       :disabled="updating || !savePossible"
-                       @click="saveCalType">
-            </div>
-            <div v-else-if="!calTypes.length" class="emptycontent">
-                <div class="icon-file" />
-                <h2>{{ t('elbcaltypes', 'Create a new calendar type to get started') }}</h2>
-            </div>
-
-            <div v-else class="emptycontent">
-                <div class="icon-file" />
-                <h2>{{ t('elbcaltypes', 'Create a new calendar type or update existing') }}</h2>
-            </div>
-
-        </AppContent>
-
-        <AppSidebar v-show="showSidebar"
-                    :title="t('elbcaltypes', 'Manage reminders for calendar type')"
-                    :subtitle="getTitleOfCurrentCalType"
-                    @close="toggleSidebar">
-
-            <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit">
-
-                {{ t('elbcaltypes', 'Assigned reminders for the selected calendar type') }}
-
-                <hr>
-
-                <div v-if="assignedRemindersForCalTypeID">
-                    <ul class="assigned-reminders-for-cal-type">
-                        <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
-                            {{ calTypeReminder.cal_def_reminder_title_trans }}<button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
-                        </li>
-                    </ul>
+                <div v-if="currentCalType">
+                    <input ref="title"
+                           :placeholder="t('elbcaltypes', 'Name for calendar type')"
+                           v-model="currentCalType.title"
+                           type="text"
+                           :disabled="updating">
+                    <textarea ref="content" v-model="currentCalType.description" :disabled="updating" rows="15" :placeholder="t('elbcaltypes', 'Description for calendar type')"/>
+                    <input type="button"
+                           class="primary"
+                           :value="t('elbcaltypes', 'Save')"
+                           :disabled="updating || !savePossible"
+                           @click="saveCalType">
                 </div>
-                <div v-else>
-                    <p class="text-warning">
-                        {{ t('elbcaltypes', 'The selected calendar type doesn\' have assigned reminder') }}
-                    </p>
+                <div v-else-if="!calTypes.length" class="emptycontent">
+                    <div class="icon-file" />
+                    <h2>{{ t('elbcaltypes', 'Create a new calendar type to get started') }}</h2>
                 </div>
 
-            </AppSidebarTab>
+                <div v-else class="emptycontent">
+                    <div class="icon-file" />
+                    <h2>{{ t('elbcaltypes', 'Create a new calendar type or update existing') }}</h2>
+                </div>
 
-            <AppSidebarTab id="avail-reminders" :name="t('elbcaltypes', 'Available reminders')" icon="icon-edit">
+            </AppContent>
 
-                <div v-if="defaultCalReminders.length">
+            <AppSidebar v-show="showSidebar"
+                        :title="t('elbcaltypes', 'Manage reminders for calendar type')"
+                        :subtitle="getTitleOfCurrentCalType"
+                        @close="toggleSidebar">
+
+                <AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit">
+
+                    {{ t('elbcaltypes', 'Assigned reminders for the selected calendar type') }}
+
+                    <hr>
+
+                    <div v-if="assignedRemindersForCalTypeID">
+                        <ul class="assigned-reminders-for-cal-type">
+                            <li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
+                                {{ calTypeReminder.cal_def_reminder_title_trans }}<button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-else>
+                        <p class="text-warning">
+                            {{ t('elbcaltypes', 'The selected calendar type doesn\' have assigned reminder') }}
+                        </p>
+                    </div>
+
+                </AppSidebarTab>
+
+                <AppSidebarTab id="avail-reminders" :name="t('elbcaltypes', 'Available reminders')" icon="icon-edit">
+
+                    <div v-if="defaultCalReminders.length">
+                        <p>
+                            {{ t('elbcaltypes', 'Select reminder to assign it to the selected calendar type') }}
+                        </p>
+
+                        <hr>
+
+                        <ul class="reminders-for-cal-type">
+                            <li v-for="defCal in defaultCalReminders">
+                                <input :id="'link-checkbox'+ defCal.id"
+                                       name="link-checkbox[]"
+                                       :disabled="checkIfDefCalReminderIsAssignedToCalTypeID(defCal.id)"
+                                       class="checkbox link-checkbox"
+                                       v-model="modelDefaultCalReminder"
+                                       :value="defCal.id"
+                                       type="checkbox">
+                                <label :for="'link-checkbox'+ defCal.id" class="link-checkbox-label">{{ t('elbcaltypes', defCal.title) }}</label>
+                            </li>
+                        </ul>
+
+                        <div class="app-sidebar-tab__buttons">
+                            <button class="primary" @click="saveRemindersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
+                        </div>
+
+                    </div>
+                    <div v-else>
+
+                        <hr>
+
+                        {{ t('elbcaltypes', 'No default reminders available to assign it to the selected calendar type') }}
+
+                    </div>
+
+                </AppSidebarTab>
+
+                <AppSidebarTab id="assigned-group-folders" :name="t('elbcaltypes', 'Group folders')" icon="icon-user">
+
                     <p>
-                        {{ t('elbcaltypes', 'Select reminder to assign it to the selected calendar type') }}
+                        {{ t('elbcaltypes', 'Assign group folder(s) to the selected calendar type') }}
                     </p>
 
                     <hr>
 
-                    <ul class="reminders-for-cal-type">
-                        <li v-for="defCal in defaultCalReminders">
-                            <input :id="'link-checkbox'+ defCal.id"
-                                   name="link-checkbox[]"
-                                   :disabled="checkIfDefCalReminderIsAssignedToCalTypeID(defCal.id)"
-                                   class="checkbox link-checkbox"
-                                   v-model="modelDefaultCalReminder"
-                                   :value="defCal.id"
+                    <ul v-if="groupFolders.length" class="group-folders-for-cal-type">
+                        <li v-for="gf in groupFolders">
+                            <input :id="'gf-checkbox'+ gf.folder_id"
+                                   name="gf-checkbox[]"
+                                   :disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
+                                   class="checkbox gf-checkbox"
+                                   v-model="modelGroupFolder"
+                                   :value="gf.folder_id"
                                    type="checkbox">
-                            <label :for="'link-checkbox'+ defCal.id" class="link-checkbox-label">{{ t('elbcaltypes', defCal.title) }}</label>
+                            <label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
+                            <button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)"></button>
                         </li>
                     </ul>
 
                     <div class="app-sidebar-tab__buttons">
-                        <button class="primary" @click="saveRemindersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
+                        <button class="primary" @click="saveGroupFoldersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
                     </div>
 
-                </div>
-                <div v-else>
+                </AppSidebarTab>
 
-                    <hr>
-
-                    {{ t('elbcaltypes', 'No default reminders available to assign it to the selected calendar type') }}
-
-                </div>
-
-            </AppSidebarTab>
-
-            <AppSidebarTab id="assigned-group-folders" :name="t('elbcaltypes', 'Group folders')" icon="icon-user">
-
-                <p>
-                    {{ t('elbcaltypes', 'Assign group folder(s) to the selected calendar type') }}
-                </p>
-
-                <hr>
-
-                <ul v-if="groupFolders.length" class="group-folders-for-cal-type">
-                    <li v-for="gf in groupFolders">
-                        <input :id="'gf-checkbox'+ gf.folder_id"
-                               name="gf-checkbox[]"
-                               :disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
-                               class="checkbox gf-checkbox"
-                               v-model="modelGroupFolder"
-                               :value="gf.folder_id"
-                               type="checkbox">
-                        <label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
-                        <button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)"></button>
-                    </li>
-                </ul>
-
-                <div class="app-sidebar-tab__buttons">
-                    <button class="primary" @click="saveGroupFoldersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
-                </div>
-
-            </AppSidebarTab>
-
-        </AppSidebar>
+            </AppSidebar>
+        </div>
     </div>
 </template>
 
@@ -211,7 +213,6 @@ export default {
         // Perform ajax call to fetch all group folders
         axios.get(OC.generateUrl('/apps/elb_cal_types/getallgroupfolders')).then((result) => {
             this.groupFolders = result.data
-			console.log('fetched group folders: ', this.groupFolders)
         }),
 		// fetch assigned group folders for calendar types
 		this.fetchAssignedGroupFolders()
@@ -411,7 +412,6 @@ export default {
 		fetchAssignedGroupFolders(){
 			axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedgroupfolders')).then((result) => {
 				this.assignedGroupFoldersForCalTypes = result.data
-                console.log('fetched assigned group folders: ', this.assignedGroupFoldersForCalTypes)
 			})
         },
 		/**
