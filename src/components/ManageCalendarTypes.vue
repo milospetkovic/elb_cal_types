@@ -102,16 +102,14 @@
 						</ul>
 
 						<div class="app-sidebar-tab__buttons">
-							<button class="primary" @click="saveRemindersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
-						</div>
 
+							<button class="primary" @click="saveRemindersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
+
+						</div>
 					</div>
 					<div v-else>
-
 						<hr>
-
 						{{ t('elbcaltypes', 'No default reminders available to assign it to the selected calendar type') }}
-
 					</div>
 				</AppSidebarTab>
 
@@ -125,22 +123,22 @@
 					<ul v-if="groupFolders.length" class="group-folders-for-cal-type">
 						<li v-for="gf in groupFolders">
 							<input :id="'gf-checkbox'+ gf.folder_id"
-								   name="gf-checkbox[]"
-								   :disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
-								   class="checkbox gf-checkbox"
-								   v-model="modelGroupFolder"
-								   :value="gf.folder_id"
-								   type="checkbox">
+                                    v-model="modelGroupFolder"
+									name="gf-checkbox[]"
+									:disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
+									class="checkbox gf-checkbox"
+									:value="gf.folder_id"
+									type="checkbox">
 							<label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
 
 							<button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)"></button>
-
 						</li>
 					</ul>
 
 					<div class="app-sidebar-tab__buttons">
-                        <button class="primary" @click="saveGroupFoldersForCalendarType">{{ t('elbcaltypes', 'Assign') }}
-                        </button>
+						<button class="primary" @click="saveGroupFoldersForCalendarType">
+							{{ t('elbcaltypes', 'Assign') }}
+						</button>
 					</div>
 				</AppSidebarTab>
 			</AppSidebar>
@@ -304,17 +302,17 @@ export default {
 		// Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
 			this.isAdminUser = result.data.isSuperAdmin
-		}),
+		})
 		// Perform ajax call to fetch default reminders
 		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
 			this.defaultCalReminders = result.data
-		}),
+		})
 		// fetch assigned reminders for calendar types
-		this.fetchAssignedReminders(),
+		this.fetchAssignedReminders()
 		// Perform ajax call to fetch all group folders
 		axios.get(OC.generateUrl('/apps/elb_cal_types/getallgroupfolders')).then((result) => {
 			this.groupFolders = result.data
-		}),
+		})
 		// fetch assigned group folders for calendar types
 		this.fetchAssignedGroupFolders()
 	},
