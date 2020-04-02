@@ -123,12 +123,12 @@
 					<ul v-if="groupFolders.length" class="group-folders-for-cal-type">
 						<li v-for="gf in groupFolders">
 							<input :id="'gf-checkbox'+ gf.folder_id"
-                                    v-model="modelGroupFolder"
-									name="gf-checkbox[]"
-									:disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
-									class="checkbox gf-checkbox"
-									:value="gf.folder_id"
-									type="checkbox">
+                                v-model="modelGroupFolder"
+                                name="gf-checkbox[]"
+                                :disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
+                                class="checkbox gf-checkbox"
+                                :value="gf.folder_id"
+                                type="checkbox">
 							<label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
 
 							<button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)"></button>

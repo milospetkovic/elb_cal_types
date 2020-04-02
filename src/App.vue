@@ -1,18 +1,18 @@
 <template>
-    <div>
-        <div v-if="permissionToManageCalendarTypes">
-            <ManageCalendarTypes :isSuperAdminUser="isSuperAdminUser" />
-        </div>
-        <div v-if="permissionToManageCalendarTypesEvents">
-            <ManageCalendarTypesEvents />
-        </div>
-    </div>
+	<div>
+		<div v-if="permissionToManageCalendarTypes">
+			<ManageCalendarTypes :isSuperAdminUser='isSuperAdminUser' />
+		</div>
+		<div v-if="permissionToManageCalendarTypesEvents">
+			<ManageCalendarTypesEvents />
+		</div>
+	</div>
 </template>
 
 <script>
 import ManageCalendarTypes from './components/ManageCalendarTypes'
 import ManageCalendarTypesEvents from './components/ManageCalendarTypesEvents'
-import axios from "@nextcloud/axios";
+import axios from '@nextcloud/axios'
 
 export default {
 	name: 'App',
@@ -21,12 +21,12 @@ export default {
 		ManageCalendarTypesEvents,
 	},
 	data() {
-        return {
+		return {
 			isSuperAdminUser: false,
-			isGroupFolderAdminUser: false
+			isGroupFolderAdminUser: false,
 		}
 	},
-    computed: {
+	computed: {
 		/**
 		 * Check up if managing calendar types is allowed
 		 * @returns {Boolean}
@@ -36,8 +36,8 @@ export default {
 		},
 		permissionToManageCalendarTypesEvents() {
 			return (this.isGroupFolderAdminUser)
-        }
-    },
+		},
+	},
 	beforeMount() {
 		// Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
