@@ -3,7 +3,7 @@
         <div v-if="permissionToManageCalendarTypes">
             <ManageCalendarTypes :isSuperAdminUser="isSuperAdminUser" />
         </div>
-        <div v-if="!permissionToManageCalendarTypes">
+        <div v-if="permissionToManageCalendarTypesEvents">
             <ManageCalendarTypesEvents />
         </div>
     </div>
@@ -22,7 +22,8 @@ export default {
 	},
 	data() {
         return {
-			isSuperAdminUser: false
+			isSuperAdminUser: false,
+			isGroupFolderAdminUser: false
 		}
 	},
     computed: {
@@ -31,13 +32,21 @@ export default {
 		 * @returns {Boolean}
 		 */
 		permissionToManageCalendarTypes() {
-			return (this.isSuperAdminUser)
+			return (this.isSuperAdminUser && !this.isGroupFolderAdminUser)
 		},
+		permissionToManageCalendarTypesEvents() {
+			return (this.isGroupFolderAdminUser)
+        }
     },
 	beforeMount() {
 		// Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
 			this.isSuperAdminUser = result.data.isSuperAdmin
+		})
+		// Perform ajax call to check up if current logged in user belongs to the super admin user group
+		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
+			// this.isGroupFolderAdminUser = result.data.isSuperAdmin
+			this.isGroupFolderAdminUser = true
 		})
 	},
 }
