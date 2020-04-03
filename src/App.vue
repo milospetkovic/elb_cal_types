@@ -7,8 +7,7 @@
 			<ManageCalendarTypesEvents />
 		</div>
         <div v-if="isRegularUser">
-            <p class="">{{ t('elbcaltypes', 'Sorry, You don\'t have assigned permission') }}</p>
-            <p class="text-warning">Forbidden access</p>
+            <ForbiddenAccess />
         </div>
 	</div>
 </template>
@@ -16,6 +15,7 @@
 <script>
 import ManageCalendarTypes from './components/ManageCalendarTypes'
 import ManageCalendarTypesEvents from './components/ManageCalendarTypesEvents'
+import ForbiddenAccess from './components/ForbiddenAccess'
 import axios from '@nextcloud/axios'
 
 export default {
@@ -23,6 +23,7 @@ export default {
 	components: {
 		ManageCalendarTypes,
 		ManageCalendarTypesEvents,
+		ForbiddenAccess,
 	},
 	data() {
 		return {
