@@ -51,7 +51,6 @@ export default {
 		})
 		// perform ajax call to check up if current logged in user is administrator of group folder
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isuseradminforgroupfolder')).then((result) => {
-			// this.isGroupFolderAdminUser = result.data.isSuperAdmin
 			this.isGroupFolderAdminUser = result.data.isGroupFolderAdmin
 		})
 	},
