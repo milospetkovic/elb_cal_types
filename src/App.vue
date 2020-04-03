@@ -6,6 +6,9 @@
 		<div v-if="permissionToManageCalendarTypesEvents">
 			<ManageCalendarTypesEvents />
 		</div>
+        <div v-if="userWithoutAccessPermission">
+            <p class="">{{ t('elbcaltypes', 'Assign group folder(s) to the selected calendar type') }}</p>
+        </div>
 	</div>
 </template>
 
@@ -37,16 +40,19 @@ export default {
 		permissionToManageCalendarTypesEvents() {
 			return (this.isGroupFolderAdminUser)
 		},
+		userWithoutAccessPermission() {
+			return (!this.isSuperAdminUser && !this.isGroupFolderAdminUser)
+        }
 	},
 	beforeMount() {
 		// Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
 			this.isSuperAdminUser = result.data.isSuperAdmin
 		})
-		// Perform ajax call to check up if current logged in user belongs to the super admin user group
-		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
+		// perform ajax call to check up if current logged in user is administrator of group folder
+		axios.post(OC.generateUrl('/apps/elb_cal_types/isuseradminforgroupfolder')).then((result) => {
 			// this.isGroupFolderAdminUser = result.data.isSuperAdmin
-			this.isGroupFolderAdminUser = true
+			this.isGroupFolderAdminUser = result.data.isGroupFolderAdmin
 		})
 	},
 }

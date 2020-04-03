@@ -23,6 +23,7 @@ namespace OCA\ElbCalTypes\Controller;
 
 
 use OCA\ElbCalTypes\CurrentUser;
+use OCA\ElbCalTypes\Service\ElbGroupFolderUserService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 
@@ -32,14 +33,21 @@ class UserController extends Controller
      * @var CurrentUser
      */
     private $currentUser;
+    /**
+     * @var ElbGroupFolderUserService
+     */
+    private $groupFolderUser;
 
     /**
      * UserController constructor.
      * @param CurrentUser $currentUser
+     * @param ElbGroupFolderUserService $groupFolderUser
      */
-    public function __construct(CurrentUser $currentUser)
+    public function __construct(CurrentUser $currentUser,
+                                ElbGroupFolderUserService $groupFolderUser)
     {
         $this->currentUser = $currentUser;
+        $this->groupFolderUser = $groupFolderUser;
     }
 
     /**
@@ -51,6 +59,17 @@ class UserController extends Controller
     public function isusersuperadmin()
     {
         return new JSONResponse($this->currentUser->isCurrentUserSuperAdmin());
+    }
+
+    /**
+     * Check up if current logged in user is assigned as admin for group folder
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function isuseradminforgroupfolder()
+    {
+        return new JSONResponse($this->groupFolderUser->isCurrentUserAdminForGroupFolder());
     }
 
 }
