@@ -8,7 +8,7 @@
 
             <AppNavigationNew
                     :text="t('elbcaltypes', 'Create event')"
-                    :disabled="!(currentCalTypeLinkID > 0)"
+                    :disabled="disableCreateNewEventButton"
                     button-id="new-caltype-event-button"
                     button-class="icon-add"
                     :title="t('elbcaltypes', 'Create and assign calendar event with reminders to users')"
@@ -58,6 +58,7 @@ export default {
     	return {
     		assignedCalendarTypes: [],
 			currentCalTypeLinkID: null,
+            visibleCreateNewEventForm: false,
         }
     },
     computed: {
@@ -74,6 +75,12 @@ export default {
 				}
 			}
 		},
+		disableCreateNewEventButton() {
+			if (!this.currentCalTypeLinkID || this.visibleCreateNewEventForm) {
+				return true
+            }
+			return false
+        },
     },
     beforeMount() {
     	axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
@@ -83,10 +90,12 @@ export default {
 	},
     methods: {
 		openCalType(calType) {
+			this.visibleCreateNewEventForm = false
             this.currentCalTypeLinkID = calType.link_id
 		},
 		newCalendarTypeEvent() {
-			alert('implement event create form')
+			this.visibleCreateNewEventForm = true
+			//alert('implement event create form')
         }
     }
 }
@@ -101,7 +110,6 @@ export default {
         background-color: #EDEDED;
         border: 1px solid #DBDBDB;
         margin: 10px 10px;
-        /*border-radius: var(--border-radius-pill);*/
         font-weight: bold;
     }
 </style>
