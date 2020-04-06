@@ -78,9 +78,29 @@ class ElbCalTypeGroupFolderService
             ->from('elb_gf_cal_types', 'gct')
             ->leftJoin('gct', 'group_folders', 'gu', $qb->expr()->eq('gu.folder_id', 'gct.fk_group_folder'))
             ->leftJoin('gct', 'elb_calendar_types', 'ct', $qb->expr()->eq('ct.id', 'gct.fk_elb_cal_type'))
-            ->leftJoin('ct', 'elb_cal_type_reminders', 'ctr', $qb->expr()->eq('ctr.fk_elb_cal_type', 'ct.id'))
+            //->leftJoin('ct', 'elb_cal_type_reminders', 'ctr', $qb->expr()->eq('ctr.fk_elb_cal_type', 'ct.id'))
             ->where($qb->expr()->in('gct.fk_group_folder', $qb->createNamedParameter($gfIDs, IQueryBuilder::PARAM_INT_ARRAY)));
         return $qb->execute()->fetchAll();
+    }
+
+    public function getFormatedCalendarTypesAssignedForGroupFoldersIDs(array $gfIDs)
+    {
+        $ret = [];
+        $res = $this->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
+        if (is_array($res) && count($res)) {
+            $assignedRemForCalType = [];
+            foreach ($res as $data) {
+                $ret[] = [
+                    'link_id' => $data['link_id'],
+                    'cal_type_id' => $data['cal_type_id'],
+                    'group_folder_id' => $data['group_folder_id'],
+                    'group_folder_name' => $data['group_folder_name'],
+                    'cal_type_title' => $data['cal_type_title'],
+                ];
+                //if (!in_array($assignedRemForCalType, $data))
+            }
+        }
+        return $ret;
     }
 
 }

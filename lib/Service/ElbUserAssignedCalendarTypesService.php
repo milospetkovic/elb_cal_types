@@ -56,7 +56,6 @@ class ElbUserAssignedCalendarTypesService
     {
         $ret = [];
         $gfIDs =  $this->elbGroupFolderUserService->getGroupFoldersIdsLinkedWithUser();
-
         if (is_array($gfIDs) && count($gfIDs)) {
             $ret = $this->elbCalTypeGroupFolderService->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
         }

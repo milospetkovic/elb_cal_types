@@ -4,7 +4,6 @@
 
             <h4>{{ t('elb_cal_types', 'Choose assigned calendar types') }}</h4>
 
-
             <ul>
                 <template v-for="calType in assignedCalendarTypes">
                     <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
@@ -46,22 +45,7 @@ export default {
 				return {
 					text: calType.cal_type_title,
 					action: () => this.openCalType(calType),
-					classes: this.currentCalTypeLinkID === calType.id ? 'active' : '',
-					utils: {
-						actions: [
-							{
-								icon: calType.id === -1 ? 'icon-close' : 'icon-delete',
-								text: calType.id === -1 ? t('elb_cal_types', 'Cancel calendar type creation') : t('elb_cal_types', 'Delete calendar type'),
-								action: () => {
-									if (calType.id === -1) {
-										this.cancelNewCalType(calType)
-									} else {
-										this.deleteCalType(calType)
-									}
-								},
-							},
-						],
-					},
+					classes: this.currentCalTypeLinkID === calType.link_id ? 'active' : '',
 				}
 			}
 		},
