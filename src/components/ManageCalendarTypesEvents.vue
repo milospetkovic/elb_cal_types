@@ -2,7 +2,9 @@
     <div id="content" class="app-elb-cal-types-events">
         <AppNavigation>
 
-            <h4>{{ t('elb_cal_types', 'Assigned calendar types') }}</h4>
+            <div class="nav-title-field">
+                <h4>{{ t('elb_cal_types', 'Assigned calendar types') }}</h4>
+            </div>
 
             <ul>
                 <template v-for="calType in assignedCalendarTypes">
@@ -79,5 +81,14 @@ export default {
 <style scoped>
     #app-content {
         padding: 20px;
+    }
+    .nav-title-field {
+        display: inline-block;
+        padding: 10px 10px 10px 20px;
+        background-color: #EDEDED;
+        border: 1px solid #DBDBDB;
+        margin: 10px 10px;
+        border-radius: var(--border-radius-pill);
+        font-weight: bold;
     }
 </style>
