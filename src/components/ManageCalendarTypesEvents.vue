@@ -11,7 +11,7 @@
                     :disabled="!(currentCalTypeLinkID > 0)"
                     button-id="new-caltype-event-button"
                     button-class="icon-add"
-                    :title="t('elbcaltypes', 'Create and assigne calendar event with reminders for selected calendar type')"
+                    :title="t('elbcaltypes', 'Create and assign calendar event with reminders to users')"
                     @click="newCalendarTypeEvent" />
 
             <ul>
