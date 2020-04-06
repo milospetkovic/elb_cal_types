@@ -23,5 +23,6 @@ return [
         [ 'name' => 'elbcaltypegroupfolder#assigngroupfolderstocaltype', 'url' => '/assigngroupfolderstocaltype', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypegroupfolder#removegroupfolderforcaltype', 'url' => '/removegroupfolderforcaltype', 'verb' => 'POST'],
         [ 'name' => 'user#isuseradminforgroupfolder', 'url' => '/isuseradminforgroupfolder', 'verb' => 'POST'],
+        [ 'name' => 'user#getassignedcalendartypes', 'url' => '/getassignedcalendartypes', 'verb' => 'GET'],
     ]
 ];

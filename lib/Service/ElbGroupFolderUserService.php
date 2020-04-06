@@ -71,5 +71,66 @@ class ElbGroupFolderUserService
         return $res;
     }
 
+    /**
+     * Get group folders ids which are assigned to the user by user ID's
+     *
+     * @return array
+     */
+    private function getGroupFolderIdsAssignedForUserByUserId()
+    {
+        $ret = [];
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('gfm.folder_id')
+            ->from('group_folders_manage', 'gfm')
+            ->where($qb->expr()->eq('gfm.mapping_id', $qb->createNamedParameter($this->currentUser->getUID())))
+            ->andWhere('gfm.mapping_type="user"')
+            ->groupBy('gfm.folder_id');
+        $res = $qb->execute()->fetchAll();
+
+        if (is_array($res) && count($res)) {
+            foreach ($res as $rowData) {
+                $ret[] = $rowData['folder_id'];
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * Get group folders ids which are assigned to the user by user's group
+     *
+     * @return array
+     */
+    private function getGroupFolderIdsAssignedForUserByUserGroup()
+    {
+        $ret = [];
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('gfm.folder_id')
+            ->from('group_folders_manage', 'gfm')
+            ->where($qb->expr()->eq('gu.uid', $qb->createNamedParameter($this->currentUser->getUID())))
+            ->andWhere('gfm.mapping_type="group"')
+            ->leftJoin('gfm', 'group_user', 'gu', $qb->expr()->eq('gu.gid', 'gfm.mapping_id'))
+            ->groupBy('gfm.folder_id');
+        $res = $qb->execute()->fetchAll();
+
+        if (is_array($res) && count($res)) {
+            foreach ($res as $rowData) {
+                $ret[] = $rowData['folder_id'];
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * Get all group folders ids which are available for the user to manage
+     *
+     * @return array
+     */
+    public function getGroupFoldersIdsLinkedWithUser()
+    {
+        $gfIdsForUserId = $this->getGroupFolderIdsAssignedForUserByUserId();
+        $gfIdsForUserGroup = $this->getGroupFolderIdsAssignedForUserByUserGroup();
+        $retArr = array_unique(array_merge($gfIdsForUserId, $gfIdsForUserGroup));
+        return $retArr;
+    }
 
 }

@@ -20,5 +20,17 @@ export default {
     components: {
         AppNavigation,
     },
+    data() {
+    	return {
+    		assignedCalendarTypes: []
+        }
+    },
+    beforeMount() {
+		//console.log('poziva ?')
+    	axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
+			this.assignedCalendarTypes = result.data
+			console.log('assigned cal types: ', this.assignedCalendarTypes)
+		})
+	}
 }
 </script>

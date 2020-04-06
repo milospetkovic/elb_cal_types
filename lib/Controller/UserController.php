@@ -24,6 +24,7 @@ namespace OCA\ElbCalTypes\Controller;
 
 use OCA\ElbCalTypes\CurrentUser;
 use OCA\ElbCalTypes\Service\ElbGroupFolderUserService;
+use OCA\ElbCalTypes\Service\ElbUserAssignedCalendarTypesService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 
@@ -37,17 +38,24 @@ class UserController extends Controller
      * @var ElbGroupFolderUserService
      */
     private $groupFolderUser;
+    /**
+     * @var ElbUserAssignedCalendarTypesService
+     */
+    private $assignedCalTypes;
 
     /**
      * UserController constructor.
      * @param CurrentUser $currentUser
      * @param ElbGroupFolderUserService $groupFolderUser
+     * @param ElbUserAssignedCalendarTypesService $assignedCalTypes
      */
     public function __construct(CurrentUser $currentUser,
-                                ElbGroupFolderUserService $groupFolderUser)
+                                ElbGroupFolderUserService $groupFolderUser,
+                                ElbUserAssignedCalendarTypesService $assignedCalTypes)
     {
         $this->currentUser = $currentUser;
         $this->groupFolderUser = $groupFolderUser;
+        $this->assignedCalTypes = $assignedCalTypes;
     }
 
     /**
@@ -70,6 +78,17 @@ class UserController extends Controller
     public function isuseradminforgroupfolder()
     {
         return new JSONResponse($this->groupFolderUser->isCurrentUserAdminForGroupFolder());
+    }
+
+    /**
+     * Get up assigned calendar types for user
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function getassignedcalendartypes()
+    {
+        return new JSONResponse($this->assignedCalTypes->getAssignedCalendarTypes());
     }
 
 }
