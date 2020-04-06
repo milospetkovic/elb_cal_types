@@ -15,13 +15,11 @@
 
         <AppContent>
 
-            <h2>Show ovde content</h2>
-
             <div v-if="currentCalTypeLinkID">
-                <h4>{{ t('elb_cal_types', 'Manage events for selected calendar type') }}: {{ }}</h4>
+                <h2>{{ t('elb_cal_types', 'Manage events for selected calendar type') }}: {{ assignedCalendarTypes[currentCalTypeLinkID]['cal_type_title'] }}</h2>
             </div>
             <div v-else>
-                <h4>{{ t('elb_cal_types', 'Choose assigned calendar type from the left menu to manage events') }}</h4>
+                <h2>{{ t('elb_cal_types', 'Choose assigned calendar type from the left menu to manage events') }}</h2>
             </div>
 
         </AppContent>
