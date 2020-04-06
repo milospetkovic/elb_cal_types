@@ -6,6 +6,14 @@
                 <h4>{{ t('elb_cal_types', 'Assigned calendar types') }}</h4>
             </div>
 
+            <AppNavigationNew
+                    :text="t('elbcaltypes', 'Create event')"
+                    :disabled="!(currentCalTypeLinkID > 0)"
+                    button-id="new-caltype-event-button"
+                    button-class="icon-add"
+                    :title="t('elbcaltypes', 'Create and assigne calendar event with reminders for selected calendar type')"
+                    @click="newCalendarTypeEvent" />
+
             <ul>
                 <template v-for="calType in assignedCalendarTypes">
                     <AppNavigationItem :key="calType.id" :item="calTypeEntry(calType)" icon="icon-user">
@@ -21,7 +29,7 @@
                 <h2>{{ t('elb_cal_types', 'Manage events for selected calendar type') }}: {{ assignedCalendarTypes[currentCalTypeLinkID]['cal_type_title'] }}</h2>
             </div>
             <div v-else>
-                <h2>{{ t('elb_cal_types', 'Choose assigned calendar type from the left menu to manage events') }}</h2>
+                <h2>{{ t('elb_cal_types', 'Please choose assigned calendar type from the left menu to manage events') }}</h2>
             </div>
 
         </AppContent>
@@ -31,6 +39,7 @@
 <script>
 import {
     AppNavigation,
+    AppNavigationNew,
     AppNavigationItem,
     AppContent,
 } from 'nextcloud-vue'
@@ -41,6 +50,7 @@ export default {
     name: 'ManageCalendarTypesEvents',
     components: {
         AppNavigation,
+		AppNavigationNew,
 		AppNavigationItem,
 		AppContent,
     },
@@ -75,6 +85,9 @@ export default {
 		openCalType(calType) {
             this.currentCalTypeLinkID = calType.link_id
 		},
+		newCalendarTypeEvent() {
+			alert('implement event create form')
+        }
     }
 }
 </script>
@@ -88,7 +101,7 @@ export default {
         background-color: #EDEDED;
         border: 1px solid #DBDBDB;
         margin: 10px 10px;
-        border-radius: var(--border-radius-pill);
+        /*border-radius: var(--border-radius-pill);*/
         font-weight: bold;
     }
 </style>
