@@ -1,5 +1,5 @@
 <template>
-    <div id="content2" class="app-elb-cal-types-events">
+    <div id="content" class="app-elb-cal-types-events">
         <AppNavigation>
 
             <h4>{{ t('elb_cal_types', 'Choose assigned calendar types') }}</h4>
@@ -12,6 +12,12 @@
             </ul>
 
         </AppNavigation>
+
+        <AppContent>
+
+            <h2>Show ovde content</h2>
+
+        </AppContent>
     </div>
 </template>
 
@@ -19,6 +25,7 @@
 import {
     AppNavigation,
     AppNavigationItem,
+    AppContent,
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
@@ -28,6 +35,7 @@ export default {
     components: {
         AppNavigation,
 		AppNavigationItem,
+		AppContent,
     },
     data() {
     	return {
@@ -55,6 +63,11 @@ export default {
 			this.assignedCalendarTypes = result.data
 			console.log('assigned cal types: ', this.assignedCalendarTypes)
 		})
-	}
+	},
+    methods: {
+		openCalType(calType) {
+
+		},
+    }
 }
 </script>
