@@ -26,6 +26,10 @@ class ElbUserAssignedCalendarTypesService
      * @var ElbGroupFolderUserService
      */
     private $elbGroupFolderUserService;
+    /**
+     * @var ElbCalTypeGroupFolderService
+     */
+    private $elbCalTypeGroupFolderService;
 
     /**
      * ElbUserAssignedCalendarTypesService constructor.
@@ -33,21 +37,30 @@ class ElbUserAssignedCalendarTypesService
      * @param IDBConnection $db
      * @param CurrentUser $currentUser
      * @param ElbGroupFolderUserService $elbGroupFolderUserService
+     * @param ElbCalTypeGroupFolderService $elbCalTypeGroupFolderService
      */
     public function __construct(IL10N $l,
                                 IDBConnection $db,
                                 CurrentUser $currentUser,
-                                ElbGroupFolderUserService $elbGroupFolderUserService)
+                                ElbGroupFolderUserService $elbGroupFolderUserService,
+                                ElbCalTypeGroupFolderService $elbCalTypeGroupFolderService)
     {
         $this->l = $l;
         $this->db = $db;
         $this->currentUser = $currentUser;
         $this->elbGroupFolderUserService = $elbGroupFolderUserService;
+        $this->elbCalTypeGroupFolderService = $elbCalTypeGroupFolderService;
     }
 
     public function getAssignedCalendarTypes()
     {
-        return $this->elbGroupFolderUserService->getGroupFoldersIdsLinkedWithUser();
+        $ret = [];
+        $gfIDs =  $this->elbGroupFolderUserService->getGroupFoldersIdsLinkedWithUser();
+
+        if (is_array($gfIDs) && count($gfIDs)) {
+            $ret = $this->elbCalTypeGroupFolderService->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
+        }
+        return $ret;
     }
 
 }

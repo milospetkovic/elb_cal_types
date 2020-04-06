@@ -7,19 +7,27 @@ namespace OCA\ElbCalTypes\Service;
 use OCA\Activity\CurrentUser;
 use OCA\ElbCalTypes\Db\CalendarTypeGroupFolder;
 use OCA\ElbCalTypes\Db\CalendarTypeGroupFolderMapper;
-use OCA\ElbCalTypes\Db\GroupFolders;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
 use OCP\IL10N;
 
 class ElbCalTypeGroupFolderService
 {
 
+    /**
+     * @var IDBConnection
+     */
+    private $db;
+
     public function __construct(IL10N $l,
                                 CalendarTypeGroupFolderMapper $mapper,
-                                CurrentUser $currentUser)
+                                CurrentUser $currentUser,
+                                IDBConnection $db)
     {
         $this->l = $l;
         $this->mapper = $mapper;
         $this->currentUser = $currentUser;
+        $this->db = $db;
     }
 
 
@@ -59,6 +67,15 @@ class ElbCalTypeGroupFolderService
         $calTypeGF = new CalendarTypeGroupFolder();
         $calTypeGF->id = $linkID;
         return $this->mapper->delete($calTypeGF);
+    }
+
+    public function getCalendarTypesAssignedForGroupFoldersIDs(array $gfIDs)
+    {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('gct.id as link_id')
+            ->from('elb_gf_cal_types', 'gct')
+            ->where($qb->expr()->in('gct.fk_group_folder', $qb->createNamedParameter($gfIDs, IQueryBuilder::PARAM_INT_ARRAY)));
+        return $qb->execute()->fetchAll();
     }
 
 }
