@@ -85,19 +85,29 @@ class ElbCalTypeGroupFolderService
 
     public function getFormatedCalendarTypesAssignedForGroupFoldersIDs(array $gfIDs)
     {
+//        $ret = [];
+//        $res = $this->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
+//        if (is_array($res) && count($res)) {
+//            $assignedRemForCalType = [];
+//            foreach ($res as $data) {
+//                $ret[] = [
+//                    'link_id' => $data['link_id'],
+//                    'cal_type_id' => $data['cal_type_id'],
+//                    'group_folder_id' => $data['group_folder_id'],
+//                    'group_folder_name' => $data['group_folder_name'],
+//                    'cal_type_title' => $data['cal_type_title'],
+//                ];
+//                //if (!in_array($assignedRemForCalType, $data))
+//            }
+//        }
+//        return $ret;
+
         $ret = [];
+
         $res = $this->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
         if (is_array($res) && count($res)) {
-            $assignedRemForCalType = [];
             foreach ($res as $data) {
-                $ret[] = [
-                    'link_id' => $data['link_id'],
-                    'cal_type_id' => $data['cal_type_id'],
-                    'group_folder_id' => $data['group_folder_id'],
-                    'group_folder_name' => $data['group_folder_name'],
-                    'cal_type_title' => $data['cal_type_title'],
-                ];
-                //if (!in_array($assignedRemForCalType, $data))
+                $ret[$data['link_id']] = $data;
             }
         }
         return $ret;
