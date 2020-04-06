@@ -71,3 +71,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    #app-content {
+        padding: 20px;
+    }
+</style>
