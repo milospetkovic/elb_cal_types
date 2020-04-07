@@ -33,20 +33,27 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th></th>
-								<th></th>
+								<th>{{ t('elb_cal_types', 'Event attributes') }}</th>
+								<th>{{ t('elb_cal_types', 'Values') }}</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td>{{ t('elb_cal_types', 'Event name') }}</td>
-								<td></td>
+								<td><input name="eventname" type="text" :value="assignedCalendarTypes[currentCalTypeLinkID]['cal_type_title']"></td>
 							</tr>
 
-                            <tr>
-                                <td>{{ t('elb_cal_types', 'Event date and time') }}</td>
-                                <td></td>
-                            </tr>
+							<tr>
+								<td>{{ t('elb_cal_types', 'Event description') }}</td>
+								<td>
+									<textarea name="eventdescription" />
+								</td>
+							</tr>
+
+							<tr>
+								<td>{{ t('elb_cal_types', 'Event date and time') }}</td>
+								<td></td>
+							</tr>
 
 							<tr>
 								<td>{{ t('elb_cal_types', 'Reminders for event') }}</td>
@@ -61,9 +68,9 @@
 							<tr>
 								<td />
 								<td>
-                                    <button class="button primary" @click="saveNewEvent">
-                                        {{ t('elb_cal_types', 'Save') }}
-                                    </button>
+									<button class="button primary" @click="saveNewEvent">
+										{{ t('elb_cal_types', 'Save') }}
+									</button>
 
 									<button @click="cancelCreateNewEvent">
 										{{ t('elb_cal_types', 'Cancel') }}
@@ -137,7 +144,6 @@ export default {
 		},
 		newCalendarTypeEvent() {
 			this.visibleCreateNewEventForm = true
-			// alert('implement event create form')
 		},
 		cancelCreateNewEvent() {
 			if (confirm(t('elb_cal_types', 'Really cancel') + '?')) {
@@ -146,7 +152,7 @@ export default {
 		},
 		saveNewEvent() {
 			alert('save event')
-        }
+		},
 	},
 }
 </script>
