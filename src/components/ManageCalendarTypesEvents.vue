@@ -59,9 +59,18 @@
                                     {{ t('elb_cal_types', 'Event date and time') }}
                                 </td>
 								<td>
-                                    <DatetimePicker
-                                            v-model="eventdatetime"
-                                            type="datetime" />
+                                    <template>
+                                        <span>
+                                        <DatetimePicker
+                                                v-model="eventdatetime"
+                                                type="datetime"
+                                                :default-value="new Date()"
+                                                :clearable="true"
+                                                :format="'DD.MM.YYYY HH:mm'"
+                                                :show-second="false"  />
+                                        {{ eventdatetime }}
+                                        </span>
+                                    </template>
                                 </td>
 							</tr>
 
@@ -109,6 +118,8 @@ import {
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
+import 'vue2-datepicker/lib/datepicker.css';
+import 'vue2-datepicker/src/locale/languages';
 
 export default {
 	name: 'ManageCalendarTypesEvents',
@@ -124,6 +135,7 @@ export default {
 			assignedCalendarTypes: [],
 			currentCalTypeLinkID: null,
 			visibleCreateNewEventForm: false,
+            eventdatetime: null,
 		}
 	},
 	computed: {
