@@ -62,7 +62,7 @@ class ElbCalTypeReminderService
                     'calendar_type_id' => $res['cal_type_id'],
                     'link_id' => $res['link_id'],
                     'cal_def_reminder_id' => $res['cal_def_reminder_id'],
-                    'cal_def_reminder_title' => $res['cal_def_reminder_id'],
+                    'cal_def_reminder_title' => $res['cal_def_reminder_title'],
                     'cal_def_reminder_title_trans' => $transForDefReminders[$res['cal_def_reminder_id']],
                 ];
             }
@@ -105,7 +105,7 @@ class ElbCalTypeReminderService
                     'calendar_type_id' => $res['cal_type_id'],
                     'link_id' => $res['link_id'],
                     'cal_def_reminder_id' => $res['cal_def_reminder_id'],
-                    'cal_def_reminder_title' => $res['cal_def_reminder_id'],
+                    'cal_def_reminder_title' => $res['cal_def_reminder_title'],
                     'cal_def_reminder_title_trans' => $transForDefReminders[$res['cal_def_reminder_id']],
                 ];
             }

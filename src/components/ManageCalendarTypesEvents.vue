@@ -196,24 +196,13 @@ export default {
 	beforeMount() {
 		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
 		axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
-			this.assignedCalendarTypes = result.data
-			//let calTypesIds = Object.keys(this.assignedCalendarTypes)
-			//console.log('calTypesIds: ', calTypesIds)
-			console.log('assignedCalendarTypes: ', this.assignedCalendarTypes)
-
 			let calTypesIds = []
-
             if (this.assignedCalendarTypes) {
 				Object.keys(this.assignedCalendarTypes).forEach(key => {
 					const obj = this.assignedCalendarTypes[key]
-
 					calTypesIds.push(obj.cal_type_id)
-					console.log('obj', obj)
 				})
             }
-
-			console.log('calTypesIds', calTypesIds)
-
             if (calTypesIds.length) {
 				const data = {
 					calTypesIds: calTypesIds,

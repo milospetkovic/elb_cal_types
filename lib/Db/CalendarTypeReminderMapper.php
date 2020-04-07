@@ -34,8 +34,8 @@ class CalendarTypeReminderMapper extends QBMapper
         $qb->select('ctr.id as link_id', 'ctr.fk_elb_cal_type as cal_type_id',
             'ctr.fk_elb_def_reminder as cal_def_reminder_id', 'cdf.title as cal_def_reminder_title', 'cdf.minutes_before_event')
             ->from('elb_cal_type_reminders', 'ctr')
-            ->rightJoin('ctr', 'elb_calendar_types', 'ct', $qb->expr()->eq('ctr.fk_elb_cal_type', 'ct.id'))
-            ->rightJoin('ctr', 'elb_cal_def_reminders', 'cdf', $qb->expr()->eq('ctr.fk_elb_def_reminder', 'cdf.id'))
+            ->leftJoin('ctr', 'elb_calendar_types', 'ct', $qb->expr()->eq('ctr.fk_elb_cal_type', 'ct.id'))
+            ->leftJoin('ctr', 'elb_cal_def_reminders', 'cdf', $qb->expr()->eq('ctr.fk_elb_def_reminder', 'cdf.id'))
             ->where('ctr.id > 0' );
         if (count($arrayOfCalTypeIds)) {
             //$qb->andWhere($qb->expr()->in('ctr.fk_elb_cal_type', $qb->createNamedParameter($arrayOfCalTypeIds, IQueryBuilder::PARAM_INT_ARRAY)));
@@ -43,12 +43,6 @@ class CalendarTypeReminderMapper extends QBMapper
         }
             $qb->groupBy('ctr.id')
             ->orderBy('cdf.minutes_before_event', 'ASC');
-
-
-
-//        var_dump($qb->getSQL());
-//        die();
-
 
         return $qb->execute()->fetchAll();
     }
