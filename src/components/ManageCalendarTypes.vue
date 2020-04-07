@@ -338,7 +338,7 @@ export default {
 
 					Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).forEach(key => {
 						const calRemObj = this.assignedRemForCalTypes[this.currentCalTypeID][key]
-						if (calRemObj.cal_def_reminder_id === defRemID) {
+						if (calRemObj.cal_def_reminder_id == defRemID) {
 							response = true
 							return true
 						}
