@@ -81,7 +81,25 @@
 								<td class="text-right">
                                     {{ t('elb_cal_types', 'Reminders for event') }}
                                 </td>
-								<td></td>
+								<td>
+                                    <Multiselect
+                                            :size="100"
+                                            v-model="eventReminders"
+                                            :options="optionsComputed"
+                                            track-by="library"
+                                            :custom-label="customLabel"
+                                            :close-on-select="false"
+                                            @select=onSelect($event)
+                                            @remove=onRemove($event)
+                                            :multiple="true">
+
+                                        <span class="checkbox-label" slot="option" slot-scope="scope" @click.self="select(scope.option)">
+                                            {{ scope.option.library }}
+                                            <input class="test" type="checkbox" v-model="scope.option.checked" @focus.prevent/>
+                                        </span>
+
+                                    </Multiselect>
+                                </td>
 							</tr>
 							<tr>
 								<td class="text-right">
@@ -118,6 +136,7 @@ import {
 	AppNavigationItem,
 	AppContent,
     DatetimePicker,
+	Multiselect,
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
@@ -132,6 +151,7 @@ export default {
 		AppNavigationItem,
 		AppContent,
 		DatetimePicker,
+        Multiselect,
 	},
 	data() {
 		return {
@@ -140,6 +160,7 @@ export default {
 			visibleCreateNewEventForm: false,
             eventdatetime: null,
 			defaultCalReminders: [],
+			eventReminders: null,
 		}
 	},
 	computed: {
@@ -162,6 +183,13 @@ export default {
 			}
 			return false
 		},
+		optionsComputed() {
+			return [
+				{ language: 'JavaScript', library: 'Vue.js', checked: true },
+				{ language: 'JavaScript', library: 'Vue-Multiselect', checked: false },
+				{ language: 'JavaScript', library: 'Vuelidate', checked: false },
+            ]
+        }
 	},
 	beforeMount() {
 		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
@@ -190,22 +218,42 @@ export default {
 		saveNewEvent() {
 			alert('save event')
 		},
+		customLabel (option) {
+			return `${option.library} - ${option.language}`
+		},
+		onSelect (option) {
+			console.log("Added");
+			option.checked = true;
+			console.log(option.library + "  Clicked!! " + option.checked);
+		},
+		onRemove (option) {
+			console.log("Removed");
+			option.checked = false;
+			console.log(option.library + "  Removed!! " + option.checked);
+		},
 	},
 }
 </script>
 <style scoped>
-	#app-content {
-		padding: 20px;
-	}
-	.nav-title-field {
-		display: inline-block;
-		padding: 10px 10px 10px 20px;
-		background-color: #EDEDED;
-		border: 1px solid #DBDBDB;
-		margin: 10px 10px;
-		font-weight: bold;
-	}
-    td.text-right {
-        text-align: right;
-    }
+#app-content {
+    padding: 20px;
+}
+.nav-title-field {
+    display: inline-block;
+    padding: 10px 10px 10px 20px;
+    background-color: #EDEDED;
+    border: 1px solid #DBDBDB;
+    margin: 10px 10px;
+    font-weight: bold;
+}
+td.text-right {
+    text-align: right;
+}
+.checkbox-label {
+    display: block;
+}
+.test {
+    position: absolute;
+    right: 1vw;
+}
 </style>
