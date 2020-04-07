@@ -69,8 +69,9 @@
                                                 :format="'DD.MM.YYYY HH:mm'"
                                                 :show-second="false"
                                                 :time-select-options="{minutes: [0,5,10,15,20,25,30,35,40,45,50,55]}"
-                                                :lang="'en'"/>
-                                        {{ eventdatetime }}
+                                                :lang="'en'"
+                                                :first-day-of-week="1"
+                                                :not-before="new Date()"/>
                                         </span>
                                     </template>
                                 </td>
