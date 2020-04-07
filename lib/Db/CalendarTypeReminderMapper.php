@@ -5,6 +5,7 @@ namespace OCA\ElbCalTypes\Db;
 
 
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class CalendarTypeReminderMapper extends QBMapper
@@ -27,7 +28,7 @@ class CalendarTypeReminderMapper extends QBMapper
         return $this->findEntities($qb);
     }
 
-    public function getAssignedRemindersForCalendarTypes()
+    public function getAssignedRemindersForCalendarTypes(array $arrayOfCalTypeIds)
     {
         $qb = $this->db->getQueryBuilder();
         $qb->select('ctr.id as link_id', 'ctr.fk_elb_cal_type as cal_type_id',
@@ -38,6 +39,9 @@ class CalendarTypeReminderMapper extends QBMapper
             ->where('ctr.id > 0' )
             ->groupBy('ctr.id')
             ->orderBy('cdf.minutes_before_event', 'ASC');
+        if (count($arrayOfCalTypeIds)) {
+            $qb->andWhere($qb->expr()->in('ctr.fk_elb_cal_type', $qb->createNamedParameter($arrayOfCalTypeIds, IQueryBuilder::PARAM_INT_ARRAY)));
+        }
         return $qb->execute()->fetchAll();
     }
 

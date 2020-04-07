@@ -93,14 +93,24 @@ class ElbCalTypeReminderService
         return $this->mapper->delete($calTypeReminder);
     }
 
-    /**
-     * @param $data
-     *
-     */
-    public function getAssignedRemindersForCalTypesIds($data)
+    public function getAssignedRemindersForCalTypesIds($calTypesIds)
     {
-        var_dump($data);
-        die('stop..');
+        $out = [];
+        $results = $this->mapper->getAssignedRemindersForCalendarTypes($calTypesIds);
+        if (is_array($results) && count($results)) {
+            $transForDefReminders = $this->defaultReminderService->getTranslatedTitlesForEachDefaultReminder();
+            foreach ($results as $res) {
+                $out[$res['cal_type_id']][$res['cal_def_reminder_id']] = [
+                    'minutes_before_event' => $res['minutes_before_event'],
+                    'calendar_type_id' => $res['cal_type_id'],
+                    'link_id' => $res['link_id'],
+                    'cal_def_reminder_id' => $res['cal_def_reminder_id'],
+                    'cal_def_reminder_title' => $res['cal_def_reminder_id'],
+                    'cal_def_reminder_title_trans' => $transForDefReminders[$res['cal_def_reminder_id']],
+                ];
+            }
+        }
+        return $out;
     }
 
 }
