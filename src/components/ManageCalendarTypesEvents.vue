@@ -139,6 +139,7 @@ export default {
 			currentCalTypeLinkID: null,
 			visibleCreateNewEventForm: false,
             eventdatetime: null,
+			defaultCalReminders: [],
 		}
 	},
 	computed: {
@@ -163,9 +164,14 @@ export default {
 		},
 	},
 	beforeMount() {
+		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
 		axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
 			this.assignedCalendarTypes = result.data
 			// console.log('assigned cal types: ', this.assignedCalendarTypes)
+		})
+		// perform ajax call to fetch default reminders
+		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
+			this.defaultCalReminders = result.data
 		})
 	},
 	methods: {

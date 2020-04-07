@@ -30,6 +30,8 @@ class ElbcaldefreminderController extends Controller
 
     /**
      * Get all default calendar reminders
+     * @NoAdminRequired
+     * @NoCSRFRequired
      */
     public function getdefaultreminders()
     {
