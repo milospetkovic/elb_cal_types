@@ -93,4 +93,14 @@ class ElbCalTypeReminderService
         return $this->mapper->delete($calTypeReminder);
     }
 
+    /**
+     * @param $data
+     *
+     */
+    public function getAssignedRemindersForCalTypesIds($data)
+    {
+        var_dump($data);
+        die('stop..');
+    }
+
 }

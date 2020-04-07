@@ -30,7 +30,7 @@
 
 			<div v-if="visibleCreateNewEventForm">
 				<div class="table-responsive">
-					<table class="table">
+					<table class="table" width="1000">
 						<thead>
 							<tr>
 								<th>{{ t('elb_cal_types', 'Event attributes') }}</th>
@@ -83,13 +83,14 @@
                                 </td>
 								<td>
                                     <Multiselect
-                                            :size="100"
+                                            :size="'100'"
                                             v-model="eventReminders"
                                             :options="optionsComputed"
                                             track-by="library"
                                             :custom-label="customLabel"
                                             :close-on-select="false"
                                             @select=onSelect($event)
+                                            @load=multiSelectLoad($event)
                                             @remove=onRemove($event)
                                             :multiple="true">
 
@@ -161,6 +162,7 @@ export default {
             eventdatetime: null,
 			defaultCalReminders: [],
 			eventReminders: null,
+            defAssignedRemindersForCalTypes: [],
 		}
 	},
 	computed: {
@@ -195,7 +197,17 @@ export default {
 		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
 		axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
 			this.assignedCalendarTypes = result.data
-			// console.log('assigned cal types: ', this.assignedCalendarTypes)
+			let calTypesIds = Object.keys(this.assignedCalendarTypes)
+            if (calTypesIds.length) {
+				const data = {
+					calTypesIds: calTypesIds,
+				}
+				// perform ajax call to fetch assigned reminders for calendar types
+				axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedremindersforcaltypesids'), data).then((result) => {
+					this.defAssignedRemindersForCalTypes = result.data
+					console.log('defAssignedRemindersForCalTypes: ', this.defAssignedRemindersForCalTypes)
+				})
+            }
 		})
 		// perform ajax call to fetch default reminders
 		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
@@ -231,6 +243,9 @@ export default {
 			option.checked = false;
 			console.log(option.library + "  Removed!! " + option.checked);
 		},
+		multiSelectLoad(option) {
+			console.log('load called!!')
+        },
 	},
 }
 </script>
