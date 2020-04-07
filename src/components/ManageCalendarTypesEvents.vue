@@ -39,28 +39,42 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>{{ t('elb_cal_types', 'Event name') }}</td>
+								<td class="text-right">
+                                    {{ t('elb_cal_types', 'Event name') }}
+                                </td>
 								<td><input name="eventname" type="text" :value="assignedCalendarTypes[currentCalTypeLinkID]['cal_type_title']"></td>
 							</tr>
 
 							<tr>
-								<td>{{ t('elb_cal_types', 'Event description') }}</td>
+								<td class="text-right">
+                                    {{ t('elb_cal_types', 'Event description') }}
+                                </td>
 								<td>
 									<textarea name="eventdescription" />
 								</td>
 							</tr>
 
 							<tr>
-								<td>{{ t('elb_cal_types', 'Event date and time') }}</td>
-								<td></td>
+								<td class="text-right">
+                                    {{ t('elb_cal_types', 'Event date and time') }}
+                                </td>
+								<td>
+                                    <DatetimePicker
+                                            v-model="eventdatetime"
+                                            type="datetime" />
+                                </td>
 							</tr>
 
 							<tr>
-								<td>{{ t('elb_cal_types', 'Reminders for event') }}</td>
+								<td class="text-right">
+                                    {{ t('elb_cal_types', 'Reminders for event') }}
+                                </td>
 								<td></td>
 							</tr>
 							<tr>
-								<td>{{ t('elb_cal_types', 'Assign users for event') }}</td>
+								<td class="text-right">
+                                    {{ t('elb_cal_types', 'Assign users for event') }}
+                                </td>
 								<td></td>
 							</tr>
 						</tbody>
@@ -91,6 +105,7 @@ import {
 	AppNavigationNew,
 	AppNavigationItem,
 	AppContent,
+    DatetimePicker,
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
@@ -102,6 +117,7 @@ export default {
 		AppNavigationNew,
 		AppNavigationItem,
 		AppContent,
+		DatetimePicker,
 	},
 	data() {
 		return {
@@ -168,4 +184,7 @@ export default {
 		margin: 10px 10px;
 		font-weight: bold;
 	}
+    td.text-right {
+        text-align: right;
+    }
 </style>
