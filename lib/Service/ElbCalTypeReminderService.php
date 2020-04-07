@@ -53,7 +53,7 @@ class ElbCalTypeReminderService
     public function returnAssignedRemindersForCalendarTypes()
     {
         $out = [];
-        $results = $this->mapper->getAssignedRemindersForCalendarTypes();
+        $results = $this->mapper->getAssignedRemindersForCalendarTypes([]);
         if (is_array($results) && count($results)) {
             $transForDefReminders = $this->defaultReminderService->getTranslatedTitlesForEachDefaultReminder();
             foreach ($results as $res) {
