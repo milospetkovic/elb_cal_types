@@ -42,6 +42,12 @@
 								<td>{{ t('elb_cal_types', 'Event name') }}</td>
 								<td></td>
 							</tr>
+
+                            <tr>
+                                <td>{{ t('elb_cal_types', 'Event date and time') }}</td>
+                                <td></td>
+                            </tr>
+
 							<tr>
 								<td>{{ t('elb_cal_types', 'Reminders for event') }}</td>
 								<td></td>
@@ -55,6 +61,10 @@
 							<tr>
 								<td />
 								<td>
+                                    <button class="button primary" @click="saveNewEvent">
+                                        {{ t('elb_cal_types', 'Save') }}
+                                    </button>
+
 									<button @click="cancelCreateNewEvent">
 										{{ t('elb_cal_types', 'Cancel') }}
 									</button>
@@ -130,8 +140,13 @@ export default {
 			// alert('implement event create form')
 		},
 		cancelCreateNewEvent() {
-			this.visibleCreateNewEventForm = false
+			if (confirm(t('elb_cal_types', 'Really cancel') + '?')) {
+				this.visibleCreateNewEventForm = false
+			}
 		},
+		saveNewEvent() {
+			alert('save event')
+        }
 	},
 }
 </script>
