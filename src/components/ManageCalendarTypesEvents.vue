@@ -67,7 +67,9 @@
                                                 :default-value="new Date()"
                                                 :clearable="true"
                                                 :format="'DD.MM.YYYY HH:mm'"
-                                                :show-second="false"  />
+                                                :show-second="false"
+                                                :time-select-options="{minutes: [0,5,10,15,20,25,30,35,40,45,50,55]}"
+                                                :lang="'en'"/>
                                         {{ eventdatetime }}
                                         </span>
                                     </template>
@@ -118,8 +120,8 @@ import {
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
-import 'vue2-datepicker/lib/datepicker.css';
-import 'vue2-datepicker/src/locale/languages';
+// import 'vue2-datepicker/lib/datepicker.css';
+// import 'vue2-datepicker/src/locale/languages';
 
 export default {
 	name: 'ManageCalendarTypesEvents',
