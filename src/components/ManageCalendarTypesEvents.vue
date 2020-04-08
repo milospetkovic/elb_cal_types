@@ -90,7 +90,7 @@
                                                          :multiple="true"
                                                          :tag-width="200"
                                                          :close-on-select="false"
-                                                         :label="language"
+                                                         label="language"
                                                          @select="toggleSelected"/>
 
                                             <pre>{{ value1 }}</pre>
