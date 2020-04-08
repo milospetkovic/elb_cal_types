@@ -90,10 +90,8 @@
                                                          :multiple="true"
                                                          :tag-width="200"
                                                          :close-on-select="false"
-                                                         label="language"
+                                                         label="name"
                                                          @select="toggleSelected"/>
-
-                                            <pre>{{ preselectedCalReminders }}</pre>
                                         </div>
                                     </template>
                                 </td>
@@ -157,14 +155,8 @@ export default {
 			defaultCalReminders: [],
 			eventReminders: null,
             defAssignedRemindersForCalTypes: [],
-			preselectedCalReminders: [ {id: 1, language: 'LangJavaScript'}, {id: 3, language: 'LangRuby2'} ],
-			optionsForCalReminders: [
-				{ id: 1, language: 'LangJavaScript' },
-				{ id: 2, language: 'LangRuby' },
-				{ id: 3, language: 'LangRuby2' },
-				{ id: 4, language: 'LangPHP' },
-				{ id: 5, language: 'LangElixir' }
-			]
+			preselectedCalReminders: [],
+			optionsForCalReminders: []
 		}
 	},
 	computed: {
@@ -220,12 +212,14 @@ export default {
 		// perform ajax call to fetch default reminders
 		axios.post(OC.generateUrl('/apps/elb_cal_types/getdefaultreminders')).then((result) => {
 			this.defaultCalReminders = result.data
+            this.populateOptionsForCalReminders()
 		})
 	},
 	methods: {
 		openCalType(calType) {
 			this.visibleCreateNewEventForm = false
 			this.currentCalTypeLinkID = calType.link_id
+            this.populatePreselectedCalReminders()
 		},
 		newCalendarTypeEvent() {
 			this.visibleCreateNewEventForm = true
@@ -238,6 +232,20 @@ export default {
 		saveNewEvent() {
 			alert('save event')
 		},
+		populatePreselectedCalReminders() {
+            console.log('implement populatePreselectedCalReminders')
+        },
+		populateOptionsForCalReminders() {
+			console.log('implement populateOptionsForCalReminders')
+			const ret = []
+			Object.keys(this.defaultCalReminders).forEach(key => {
+				const defCalRem = this.defaultCalReminders[key]
+				ret[key] = { 'id': defCalRem.id, 'name': defCalRem.title }
+			})
+            this.optionsForCalReminders = ret
+			console.log('finished populateOptionsForCalReminders', this.optionsForCalReminders)
+			return ret
+        },
 		customLabel (option) {
 			return `${option.library} - ${option.language}`
 		},
