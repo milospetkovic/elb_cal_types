@@ -84,16 +84,16 @@
 								<td>
                                     <template>
                                         <div class="wrapper">
-                                            <Multiselect v-model="value1"
+                                            <Multiselect v-model="preselectedCalReminders"
                                                          track-by="id"
-                                                         :options="options"
+                                                         :options="optionsForCalReminders"
                                                          :multiple="true"
                                                          :tag-width="200"
                                                          :close-on-select="false"
                                                          label="language"
                                                          @select="toggleSelected"/>
 
-                                            <pre>{{ value1 }}</pre>
+                                            <pre>{{ preselectedCalReminders }}</pre>
                                         </div>
                                     </template>
                                 </td>
@@ -157,8 +157,8 @@ export default {
 			defaultCalReminders: [],
 			eventReminders: null,
             defAssignedRemindersForCalTypes: [],
-			value1: [ {id: 1, language: 'LangJavaScript'} ],
-			options: [
+			preselectedCalReminders: [ {id: 1, language: 'LangJavaScript'}, {id: 3, language: 'LangRuby2'} ],
+			optionsForCalReminders: [
 				{ id: 1, language: 'LangJavaScript' },
 				{ id: 2, language: 'LangRuby' },
 				{ id: 3, language: 'LangRuby2' },
