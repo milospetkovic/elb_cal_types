@@ -233,6 +233,7 @@ export default {
 			alert('save event')
 		},
 		populatePreselectedCalReminders() {
+			this.preselectedCalReminders = []
             let currentCalTypeID = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_id']
 			const ret = []
 			if (this.defAssignedRemindersForCalTypes) {
@@ -241,9 +242,9 @@ export default {
 						const assCalTypeRem = this.defAssignedRemindersForCalTypes[currentCalTypeID][key]
 						ret.push({ 'id': parseInt(assCalTypeRem.cal_def_reminder_id), 'name': assCalTypeRem.cal_def_reminder_title_trans })
 					})
+					this.preselectedCalReminders = ret
 				}
             }
-			this.preselectedCalReminders = ret
         },
 		populateOptionsForCalReminders() {
 			const ret = []
@@ -270,7 +271,7 @@ export default {
 			console.log('load called!!')
         },
 		toggleSelected(value, id) {
-			alert('Bilo sta ' + value.name)
+			//alert('Selected option for reminders for event ' + value.name)
 		}
 	},
 }
