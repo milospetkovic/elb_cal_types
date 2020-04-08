@@ -82,24 +82,20 @@
                                     {{ t('elb_cal_types', 'Reminders for event') }}
                                 </td>
 								<td>
-                                    <Multiselect
-                                            :size="'100'"
-                                            v-model="eventReminders"
-                                            :options="optionsComputed"
-                                            track-by="library"
-                                            :custom-label="customLabel"
-                                            :close-on-select="false"
-                                            @select=onSelect($event)
-                                            @load=multiSelectLoad($event)
-                                            @remove=onRemove($event)
-                                            :multiple="true">
+                                    <template>
+                                        <div class="wrapper">
+                                            <Multiselect v-model="value1"
+                                                         track-by="id"
+                                                         :options="options"
+                                                         :multiple="true"
+                                                         :tag-width="200"
+                                                         :close-on-select="false"
+                                                         :label="language"
+                                                         @select="toggleSelected"/>
 
-                                        <span class="checkbox-label" slot="option" slot-scope="scope" @click.self="select(scope.option)">
-                                            {{ scope.option.library }}
-                                            <input class="test" type="checkbox" v-model="scope.option.checked" @focus.prevent/>
-                                        </span>
-
-                                    </Multiselect>
+                                            <pre>{{ value1 }}</pre>
+                                        </div>
+                                    </template>
                                 </td>
 							</tr>
 							<tr>
@@ -141,8 +137,6 @@ import {
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
-// import 'vue2-datepicker/lib/datepicker.css';
-// import 'vue2-datepicker/src/locale/languages';
 
 export default {
 	name: 'ManageCalendarTypesEvents',
@@ -152,7 +146,7 @@ export default {
 		AppNavigationItem,
 		AppContent,
 		DatetimePicker,
-        Multiselect,
+		Multiselect,
 	},
 	data() {
 		return {
@@ -163,6 +157,14 @@ export default {
 			defaultCalReminders: [],
 			eventReminders: null,
             defAssignedRemindersForCalTypes: [],
+			value1: [ {id: 1, language: 'LangJavaScript'} ],
+			options: [
+				{ id: 1, language: 'LangJavaScript' },
+				{ id: 2, language: 'LangRuby' },
+				{ id: 3, language: 'LangRuby2' },
+				{ id: 4, language: 'LangPHP' },
+				{ id: 5, language: 'LangElixir' }
+			]
 		}
 	},
 	computed: {
@@ -252,6 +254,9 @@ export default {
 		multiSelectLoad(option) {
 			console.log('load called!!')
         },
+		toggleSelected(value, id) {
+			alert('Bilo sta ' + value.name)
+		}
 	},
 }
 </script>
