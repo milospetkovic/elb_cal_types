@@ -233,18 +233,25 @@ export default {
 			alert('save event')
 		},
 		populatePreselectedCalReminders() {
-            console.log('implement populatePreselectedCalReminders')
+            let currentCalTypeID = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_id']
+			const ret = []
+			if (this.defAssignedRemindersForCalTypes) {
+				if (this.defAssignedRemindersForCalTypes[currentCalTypeID] !== -1) {
+					Object.keys(this.defAssignedRemindersForCalTypes[currentCalTypeID]).forEach(key => {
+						const assCalTypeRem = this.defAssignedRemindersForCalTypes[currentCalTypeID][key]
+						ret.push({ 'id': parseInt(assCalTypeRem.cal_def_reminder_id), 'name': assCalTypeRem.cal_def_reminder_title_trans })
+					})
+				}
+            }
+			this.preselectedCalReminders = ret
         },
 		populateOptionsForCalReminders() {
-			console.log('implement populateOptionsForCalReminders')
 			const ret = []
 			Object.keys(this.defaultCalReminders).forEach(key => {
 				const defCalRem = this.defaultCalReminders[key]
 				ret[key] = { 'id': defCalRem.id, 'name': defCalRem.title }
 			})
             this.optionsForCalReminders = ret
-			console.log('finished populateOptionsForCalReminders', this.optionsForCalReminders)
-			return ret
         },
 		customLabel (option) {
 			return `${option.library} - ${option.language}`
