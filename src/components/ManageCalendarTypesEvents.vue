@@ -92,8 +92,7 @@
                                                          :multiple="true"
                                                          :tag-width="200"
                                                          :close-on-select="false"
-                                                         label="name"
-                                                         @select="toggleSelected"/>
+                                                         label="name" />
                                         </div>
                                     </template>
                                 </td>
@@ -249,12 +248,13 @@ export default {
 			}
 		},
 		populatePreselectedCalReminders() {
-			this.preselectedCalReminders = []
+			this.preselectedCalReminders = null
             let currentCalTypeID = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_id']
-			const ret = []
-			if (this.defAssignedRemindersForCalTypes) {
-				if (this.defAssignedRemindersForCalTypes[currentCalTypeID] !== -1) {
+			if (this.defAssignedRemindersForCalTypes !== undefined) {
+				if (this.defAssignedRemindersForCalTypes[currentCalTypeID] !== undefined) {
+					const ret = []
 					Object.keys(this.defAssignedRemindersForCalTypes[currentCalTypeID]).forEach(key => {
+						console.log('ulazi')
 						const assCalTypeRem = this.defAssignedRemindersForCalTypes[currentCalTypeID][key]
 						ret.push({ 'id': parseInt(assCalTypeRem.cal_def_reminder_id), 'name': assCalTypeRem.cal_def_reminder_title_trans })
 					})
@@ -270,25 +270,25 @@ export default {
 			})
             this.optionsForCalReminders = ret
         },
-		customLabel (option) {
-			return `${option.library} - ${option.language}`
-		},
-		onSelect (option) {
-			console.log("Added");
-			option.checked = true;
-			console.log(option.library + "  Clicked!! " + option.checked);
-		},
-		onRemove (option) {
-			console.log("Removed");
-			option.checked = false;
-			console.log(option.library + "  Removed!! " + option.checked);
-		},
-		multiSelectLoad(option) {
-			console.log('load called!!')
-        },
-		toggleSelected(value, id) {
-			//alert('Selected option for reminders for event ' + value.name)
-		}
+		// customLabel (option) {
+		// 	return `${option.library} - ${option.language}`
+		// },
+		// onSelect (option) {
+		// 	console.log("Added");
+		// 	option.checked = true;
+		// 	console.log(option.library + "  Clicked!! " + option.checked);
+		// },
+		// onRemove (option) {
+		// 	console.log("Removed");
+		// 	option.checked = false;
+		// 	console.log(option.library + "  Removed!! " + option.checked);
+		// },
+		// multiSelectLoad(option) {
+		// 	console.log('load called!!')
+        // },
+		// toggleSelected(value, id) {
+		// 	//alert('Selected option for reminders for event ' + value.name)
+		// }
 	},
 }
 </script>
