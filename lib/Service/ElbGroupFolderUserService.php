@@ -5,6 +5,7 @@ namespace OCA\ElbCalTypes\Service;
 
 
 use OCA\Activity\CurrentUser;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IL10N;
 
@@ -132,5 +133,19 @@ class ElbGroupFolderUserService
         $retArr = array_unique(array_merge($gfIdsForUserId, $gfIdsForUserGroup));
         return $retArr;
     }
+
+
+    public function getUsersAssignedToGroupFolders(array $gfIDs)
+    {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('gfg.folder_id', 'g.gid as user_group_id', 'gu.uid as user_id')
+            ->from('group_folders_groups', 'gfg')
+            ->leftJoin('gfg', 'groups', 'g', $qb->expr()->eq('g.gid', 'gfg.group_id'))
+            ->leftJoin('g', 'group_user', 'gu', $qb->expr()->eq('gu.gid', 'g.gid'))
+            ->where($qb->expr()->in('gfg.folder_id', $qb->createNamedParameter($gfIDs, IQueryBuilder::PARAM_STR_ARRAY)));
+        $res = $qb->execute()->fetchAll();
+        return $res;
+    }
+
 
 }

@@ -18,16 +18,22 @@ class ElbCalTypeGroupFolderService
      * @var IDBConnection
      */
     private $db;
+    /**
+     * @var ElbGroupFoldersService
+     */
+    private $elbGroupFolderUserService;
 
     public function __construct(IL10N $l,
                                 CalendarTypeGroupFolderMapper $mapper,
                                 CurrentUser $currentUser,
-                                IDBConnection $db)
+                                IDBConnection $db,
+                                ElbGroupFolderUserService $elbGroupFolderUserService)
     {
         $this->l = $l;
         $this->mapper = $mapper;
         $this->currentUser = $currentUser;
         $this->db = $db;
+        $this->elbGroupFolderUserService = $elbGroupFolderUserService;
     }
 
 
@@ -80,9 +86,6 @@ class ElbCalTypeGroupFolderService
             ->leftJoin('gct', 'elb_calendar_types', 'ct', $qb->expr()->eq('ct.id', 'gct.fk_elb_cal_type'))
             //->leftJoin('ct', 'elb_cal_type_reminders', 'ctr', $qb->expr()->eq('ctr.fk_elb_cal_type', 'ct.id'))
             ->where($qb->expr()->in('gct.fk_group_folder', $qb->createNamedParameter($gfIDs, IQueryBuilder::PARAM_STR_ARRAY)));
-            //->where('`gct`.`fk_group_folder` IN ('.implode(',',$gfIDs).')');
-
-        //die($qb->getSQL());
         return $qb->execute()->fetchAll();
     }
 
@@ -109,6 +112,13 @@ class ElbCalTypeGroupFolderService
 
         $res = $this->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
         if (is_array($res) && count($res)) {
+
+            $res2 = $this->elbGroupFolderUserService->getUsersAssignedToGroupFolders($gfIDs);
+
+            var_dump($res2);
+
+            die();
+
             foreach ($res as $data) {
                 $ret['assigned_calendars'][$data['link_id']] = $data;
             }
