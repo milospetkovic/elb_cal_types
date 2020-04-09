@@ -80,15 +80,11 @@ class ElbCalTypeEventService
                 }
             }
 
-
-                    die('OK');
+            //die('OK');
 
         } else {
-            die('NOT OK');
-
+            //die('NOT OK');
         }
-
-
     }
 
 }
