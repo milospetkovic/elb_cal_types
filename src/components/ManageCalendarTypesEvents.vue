@@ -52,7 +52,7 @@
                                     {{ t('elb_cal_types', 'Event description') }}
                                 </td>
 								<td>
-									<textarea name="eventdescription" />
+									<textarea name="eventdescription" v-model="eventDescription" />
 								</td>
 							</tr>
 
@@ -150,9 +150,11 @@ export default {
 	data() {
 		return {
 			assignedCalendarTypes: [],
+			currentCalTypeID: null,
 			currentCalTypeLinkID: null,
 			visibleCreateNewEventForm: false,
             eventTitle: null,
+			eventDescription: null,
             eventDateTime: null,
 			defaultCalReminders: [],
 			eventReminders: null,
@@ -214,12 +216,17 @@ export default {
 		openCalType(calType) {
 			this.visibleCreateNewEventForm = false
 			this.currentCalTypeLinkID = calType.link_id
+			this.currentCalTypeID = calType.cal_type_id
             this.populatePreselectedCalReminders()
-            this.populateTitleForCreateEventForm()
+            this.populateEventTitleForCreateEventForm()
+			this.populateEventDescriptionForCreateEventForm()
 		},
-		populateTitleForCreateEventForm() {
+		populateEventTitleForCreateEventForm() {
             this.eventTitle = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_title']
         },
+		populateEventDescriptionForCreateEventForm() {
+			this.eventDescription = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_description']
+		},
 		newCalendarTypeEvent() {
 			this.visibleCreateNewEventForm = true
 		},
@@ -229,10 +236,12 @@ export default {
 			}
 		},
 		async saveNewEvent() {
-			alert('save event')
+			//alert('save event')
+            let res = null
+
 			const data = {
 				caltypeid: this.currentCalTypeID,
-                eventname: this.eventname,
+                eventname: this.eventTitle,
 				reminders: this.preselectedCalReminders,
 			}
 
