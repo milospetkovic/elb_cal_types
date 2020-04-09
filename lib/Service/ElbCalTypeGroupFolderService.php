@@ -113,11 +113,11 @@ class ElbCalTypeGroupFolderService
         $res = $this->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
         if (is_array($res) && count($res)) {
 
-            $res2 = $this->elbGroupFolderUserService->getUsersAssignedToGroupFolders($gfIDs);
+            $res2 = $this->getArrayOfUsersForGroupFolders($gfIDs);
 
-            var_dump($res2);
-
-            die();
+            if (count($res2)) {
+                $ret['users_per_group_folder'] = $res2;
+            }
 
             foreach ($res as $data) {
                 $ret['assigned_calendars'][$data['link_id']] = $data;
@@ -125,6 +125,58 @@ class ElbCalTypeGroupFolderService
             $ret['nr_of_group_folders'] = count($gfIDs);
         }
         return $ret;
+    }
+
+    public function getArrayOfUsersForGroupFolders($gfIDs)
+    {
+        $ret = [];
+
+        $res = $this->elbGroupFolderUserService->getUsersAssignedToGroupFolders($gfIDs);
+
+        if (is_array($res) && count($res)) {
+            foreach ($res as $ind => $data) {
+                $ret[] = [$data['folder_id'] => [$data['user_id'] => [$ind => $data['user_group_id']]]];
+            }
+        }
+
+        $userGroupsForFolder = [];
+
+        if (count($ret)) {
+            foreach ($ret as $key => $gfInfo) {
+                foreach($gfInfo as $gfID => $userInfo) {
+                    foreach ($userInfo as $userID => $userGroupInfo) {
+
+                        foreach ($userGroupInfo as $index => $userGroupID) {
+
+                            if (!array_key_exists($gfID, $userGroupsForFolder)) {
+                                $userGroupsForFolder[$gfID] = [];
+                            }
+
+                            if (!array_key_exists($userID, $userGroupsForFolder[$gfID])) {
+                                $userGroupsForFolder[$gfID][$userID] = [];
+                            }
+
+                            if (!in_array($userGroupsForFolder[$gfID][$userID], $userGroupID)) {
+                                $userGroupsForFolder[$gfID][$userID][] = $userGroupID;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $returnFormated = [];
+
+        if (count($userGroupsForFolder)) {
+            foreach($userGroupsForFolder as $gfID => $userInfo) {
+                foreach($userInfo as $userID => $userGroupsIDsInfo) {
+                    $returnFormated[] = [$gfID => [$userID => '(' . implode(',', $userGroupsIDsInfo) . ')']];
+                    continue ;
+                }
+            }
+        }
+
+        return $returnFormated;
     }
 
 }
