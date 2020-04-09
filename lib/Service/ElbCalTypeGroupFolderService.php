@@ -74,7 +74,7 @@ class ElbCalTypeGroupFolderService
         $qb = $this->db->getQueryBuilder();
         $qb->select('gct.id as link_id', 'gct.fk_elb_cal_type as cal_type_id',
             'gct.fk_group_folder as group_folder_id','gu.mount_point as group_folder_name',
-            'ct.title as cal_type_title')
+            'ct.title as cal_type_title', 'ct.description as cal_type_description')
             ->from('elb_gf_cal_types', 'gct')
             ->leftJoin('gct', 'group_folders', 'gu', $qb->expr()->eq('gu.folder_id', 'gct.fk_group_folder'))
             ->leftJoin('gct', 'elb_calendar_types', 'ct', $qb->expr()->eq('ct.id', 'gct.fk_elb_cal_type'))
