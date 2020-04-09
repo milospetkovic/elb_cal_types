@@ -158,6 +158,7 @@ export default {
             eventDateTime: null,
 			defaultCalReminders: [],
 			eventReminders: null,
+			eventAssignedUsers: null,
             defAssignedRemindersForCalTypes: [],
 			preselectedCalReminders: null,
 			optionsForCalReminders: []
@@ -242,7 +243,10 @@ export default {
 			const data = {
 				caltypeid: this.currentCalTypeID,
                 eventname: this.eventTitle,
+                eventdesc: this.eventDescription,
+                eventdatetime: this.eventDateTime,
 				reminders: this.preselectedCalReminders,
+                users: this.eventAssignedUsers,
 			}
 
 			console.log('data for save event: ', data)

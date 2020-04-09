@@ -28,6 +28,13 @@ class ElbCalTypeEventService
 
     public function storeCalendarTypeEvent($data)
     {
+        $calTypeId = $data['caltypeid'];
+        $eventName = $data['eventname'];
+        $eventDescription = $data['eventdesc'];
+        $eventDateTime = $data['eventdatetime'];
+        $eventAssignedReminders = $data['reminders'];
+        $eventAssignedUsers = $data['assigneduser'];
+
         var_dump($data);
         die('stop');
     }
