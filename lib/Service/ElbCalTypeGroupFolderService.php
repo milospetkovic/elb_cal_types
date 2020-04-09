@@ -79,7 +79,10 @@ class ElbCalTypeGroupFolderService
             ->leftJoin('gct', 'group_folders', 'gu', $qb->expr()->eq('gu.folder_id', 'gct.fk_group_folder'))
             ->leftJoin('gct', 'elb_calendar_types', 'ct', $qb->expr()->eq('ct.id', 'gct.fk_elb_cal_type'))
             //->leftJoin('ct', 'elb_cal_type_reminders', 'ctr', $qb->expr()->eq('ctr.fk_elb_cal_type', 'ct.id'))
-            ->where($qb->expr()->in('gct.fk_group_folder', $qb->createNamedParameter($gfIDs, IQueryBuilder::PARAM_INT_ARRAY)));
+            ->where($qb->expr()->in('gct.fk_group_folder', $qb->createNamedParameter($gfIDs, IQueryBuilder::PARAM_STR_ARRAY)));
+            //->where('`gct`.`fk_group_folder` IN ('.implode(',',$gfIDs).')');
+
+        //die($qb->getSQL());
         return $qb->execute()->fetchAll();
     }
 
@@ -107,8 +110,9 @@ class ElbCalTypeGroupFolderService
         $res = $this->getCalendarTypesAssignedForGroupFoldersIDs($gfIDs);
         if (is_array($res) && count($res)) {
             foreach ($res as $data) {
-                $ret[$data['link_id']] = $data;
+                $ret['assigned_calendars'][$data['link_id']] = $data;
             }
+            $ret['nr_of_group_folders'] = count($gfIDs);
         }
         return $ret;
     }

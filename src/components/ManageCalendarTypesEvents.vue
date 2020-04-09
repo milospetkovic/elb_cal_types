@@ -161,7 +161,8 @@ export default {
 			eventAssignedUsers: null,
             defAssignedRemindersForCalTypes: [],
 			preselectedCalReminders: null,
-			optionsForCalReminders: []
+			optionsForCalReminders: [],
+            nrOfGroupFolders: 0,
 		}
 	},
 	computed: {
@@ -188,7 +189,9 @@ export default {
 	beforeMount() {
 		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
 		axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
-			this.assignedCalendarTypes = result.data
+			this.assignedCalendarTypes = result.data.assigned_calendars
+            this.nrOfGroupFolders = result.data.nr_of_group_folders
+            console.log('nrOfGroupFolders sind: ', this.nrOfGroupFolders)
 			let calTypesIds = []
             if (this.assignedCalendarTypes) {
 				Object.keys(this.assignedCalendarTypes).forEach(key => {
