@@ -22,7 +22,7 @@
 
 		<AppContent>
 			<div v-if="currentCalTypeLinkID">
-				<h2>{{ t('elb_cal_types', 'Manage events for selected calendar type') }}: {{ assignedCalendarTypes[currentCalTypeLinkID]['cal_type_title'] }}</h2>
+				<h2>{{ t('elb_cal_types', 'Manage events for selected calendar type') }}: {{ calTypeEntryItemName(assignedCalendarTypes[currentCalTypeLinkID]) }}</h2>
 			</div>
 			<div v-else>
 				<h2>{{ t('elb_cal_types', 'Please choose calendar type from the left menu to manage events') }}</h2>
@@ -173,7 +173,7 @@ export default {
 		calTypeEntry() {
 			return (calType) => {
 				return {
-					text: calType.cal_type_title,
+					text: this.calTypeEntryItemName(calType),
 					action: () => this.openCalType(calType),
 					classes: this.currentCalTypeLinkID === calType.link_id ? 'active' : '',
 				}
@@ -225,6 +225,12 @@ export default {
             this.populateEventTitleForCreateEventForm()
 			this.populateEventDescriptionForCreateEventForm()
 		},
+        calTypeEntryItemName(calType) {
+			if (this.nrOfGroupFolders > 1) {
+				return calType.cal_type_title + " (" + calType.group_folder_name + ")"
+            }
+			return calType.cal_type_title
+        },
 		populateEventTitleForCreateEventForm() {
             this.eventTitle = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_title']
         },
