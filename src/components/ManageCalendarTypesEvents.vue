@@ -254,7 +254,6 @@ export default {
 				if (this.defAssignedRemindersForCalTypes[currentCalTypeID] !== undefined) {
 					const ret = []
 					Object.keys(this.defAssignedRemindersForCalTypes[currentCalTypeID]).forEach(key => {
-						console.log('ulazi')
 						const assCalTypeRem = this.defAssignedRemindersForCalTypes[currentCalTypeID][key]
 						ret.push({ 'id': parseInt(assCalTypeRem.cal_def_reminder_id), 'name': assCalTypeRem.cal_def_reminder_title_trans })
 					})
