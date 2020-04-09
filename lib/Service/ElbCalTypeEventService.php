@@ -28,7 +28,8 @@ class ElbCalTypeEventService
 
     public function storeCalendarTypeEvent($data)
     {
-
+        var_dump($data);
+        die('stop');
     }
 
 }

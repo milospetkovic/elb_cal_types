@@ -25,5 +25,6 @@ return [
         [ 'name' => 'user#isuseradminforgroupfolder', 'url' => '/isuseradminforgroupfolder', 'verb' => 'POST'],
         [ 'name' => 'user#getassignedcalendartypes', 'url' => '/getassignedcalendartypes', 'verb' => 'GET'],
         [ 'name' => 'elbcaltypereminder#getassignedremindersforcaltypesids', 'url' => '/getassignedremindersforcaltypesids', 'verb' => 'POST'],
+        [ 'name' => 'elbcaltypeevent#saveacalendartypeevent', 'url' => '/saveacalendartypeevent', 'verb' => 'POST'],
     ]
 ];

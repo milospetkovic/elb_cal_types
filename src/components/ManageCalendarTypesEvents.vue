@@ -42,7 +42,9 @@
 								<td class="text-right">
                                     {{ t('elb_cal_types', 'Event name') }}
                                 </td>
-								<td><input name="eventname" type="text" :value="assignedCalendarTypes[currentCalTypeLinkID]['cal_type_title']"></td>
+								<td>
+                                    <input name="eventname" v-model="eventTitle" type="text" >
+                                </td>
 							</tr>
 
 							<tr>
@@ -62,7 +64,7 @@
                                     <template>
                                         <span>
                                         <DatetimePicker
-                                                v-model="eventdatetime"
+                                                v-model="eventDateTime"
                                                 type="datetime"
                                                 :default-value="new Date()"
                                                 :clearable="true"
@@ -151,11 +153,12 @@ export default {
 			assignedCalendarTypes: [],
 			currentCalTypeLinkID: null,
 			visibleCreateNewEventForm: false,
-            eventdatetime: null,
+            eventTitle: null,
+            eventDateTime: null,
 			defaultCalReminders: [],
 			eventReminders: null,
             defAssignedRemindersForCalTypes: [],
-			preselectedCalReminders: [],
+			preselectedCalReminders: null,
 			optionsForCalReminders: []
 		}
 	},
@@ -179,13 +182,6 @@ export default {
 			}
 			return false
 		},
-		optionsComputed() {
-			return [
-				{ language: 'JavaScript', library: 'Vue.js', checked: true },
-				{ language: 'JavaScript', library: 'Vue-Multiselect', checked: false },
-				{ language: 'JavaScript', library: 'Vuelidate', checked: false },
-            ]
-        }
 	},
 	beforeMount() {
 		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
@@ -220,7 +216,11 @@ export default {
 			this.visibleCreateNewEventForm = false
 			this.currentCalTypeLinkID = calType.link_id
             this.populatePreselectedCalReminders()
+            this.populateTitleForCreateEventForm()
 		},
+		populateTitleForCreateEventForm() {
+            this.eventTitle = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_title']
+        },
 		newCalendarTypeEvent() {
 			this.visibleCreateNewEventForm = true
 		},
@@ -229,8 +229,24 @@ export default {
 				this.visibleCreateNewEventForm = false
 			}
 		},
-		saveNewEvent() {
+		async saveNewEvent() {
 			alert('save event')
+			const data = {
+				caltypeid: this.currentCalTypeID,
+                eventname: this.eventname,
+				reminders: this.preselectedCalReminders,
+			}
+
+			console.log('data for save event: ', data)
+
+			try {
+				res = await axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendartypeevent'), data)
+
+                console.log('response for save event: ', res)
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elb_cal_types', 'Could not save event for calendar type'))
+			}
 		},
 		populatePreselectedCalReminders() {
 			this.preselectedCalReminders = []
