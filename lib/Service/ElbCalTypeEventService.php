@@ -9,6 +9,8 @@ use OCA\ElbCalTypes\Db\CalendarTypeEvent;
 use OCA\ElbCalTypes\Db\CalendarTypeEventMapper;
 use OCA\ElbCalTypes\Db\CalendarTypeEventReminder;
 use OCA\ElbCalTypes\Db\CalendarTypeEventReminderMapper;
+use OCA\ElbCalTypes\Db\CalendarTypeEventUser;
+use OCA\ElbCalTypes\Db\CalendarTypeEventUserMapper;
 
 class ElbCalTypeEventService
 {
@@ -32,11 +34,21 @@ class ElbCalTypeEventService
      * @var CalendarTypeEventReminder
      */
     private $calendarTypeEventReminder;
+    /**
+     * @var CalendarTypeEventUserMapper
+     */
+    private $calendarTypeEventUserMapper;
+    /**
+     * @var CalendarTypeEventUser
+     */
+    private $calendarTypeEventUser;
 
     public function __construct(CalendarTypeEventMapper $calendarTypeEventMapper,
                                 CalendarTypeEvent $calendarTypeEvent,
                                 CalendarTypeEventReminderMapper $calendarTypeEventReminderMapper,
                                 CalendarTypeEventReminder $calendarTypeEventReminder,
+                                CalendarTypeEventUserMapper $calendarTypeEventUserMapper,
+                                CalendarTypeEventUser $calendarTypeEventUser,
                                 CurrentUser $currentUser)
     {
         $this->calendarTypeEventMapper = $calendarTypeEventMapper;
@@ -44,6 +56,8 @@ class ElbCalTypeEventService
         $this->calendarTypeEventReminderMapper = $calendarTypeEventReminderMapper;
         $this->calendarTypeEventReminder = $calendarTypeEventReminder;
         $this->currentUser = $currentUser;
+        $this->calendarTypeEventUserMapper = $calendarTypeEventUserMapper;
+        $this->calendarTypeEventUser = $calendarTypeEventUser;
     }
 
     // @TODO implement validation and empty values as null...
@@ -78,10 +92,14 @@ class ElbCalTypeEventService
                 }
             }
 
-            //die('OK');
-
-        } else {
-            //die('NOT OK');
+            if (is_array($eventAssignedUsers) && count($eventAssignedUsers)) {
+                foreach ($eventAssignedUsers as $aUserData) {
+                    $calTypeEventUser = new $this->calendarTypeEventUser;
+                    $calTypeEventUser->setFkCalTypeEvent($calTypeEventID);
+                    $calTypeEventUser->setFkUser($aUserData['userID']);
+                    $this->calendarTypeEventUserMapper->insert($calTypeEventUser);
+                }
+            }
         }
     }
 
