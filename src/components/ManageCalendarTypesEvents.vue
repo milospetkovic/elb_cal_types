@@ -101,7 +101,19 @@
 								<td class="text-right">
 									{{ t('elb_cal_types', 'Assign users for event') }}
 								</td>
-								<td></td>
+								<td>
+                                    <template>
+                                        <div class="wrapper">
+                                            <Multiselect v-model="usersForEvent"
+                                                         track-by="id"
+                                                         :options="availableUsersForCalType"
+                                                         :multiple="true"
+                                                         :tag-width="200"
+                                                         :close-on-select="false"
+                                                         label="name" />
+                                        </div>
+                                    </template>
+                                </td>
 							</tr>
 						</tbody>
 						<tfoot>
@@ -158,7 +170,9 @@ export default {
 			eventDateTime: null,
 			defaultCalReminders: [],
 			eventReminders: null,
-			eventAssignedUsers: null,
+			usersForEvent: null,
+			allUsersPerGroupFolders: null,
+			availableUsersForCalType: null,
 			defAssignedRemindersForCalTypes: [],
 			preselectedCalReminders: null,
 			optionsForCalReminders: [],
@@ -190,7 +204,11 @@ export default {
 		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
 		axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
 			this.assignedCalendarTypes = result.data.assigned_calendars
-			this.eventAssignedUsers = result.data.users_per_group_folder
+            if (result.data.users_per_group_folder !== undefined) {
+				this.allUsersPerGroupFolders = result.data.users_per_group_folder
+                console.log('allUsersPerGroupFolders: ', this.allUsersPerGroupFolders)
+            }
+
 			this.nrOfGroupFolders = result.data.nr_of_group_folders
 			console.log('nrOfGroupFolders sind: ', this.nrOfGroupFolders)
 			let calTypesIds = []
@@ -225,6 +243,7 @@ export default {
 			this.populatePreselectedCalReminders()
 			this.populateEventTitleForCreateEventForm()
 			this.populateEventDescriptionForCreateEventForm()
+			this.populateAvailableUsers()
 		},
 		calTypeEntryItemName(calType) {
 			if (this.nrOfGroupFolders > 1) {
@@ -238,6 +257,9 @@ export default {
 		populateEventDescriptionForCreateEventForm() {
 			this.eventDescription = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_description']
 		},
+		populateAvailableUsers() {
+
+        },
 		newCalendarTypeEvent() {
 			this.visibleCreateNewEventForm = true
 		},
@@ -256,7 +278,7 @@ export default {
 				eventdesc: this.eventDescription,
 				eventdatetime: this.eventDateTime,
 				reminders: this.preselectedCalReminders,
-				users: this.eventAssignedUsers,
+				assignedusers: this.eventAssignedUsers,
 			}
 
 			console.log('data for save event: ', data)
@@ -272,7 +294,7 @@ export default {
 		},
 		populatePreselectedCalReminders() {
 			this.preselectedCalReminders = null
-			let currentCalTypeID = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_id']
+			const currentCalTypeID = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_id']
 			if (this.defAssignedRemindersForCalTypes !== undefined) {
 				if (this.defAssignedRemindersForCalTypes[currentCalTypeID] !== undefined) {
 					const ret = []
@@ -292,25 +314,6 @@ export default {
 			})
 			this.optionsForCalReminders = ret
 		},
-		// customLabel (option) {
-		// 	return `${option.library} - ${option.language}`
-		// },
-		// onSelect (option) {
-		// 	console.log("Added");
-		// 	option.checked = true;
-		// 	console.log(option.library + "  Clicked!! " + option.checked);
-		// },
-		// onRemove (option) {
-		// 	console.log("Removed");
-		// 	option.checked = false;
-		// 	console.log(option.library + "  Removed!! " + option.checked);
-		// },
-		// multiSelectLoad(option) {
-		// 	console.log('load called!!')
-		// },
-		// toggleSelected(value, id) {
-		// 	//alert('Selected option for reminders for event ' + value.name)
-		// }
 	},
 }
 </script>

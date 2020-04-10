@@ -54,9 +54,7 @@ class ElbCalTypeEventService
         $eventDescription = $data['eventdesc'];
         $eventDateTime = $data['eventdatetime'];
         $eventAssignedReminders = $data['reminders'];
-
-        // @TODO implement linking with users
-        $eventAssignedUsers = $data['assigneduser'];
+        $eventAssignedUsers = $data['assignedusers'];
 
         $calTypeEvent = new $this->calendarTypeEvent;
         $calTypeEvent->setFkElbCalType($calTypeId);
