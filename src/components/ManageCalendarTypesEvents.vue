@@ -105,12 +105,12 @@
                                     <template>
                                         <div class="wrapper">
                                             <Multiselect v-model="usersForEvent"
-                                                         track-by="id"
+                                                         track-by="userID"
                                                          :options="availableUsersForCalType"
                                                          :multiple="true"
                                                          :tag-width="200"
                                                          :close-on-select="false"
-                                                         label="name" />
+                                                         :custom-label="showUserWithGroups" />
                                         </div>
                                     </template>
                                 </td>
@@ -164,6 +164,7 @@ export default {
 			assignedCalendarTypes: [],
 			currentCalTypeID: null,
 			currentCalTypeLinkID: null,
+			currentCalTypeGroupFolderID: null,
 			visibleCreateNewEventForm: false,
 			eventTitle: null,
 			eventDescription: null,
@@ -240,6 +241,7 @@ export default {
 			this.visibleCreateNewEventForm = false
 			this.currentCalTypeLinkID = calType.link_id
 			this.currentCalTypeID = calType.cal_type_id
+            this.currentCalTypeGroupFolderID = calType.group_folder_id
 			this.populatePreselectedCalReminders()
 			this.populateEventTitleForCreateEventForm()
 			this.populateEventDescriptionForCreateEventForm()
@@ -258,7 +260,42 @@ export default {
 			this.eventDescription = this.assignedCalendarTypes[this.currentCalTypeLinkID]['cal_type_description']
 		},
 		populateAvailableUsers() {
+			this.availableUsersForCalType = null
+            let ret = []
+			Object.keys(this.allUsersPerGroupFolders).forEach(key => {
 
+				const obj = this.allUsersPerGroupFolders[key]
+
+				Object.keys(obj).forEach(key2 => {
+
+				    const obj2 = obj[key2]
+
+                    if (key2 == this.currentCalTypeGroupFolderID) {
+						Object.keys(obj2).forEach(key3 => {
+							const valObj3 = obj2[key3]
+
+						    console.log('valObj3: ',valObj3)
+						    console.log('key3: ',key3)
+
+						    ret.push({ 'userID': key3, 'userGroups': valObj3 })
+						})
+                    }
+
+                    // console.log('allUsersPerGroupFolders obj: ',obj)
+					// console.log('key2: ',key2)
+				    // console.log('obj2: ',obj2)
+			    })
+
+				// const ret = []
+				// Object.keys(this.defAssignedRemindersForCalTypes[currentCalTypeID]).forEach(key => {
+				// 	const assCalTypeRem = this.defAssignedRemindersForCalTypes[currentCalTypeID][key]
+				// 	ret.push({ 'id': parseInt(assCalTypeRem.cal_def_reminder_id), 'name': assCalTypeRem.cal_def_reminder_title_trans })
+				// })
+				// this.preselectedCalReminders = ret
+			})
+            if (ret.length) {
+				this.availableUsersForCalType = ret
+            }
         },
 		newCalendarTypeEvent() {
 			this.visibleCreateNewEventForm = true
@@ -314,6 +351,9 @@ export default {
 			})
 			this.optionsForCalReminders = ret
 		},
+		showUserWithGroups({userID, userGroups}) {
+			return `${userID} - ${userGroups}`
+        },
 	},
 }
 </script>
