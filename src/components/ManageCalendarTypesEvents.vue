@@ -43,7 +43,7 @@
 									{{ t('elb_cal_types', 'Event name') }}
 								</td>
 								<td>
-									<input name="eventname" v-model="eventTitle" type="text" >
+									<input v-model="eventTitle" name="eventname" type="text">
 								</td>
 							</tr>
 
@@ -52,7 +52,7 @@
 									{{ t('elb_cal_types', 'Event description') }}
 								</td>
 								<td>
-									<textarea name="eventdescription" v-model="eventDescription" />
+									<textarea v-model="eventDescription" name="eventdescription" />
 								</td>
 							</tr>
 
@@ -63,7 +63,7 @@
 								<td>
 									<template>
 										<span>
-										<DatetimePicker
+											<DatetimePicker
 												v-model="eventDateTime"
 												type="datetime"
 												:default-value="new Date()"
@@ -73,7 +73,7 @@
 												:time-select-options="{minutes: [0,5,10,15,20,25,30,35,40,45,50,55]}"
 												:lang="'en'"
 												:first-day-of-week="1"
-												:not-before="new Date()"/>
+												:not-before="new Date()" />
 										</span>
 									</template>
 								</td>
@@ -87,12 +87,12 @@
 									<template>
 										<div class="wrapper">
 											<Multiselect v-model="preselectedCalReminders"
-														 track-by="id"
-														 :options="optionsForCalReminders"
-														 :multiple="true"
-														 :tag-width="200"
-														 :close-on-select="false"
-														 label="name" />
+												track-by="id"
+												:options="optionsForCalReminders"
+												:multiple="true"
+												:tag-width="200"
+												:close-on-select="false"
+												label="name" />
 										</div>
 									</template>
 								</td>
@@ -102,18 +102,18 @@
 									{{ t('elb_cal_types', 'Assign users for event') }}
 								</td>
 								<td>
-                                    <template>
-                                        <div class="wrapper">
-                                            <Multiselect v-model="usersForEvent"
-                                                         track-by="userID"
-                                                         :options="availableUsersForCalType"
-                                                         :multiple="true"
-                                                         :tag-width="200"
-                                                         :close-on-select="false"
-                                                         :custom-label="showUserWithGroups" />
-                                        </div>
-                                    </template>
-                                </td>
+									<template>
+										<div class="wrapper">
+											<Multiselect v-model="usersForEvent"
+												track-by="userID"
+												:options="availableUsersForCalType"
+												:multiple="true"
+												:tag-width="200"
+												:close-on-select="false"
+												:custom-label="showUserWithGroups" />
+										</div>
+									</template>
+								</td>
 							</tr>
 						</tbody>
 						<tfoot>
@@ -205,14 +205,12 @@ export default {
 		// perform ajax call to fetch assigned calendar types for group folder which the logged in user belongs to
 		axios.get(OC.generateUrl('/apps/elb_cal_types/getassignedcalendartypes')).then((result) => {
 			this.assignedCalendarTypes = result.data.assigned_calendars
-            if (result.data.users_per_group_folder !== undefined) {
+			if (result.data.users_per_group_folder !== undefined) {
 				this.allUsersPerGroupFolders = result.data.users_per_group_folder
-                console.log('allUsersPerGroupFolders: ', this.allUsersPerGroupFolders)
-            }
+			}
 
 			this.nrOfGroupFolders = result.data.nr_of_group_folders
-			console.log('nrOfGroupFolders sind: ', this.nrOfGroupFolders)
-			let calTypesIds = []
+			const calTypesIds = []
 			if (this.assignedCalendarTypes) {
 				Object.keys(this.assignedCalendarTypes).forEach(key => {
 					const obj = this.assignedCalendarTypes[key]
@@ -241,7 +239,7 @@ export default {
 			this.visibleCreateNewEventForm = false
 			this.currentCalTypeLinkID = calType.link_id
 			this.currentCalTypeID = calType.cal_type_id
-            this.currentCalTypeGroupFolderID = calType.group_folder_id
+			this.currentCalTypeGroupFolderID = calType.group_folder_id
 			this.populatePreselectedCalReminders()
 			this.populateEventTitleForCreateEventForm()
 			this.populateEventDescriptionForCreateEventForm()
@@ -249,7 +247,7 @@ export default {
 		},
 		calTypeEntryItemName(calType) {
 			if (this.nrOfGroupFolders > 1) {
-				return calType.cal_type_title + " (" + calType.group_folder_name + ")"
+				return calType.cal_type_title + ' (' + calType.group_folder_name + ')'
 			}
 			return calType.cal_type_title
 		},
@@ -261,42 +259,23 @@ export default {
 		},
 		populateAvailableUsers() {
 			this.availableUsersForCalType = null
-            let ret = []
+			const ret = []
 			Object.keys(this.allUsersPerGroupFolders).forEach(key => {
-
 				const obj = this.allUsersPerGroupFolders[key]
-
 				Object.keys(obj).forEach(key2 => {
-
-				    const obj2 = obj[key2]
-
-                    if (key2 == this.currentCalTypeGroupFolderID) {
+					const obj2 = obj[key2]
+					if (key2 == this.currentCalTypeGroupFolderID) {
 						Object.keys(obj2).forEach(key3 => {
 							const valObj3 = obj2[key3]
-
-						    console.log('valObj3: ',valObj3)
-						    console.log('key3: ',key3)
-
-						    ret.push({ 'userID': key3, 'userGroups': valObj3 })
+							ret.push({ 'userID': key3, 'userGroups': valObj3 })
 						})
-                    }
-
-                    // console.log('allUsersPerGroupFolders obj: ',obj)
-					// console.log('key2: ',key2)
-				    // console.log('obj2: ',obj2)
-			    })
-
-				// const ret = []
-				// Object.keys(this.defAssignedRemindersForCalTypes[currentCalTypeID]).forEach(key => {
-				// 	const assCalTypeRem = this.defAssignedRemindersForCalTypes[currentCalTypeID][key]
-				// 	ret.push({ 'id': parseInt(assCalTypeRem.cal_def_reminder_id), 'name': assCalTypeRem.cal_def_reminder_title_trans })
-				// })
-				// this.preselectedCalReminders = ret
+					}
+				})
 			})
-            if (ret.length) {
+			if (ret.length) {
 				this.availableUsersForCalType = ret
-            }
-        },
+			}
+		},
 		newCalendarTypeEvent() {
 			this.visibleCreateNewEventForm = true
 		},
@@ -306,23 +285,18 @@ export default {
 			}
 		},
 		async saveNewEvent() {
-			//alert('save event')
 			let res = null
-
 			const data = {
 				caltypeid: this.currentCalTypeID,
 				eventname: this.eventTitle,
 				eventdesc: this.eventDescription,
 				eventdatetime: this.eventDateTime,
 				reminders: this.preselectedCalReminders,
-				assignedusers: this.eventAssignedUsers,
+				assignedusers: this.usersForEvent,
 			}
-
 			console.log('data for save event: ', data)
-
 			try {
 				res = await axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendartypeevent'), data)
-
 				console.log('response for save event: ', res)
 			} catch (e) {
 				console.error(e)
@@ -353,7 +327,7 @@ export default {
 		},
 		showUserWithGroups({userID, userGroups}) {
 			return `${userID} - ${userGroups}`
-        },
+		},
 	},
 }
 </script>
