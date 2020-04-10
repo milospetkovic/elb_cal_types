@@ -178,6 +178,7 @@ export default {
 			preselectedCalReminders: null,
 			optionsForCalReminders: [],
 			nrOfGroupFolders: 0,
+            calTypeEvents: null
 		}
 	},
 	computed: {
@@ -244,6 +245,7 @@ export default {
 			this.populateEventTitleForCreateEventForm()
 			this.populateEventDescriptionForCreateEventForm()
 			this.populateAvailableUsers()
+            this.getCalTypeEvents()
 		},
 		calTypeEntryItemName(calType) {
 			if (this.nrOfGroupFolders > 1) {
@@ -328,6 +330,19 @@ export default {
 		showUserWithGroups({userID, userGroups}) {
 			return `${userID} - ${userGroups}`
 		},
+		async getCalTypeEvents() {
+			const data = {
+				caltypeid: this.currentCalTypeID,
+			}
+			try {
+				await axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
+                    this.calTypeEvents = result.data
+				})
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elb_cal_types', 'Could not get events for calendar type'))
+			}
+        }
 	},
 }
 </script>

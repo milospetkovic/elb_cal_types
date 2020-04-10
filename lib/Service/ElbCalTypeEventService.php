@@ -103,4 +103,12 @@ class ElbCalTypeEventService
         }
     }
 
+    public function getCalendarTypeEvents($data)
+    {
+        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEvents($data['caltypeid']);
+        return $res;
+    }
+
+
+
 }

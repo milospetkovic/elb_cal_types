@@ -5,6 +5,7 @@ namespace OCA\ElbCalTypes\Db;
 
 
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class CalendarTypeEventMapper extends QBMapper
@@ -27,6 +28,17 @@ class CalendarTypeEventMapper extends QBMapper
         $qb->select('*')
             ->from($this->table_name);
         return $this->findEntities($qb);
+    }
+
+    public function fetchCalendarTypeEvents($id)
+    {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('cte.id as cal_type_event_id', 'cte.event_datetime', 'eer.fk_cal_def_reminder')
+            ->from('elb_cal_type_events', 'cte')
+            ->leftJoin('cte', 'elb_event_users', 'eeu', $qb->expr()->eq('eeu.fk_cal_type_event', 'cte.id'))
+            ->leftJoin('eeu', 'elb_event_reminders', 'eer', $qb->expr()->eq('eer.fk_cal_type_event', 'eeu.fk_cal_type_event'))
+            ->where($qb->expr()->eq('cte.fk_elb_cal_type', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+        return $qb->execute()->fetchAll();
     }
 
 }

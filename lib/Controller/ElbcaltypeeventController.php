@@ -26,7 +26,6 @@ class ElbcaltypeeventController extends Controller
         $this->calTypeEventService = $calTypeEventService;
     }
 
-
     /**
      * Save calendar type event
      *
@@ -37,6 +36,18 @@ class ElbcaltypeeventController extends Controller
     public function saveacalendartypeevent()
     {
         return new JSONResponse($this->calTypeEventService->storeCalendarTypeEvent($this->request->params));
+    }
+
+    /**
+     * Get calendar type events
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @return JSONResponse
+     */
+    public function getcalendartypeevents()
+    {
+        return new JSONResponse($this->calTypeEventService->getCalendarTypeEvents($this->request->params));
     }
 
 }
