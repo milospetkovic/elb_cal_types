@@ -27,5 +27,6 @@ return [
         [ 'name' => 'elbcaltypereminder#getassignedremindersforcaltypesids', 'url' => '/getassignedremindersforcaltypesids', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypeevent#saveacalendartypeevent', 'url' => '/saveacalendartypeevent', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypeevent#getcalendartypeevents', 'url' => '/getcalendartypeevents', 'verb' => 'POST'],
+        [ 'name' => 'elbcaltypeevent#deletecaltypeevent', 'url' => '/deletecaltypeevent', 'verb' => 'POST'],
     ]
 ];

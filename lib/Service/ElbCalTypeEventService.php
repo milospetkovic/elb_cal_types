@@ -138,4 +138,12 @@ class ElbCalTypeEventService
         return $ret;
     }
 
+    public function deleteCalendarTypeEvent($data)
+    {
+        $linkID = $data['linkid'];
+        $calTypeEvent = new $this->calendarTypeEvent;
+        $calTypeEvent->id = $linkID;
+        return $this->calendarTypeEventMapper->delete($calTypeEvent);
+    }
+
 }

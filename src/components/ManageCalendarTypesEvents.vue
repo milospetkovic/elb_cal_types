@@ -173,7 +173,7 @@
 											   @click="saveCalendarEventForUsers">
 									</template>
 									<template v-show="!calEvent.event_executed">
-										<button class="icon-delete pull-right" @click="deleteCalendarEvent"></button>
+										<button class="icon-delete pull-right" @click="deleteCalendarTypeEvent(calEvent.link_id)"></button>
 									</template>
 								</td>
 							</tr>
@@ -348,6 +348,7 @@ export default {
 			console.log('data for save event: ', data)
 			try {
 				res = await axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendartypeevent'), data)
+				this.getCalTypeEvents()
 				console.log('response for save event: ', res)
 			} catch (e) {
 				console.error(e)
@@ -398,8 +399,19 @@ export default {
 		saveCalendarEventForUsers() {
 			alert('save calendar event for users')
 		},
-		deleteCalendarEvent() {
-			alert('implement remove calendar event action')
+		async deleteCalendarTypeEvent(id) {
+			// alert('implement remove calendar event action')
+			const data = {
+				linkid: id,
+			}
+			try {
+				await axios.post(OC.generateUrl('/apps/elb_cal_types/deletecaltypeevent'), data)
+				//this.$delete(this.calTypeEvents, id)
+                this.getCalTypeEvents()
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elb_cal_types', 'Could not delete event for calendar type'))
+			}
 		},
 	},
 }
