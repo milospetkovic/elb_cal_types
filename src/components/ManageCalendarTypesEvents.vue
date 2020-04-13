@@ -290,6 +290,7 @@ export default {
 			let res = null
 			const data = {
 				caltypeid: this.currentCalTypeID,
+				caltypelinkid: this.currentCalTypeLinkID,
 				eventname: this.eventTitle,
 				eventdesc: this.eventDescription,
 				eventdatetime: this.eventDateTime,

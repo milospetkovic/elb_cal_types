@@ -63,7 +63,8 @@ class ElbCalTypeEventService
     // @TODO implement validation and empty values as null...
     public function storeCalendarTypeEvent($data)
     {
-        $calTypeId = $data['caltypeid'];
+        // $calTypeId = $data['caltypeid'];
+        $calTypeLinkId = $data['caltypelinkid'];
         (empty($data['eventname']) ? $eventName=null : $eventName=trim($data['eventname']));
         $eventDescription = $data['eventdesc'];
         $eventDateTime = $data['eventdatetime'];
@@ -71,7 +72,7 @@ class ElbCalTypeEventService
         $eventAssignedUsers = $data['assignedusers'];
 
         $calTypeEvent = new $this->calendarTypeEvent;
-        $calTypeEvent->setFkElbCalType($calTypeId);
+        $calTypeEvent->setFkGfCalType($calTypeLinkId);
         $calTypeEvent->setUserAuthor($this->currentUser->getUID());
         $calTypeEvent->setCreatedAt(date('Y-m-d H:i:s', time()));
         $calTypeEvent->setTitle($eventName);

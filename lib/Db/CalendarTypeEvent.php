@@ -9,7 +9,7 @@ use OCP\AppFramework\Db\Entity;
 
 class CalendarTypeEvent extends Entity implements JsonSerializable
 {
-    protected $fkElbCalType;
+    protected $fkGfCalType;
     protected $createdAt;
     protected $userAuthor;
     protected $title;
@@ -21,7 +21,7 @@ class CalendarTypeEvent extends Entity implements JsonSerializable
     {
         return [
             'id' => $this->id,
-            'fk_elb_cal_type' => $this->fkElbCalType,
+            'fk_gf_cal_type' => $this->fkGfCalType,
             'created_at' => $this->createdAt,
             'user_author' => $this->userAuthor,
             'title' => $this->title,
