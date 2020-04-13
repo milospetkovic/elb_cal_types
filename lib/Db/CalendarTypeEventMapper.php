@@ -37,7 +37,7 @@ class CalendarTypeEventMapper extends QBMapper
             ->from('elb_cal_type_events', 'cte')
             ->leftJoin('cte', 'elb_event_users', 'eeu', $qb->expr()->eq('eeu.fk_cal_type_event', 'cte.id'))
             ->leftJoin('eeu', 'elb_event_reminders', 'eer', $qb->expr()->eq('eer.fk_cal_type_event', 'eeu.fk_cal_type_event'))
-            ->where($qb->expr()->eq('cte.fk_elb_cal_type', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+            ->where($qb->expr()->eq('cte.fk_gf_cal_type', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
         return $qb->execute()->fetchAll();
     }
 

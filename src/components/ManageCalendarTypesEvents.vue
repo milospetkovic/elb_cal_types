@@ -332,8 +332,10 @@ export default {
 			return `${userID} - ${userGroups}`
 		},
 		async getCalTypeEvents() {
+			this.calTypeEvents = null
 			const data = {
 				caltypeid: this.currentCalTypeID,
+				caltypelinkid: this.currentCalTypeLinkID,
 			}
 			try {
 				await axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
