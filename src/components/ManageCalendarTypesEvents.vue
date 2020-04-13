@@ -134,7 +134,44 @@
 				</div>
 			</div>
             <div v-if="this.calTypeEvents">
-                prikaziIIIIII!
+                <div class="table-responsive">
+                    <table class="table" width="1000">
+                        <thead>
+                            <tr>
+                                <th>{{ t('elb_cal_types', 'ID') }}</th>
+                                <th>{{ t('elb_cal_types', 'Event title') }}</th>
+                                <th>{{ t('elb_cal_types', 'Event description') }}</th>
+                                <th>{{ t('elb_cal_types', 'Event datetime') }}</th>
+                                <th>{{ t('elb_cal_types', 'Event assigned users') }}</th>
+                                <th>{{ t('elb_cal_types', 'Event reminders') }}</th>
+                                <th>{{ t('elb_cal_types', 'Event executed') }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="calEvent in this.calTypeEvents">
+                                <td>{{ calEvent.link_id }}</td>
+                                <td>{{ calEvent.event_title }}</td>
+                                <td>{{ calEvent.event_description }}</td>
+                                <td>{{ calEvent.event_datetime }}</td>
+                                <td>
+                                    <template v-for="eventAssignedUser in calEvent.event_assigned_users">
+                                        <span>{{ eventAssignedUser }}</span>
+                                    </template>
+                                </td>
+                                <td>
+                                    <template v-for="eventReminder in calEvent.event_assigned_reminders">
+                                        <span>{{ eventReminder.def_reminder_title }}</span>
+                                    </template>
+                                </td>
+                                <td>{{ calEvent.event_executed }}</td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 		</AppContent>
 	</div>
