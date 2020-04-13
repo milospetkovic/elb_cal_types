@@ -331,15 +331,16 @@ export default {
 		showUserWithGroups({userID, userGroups}) {
 			return `${userID} - ${userGroups}`
 		},
-		async getCalTypeEvents() {
+		getCalTypeEvents() {
 			this.calTypeEvents = null
 			const data = {
 				caltypeid: this.currentCalTypeID,
 				caltypelinkid: this.currentCalTypeLinkID,
 			}
 			try {
-				await axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
+				axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
                     this.calTypeEvents = result.data
+                    console.log('calTypeEvents: ', this.calTypeEvents)
 				})
 			} catch (e) {
 				console.error(e)
