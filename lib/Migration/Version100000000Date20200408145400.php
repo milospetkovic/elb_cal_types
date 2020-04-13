@@ -53,11 +53,11 @@ class Version100000000Date20200408145400 extends SimpleMigrationStep
                 'length' => 40,
             ])->setComment('User who created the record');;
 
-            $table->addColumn('fk_elb_cal_type', 'integer', [
+            $table->addColumn('fk_gf_cal_type', 'integer', [
                 'notnull' => true,
                 'length' => 11,
                 'unsigned' => false
-            ])->setComment('Foreign key to the calendar types table');
+            ])->setComment('Foreign key to the group folder calendar types table');
 
             $table->addColumn('title', 'string', [
                 'notnull' => true,
@@ -82,7 +82,7 @@ class Version100000000Date20200408145400 extends SimpleMigrationStep
 
             $table->addIndex(['user_author'], 'idx_ecte_uauthor');
 
-            $table->addForeignKeyConstraint('oc_elb_calendar_types', ['fk_elb_cal_type'], ['id'], ['onUpdate' => 'RESTRICT', 'onDelete' => 'RESTRICT'], 'frgk_ecte_ect_id');
+            $table->addForeignKeyConstraint('oc_elb_gf_cal_types', ['fk_gf_cal_type'], ['id'], ['onUpdate' => 'RESTRICT', 'onDelete' => 'RESTRICT'], 'frgk_ecte_egct_id');
         }
 
         return $schema;
