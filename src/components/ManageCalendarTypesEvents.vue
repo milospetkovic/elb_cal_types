@@ -133,6 +133,9 @@
 					</table>
 				</div>
 			</div>
+            <div v-if="this.calTypeEvents">
+                prikaziIIIIII!
+            </div>
 		</AppContent>
 	</div>
 </template>

@@ -132,6 +132,9 @@ class ElbCalTypeEventService
                 }
             }
         }
+        if (!count($ret)) {
+            return false;
+        }
         return $ret;
     }
 
