@@ -30,7 +30,7 @@
 
 			<div v-if="visibleCreateNewEventForm">
 				<div class="table-responsive">
-					<table class="table" width="1000">
+					<table class="table">
 						<thead>
 							<tr>
 								<th>{{ t('elb_cal_types', 'Event attributes') }}</th>
@@ -133,9 +133,9 @@
 					</table>
 				</div>
 			</div>
-			<div v-if="this.calTypeEvents">
+			<div v-if="calTypeEvents">
 				<div class="table-responsive">
-					<table class="table" width="1000">
+					<table class="table elb-events-table">
 						<thead>
 							<tr>
 								<th>{{ t('elb_cal_types', 'ID') }}</th>
@@ -150,7 +150,7 @@
 						</thead>
 						<tbody>
 							<tr v-for="calEvent in calTypeEvents">
-								<td>{{ calEvent.link_id }}</td>
+								<td>{{ calEvent.link_id }}.</td>
 								<td>{{ calEvent.event_title }}</td>
 								<td>{{ calEvent.event_description }}</td>
 								<td>{{ calEvent.event_datetime }}</td>
@@ -437,5 +437,13 @@ td.text-right {
 .test {
 	position: absolute;
 	right: 1vw;
+}
+.elb-events-table .icon-delete {
+   min-width: 35px;
+   min-height: 35px;
+   background-color: transparent;
+}
+.elb-events-table .icon-delete:hover {
+    border-color: #f00;
 }
 </style>

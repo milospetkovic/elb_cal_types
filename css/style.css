@@ -1,0 +1,20 @@
+.elb-events-table {
+    font-weight: bold;
+    border-left: 1px solid #dbdbdb;
+    width: 100%;
+}
+
+.elb-events-table th {
+    padding: 5px;
+    font-weight: bold;
+    background-color: #0082c9;
+    color: #fff;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.elb-events-table td {
+    padding: 3px;
+    border-bottom: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+}
