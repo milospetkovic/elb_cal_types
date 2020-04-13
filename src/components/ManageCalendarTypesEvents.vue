@@ -399,18 +399,19 @@ export default {
 		saveCalendarEventForUsers() {
 			alert('save calendar event for users')
 		},
-		async deleteCalendarTypeEvent(id) {
-			// alert('implement remove calendar event action')
-			const data = {
-				linkid: id,
-			}
-			try {
-				await axios.post(OC.generateUrl('/apps/elb_cal_types/deletecaltypeevent'), data)
-				//this.$delete(this.calTypeEvents, id)
-                this.getCalTypeEvents()
-			} catch (e) {
-				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not delete event for calendar type'))
+		deleteCalendarTypeEvent(id) {
+			if (confirm(t('elb_cal_types', 'Really delete') + '?')) {
+				const data = {
+					linkid: id,
+				}
+				try {
+					axios.post(OC.generateUrl('/apps/elb_cal_types/deletecaltypeevent'), data)
+					//this.$delete(this.calTypeEvents, id)
+					this.getCalTypeEvents()
+				} catch (e) {
+					console.error(e)
+					OCP.Toast.error(t('elb_cal_types', 'Could not delete event for calendar type'))
+				}
 			}
 		},
 	},
