@@ -29,6 +29,8 @@
 			</div>
 
 			<div v-if="visibleCreateNewEventForm">
+                <hr class="elb-hr-sep">
+                <h3 class="font-bold">{{ t('elb_cal_types', 'Form for creating event for selected calendar type') }}</h3>
 				<div class="table-responsive">
 					<table class="table">
 						<thead>
@@ -132,8 +134,12 @@
 						</tfoot>
 					</table>
 				</div>
+                <hr class="elb-hr-sep">
 			</div>
 			<div v-if="calTypeEvents">
+
+                <h3 class="font-bold">{{ t('elb_cal_types', 'Created events for selected calendar type') }}</h3>
+
 				<div class="table-responsive">
 					<table class="table elb-events-table">
 						<thead>
@@ -433,9 +439,9 @@ export default {
 td.text-right {
 	text-align: right;
 }
-.checkbox-label {
+/*.checkbox-label {
 	display: block;
-}
+}*/
 .elb-events-table .icon-delete {
    min-width: 35px;
    min-height: 35px;
@@ -451,5 +457,13 @@ td.text-right {
     box-sizing: border-box;
     margin: 2px;
     padding: 3px;
+}
+.elb-hr-sep {
+    border-bottom: 1px solid #dbdbdb;
+    border-top: 0;
+    margin: 15px 0;
+}
+.font-bold {
+    font-weight: 700;
 }
 </style>
