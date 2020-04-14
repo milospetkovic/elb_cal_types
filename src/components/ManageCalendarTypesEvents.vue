@@ -240,6 +240,7 @@ export default {
 					text: this.calTypeEntryItemName(calType),
 					action: () => this.openCalType(calType),
 					classes: this.currentCalTypeLinkID === calType.link_id ? 'active' : '',
+                    bullet: '#0082c9',
 				}
 			}
 		},
@@ -434,10 +435,6 @@ td.text-right {
 }
 .checkbox-label {
 	display: block;
-}
-.test {
-	position: absolute;
-	right: 1vw;
 }
 .elb-events-table .icon-delete {
    min-width: 35px;
