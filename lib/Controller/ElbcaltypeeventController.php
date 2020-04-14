@@ -62,4 +62,16 @@ class ElbcaltypeeventController extends Controller
         return new JSONResponse($this->calTypeEventService->deleteCalendarTypeEvent($this->request->params));
     }
 
+    /**
+     * Save calendar event to assigned users for calendar type event
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @return JSONResponse
+     */
+    public function saveacalendareventforusers()
+    {
+        return new JSONResponse($this->calTypeEventService->saveaCalendarEventsforCalendarTypeEvent($this->request->params));
+    }
+
 }

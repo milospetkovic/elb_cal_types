@@ -28,5 +28,6 @@ return [
         [ 'name' => 'elbcaltypeevent#saveacalendartypeevent', 'url' => '/saveacalendartypeevent', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypeevent#getcalendartypeevents', 'url' => '/getcalendartypeevents', 'verb' => 'POST'],
         [ 'name' => 'elbcaltypeevent#deletecaltypeevent', 'url' => '/deletecaltypeevent', 'verb' => 'POST'],
+        [ 'name' => 'elbcaltypeevent#saveacalendareventforusers', 'url' => '/saveacalendareventforusers', 'verb' => 'POST'],
     ]
 ];

@@ -42,6 +42,10 @@ class ElbCalTypeEventService
      * @var CalendarTypeEventUser
      */
     private $calendarTypeEventUser;
+    /**
+     * @var ElbCalEventService
+     */
+    private $calEventService;
 
     public function __construct(CalendarTypeEventMapper $calendarTypeEventMapper,
                                 CalendarTypeEvent $calendarTypeEvent,
@@ -49,7 +53,8 @@ class ElbCalTypeEventService
                                 CalendarTypeEventReminder $calendarTypeEventReminder,
                                 CalendarTypeEventUserMapper $calendarTypeEventUserMapper,
                                 CalendarTypeEventUser $calendarTypeEventUser,
-                                CurrentUser $currentUser)
+                                CurrentUser $currentUser,
+                                ElbCalEventService $calEventService)
     {
         $this->calendarTypeEventMapper = $calendarTypeEventMapper;
         $this->calendarTypeEvent = $calendarTypeEvent;
@@ -58,6 +63,7 @@ class ElbCalTypeEventService
         $this->currentUser = $currentUser;
         $this->calendarTypeEventUserMapper = $calendarTypeEventUserMapper;
         $this->calendarTypeEventUser = $calendarTypeEventUser;
+        $this->calEventService = $calEventService;
     }
 
     // @TODO implement validation and empty values as null...
@@ -144,6 +150,12 @@ class ElbCalTypeEventService
         $calTypeEvent = new $this->calendarTypeEvent;
         $calTypeEvent->id = $linkID;
         return $this->calendarTypeEventMapper->delete($calTypeEvent);
+    }
+
+    public function saveaCalendarEventsforCalendarTypeEvent($data)
+    {
+        $linkID = $data['linkid'];
+        return [$linkID];
     }
 
 }

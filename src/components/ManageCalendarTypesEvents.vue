@@ -403,8 +403,19 @@ export default {
 				OCP.Toast.error(t('elb_cal_types', 'Could not get events for calendar type'))
 			}
 		},
-		saveCalendarEventForUsers() {
-			alert('save calendar event for users')
+		saveCalendarEventForUsers(id) {
+			const data = {
+				linkid: id,
+            }
+			try {
+				axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendareventforusers'), data).then((result) => {
+                    //this.getCalTypeEvents()
+					console.log('response for save calendar events for users for calendar type event: ', result)
+				})
+			} catch (e) {
+				console.error(e)
+				OCP.Toast.error(t('elb_cal_types', 'Could not save event for users for calendar type event'))
+			}
 		},
 		deleteCalendarTypeEvent(id) {
 			if (confirm(t('elb_cal_types', 'Really delete') + '?')) {
@@ -413,7 +424,6 @@ export default {
 				}
 				try {
 					axios.post(OC.generateUrl('/apps/elb_cal_types/deletecaltypeevent'), data)
-					//this.$delete(this.calTypeEvents, id)
 					this.getCalTypeEvents()
 				} catch (e) {
 					console.error(e)
