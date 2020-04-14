@@ -449,8 +449,7 @@ td.text-right {
 }
 .item-as-box {
     background-color: #ededed;
-    border: 1px solid rgb(51,51,51);
-    /*border-color: rgb(51,51,51);*/
+    border: 1px solid #dbdbdb;
     border-radius: 2px;
     box-sizing: border-box;
     margin: 2px;
