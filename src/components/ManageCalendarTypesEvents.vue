@@ -156,12 +156,12 @@
 								<td>{{ calEvent.event_datetime }}</td>
 								<td>
 									<template v-for="eventAssignedUser in calEvent.event_assigned_users">
-										<span>{{ eventAssignedUser }}</span>
+                                        <div class="item-as-box">{{ eventAssignedUser }}</div>
 									</template>
 								</td>
 								<td>
 									<template v-for="eventReminder in calEvent.event_assigned_reminders">
-										<span>{{ eventReminder.def_reminder_title }}</span>
+										<div class="item-as-box">{{ eventReminder.def_reminder_title }}</div>
 									</template>
 								</td>
 								<td>{{ calEvent.event_executed }}</td>
@@ -446,5 +446,14 @@ td.text-right {
 }
 .elb-events-table .icon-delete:hover {
     border-color: #f00;
+}
+.item-as-box {
+    background-color: #ededed;
+    border: 1px solid rgb(51,51,51);
+    /*border-color: rgb(51,51,51);*/
+    border-radius: 2px;
+    box-sizing: border-box;
+    margin: 2px;
+    padding: 3px;
 }
 </style>
