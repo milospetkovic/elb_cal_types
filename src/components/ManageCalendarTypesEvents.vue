@@ -32,37 +32,37 @@
                 <hr class="elb-hr-sep">
                 <h3 class="font-bold">{{ t('elb_cal_types', 'Form for creating event for selected calendar type') }}</h3>
 				<div class="table-responsive">
-					<table class="table">
+					<table class="table elb-create-cal-event-table">
 						<thead>
 							<tr>
-								<th>{{ t('elb_cal_types', 'Event attributes') }}</th>
-								<th>{{ t('elb_cal_types', 'Values') }}</th>
+								<th class="col1">{{ t('elb_cal_types', 'Event attributes') }}</th>
+								<th class="col2">{{ t('elb_cal_types', 'Values') }}</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td class="text-right">
+								<td class="col1">
 									{{ t('elb_cal_types', 'Event name') }}
 								</td>
-								<td>
+								<td class="col2">
 									<input v-model="eventTitle" name="eventname" type="text">
 								</td>
 							</tr>
 
 							<tr>
-								<td class="text-right">
+								<td class="col1">
 									{{ t('elb_cal_types', 'Event description') }}
 								</td>
-								<td>
+								<td class="col2">
 									<textarea v-model="eventDescription" name="eventdescription" />
 								</td>
 							</tr>
 
 							<tr>
-								<td class="text-right">
+								<td class="col1">
 									{{ t('elb_cal_types', 'Event date and time') }}
 								</td>
-								<td>
+								<td class="col2">
 									<template>
 										<span>
 											<DatetimePicker
@@ -82,10 +82,10 @@
 							</tr>
 
 							<tr>
-								<td class="text-right">
+								<td class="col1">
 									{{ t('elb_cal_types', 'Reminders for event') }}
 								</td>
-								<td>
+								<td class="col2">
 									<template>
 										<div class="wrapper">
 											<Multiselect v-model="preselectedCalReminders"
@@ -100,10 +100,10 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="text-right">
+								<td class="col1">
 									{{ t('elb_cal_types', 'Assign users for event') }}
 								</td>
-								<td>
+								<td class="col2">
 									<template>
 										<div class="wrapper">
 											<Multiselect v-model="usersForEvent"
@@ -465,5 +465,38 @@ td.text-right {
 }
 .font-bold {
     font-weight: 700;
+}
+.elb-create-cal-event-table {
+    width: 100%;
+}
+.elb-create-cal-event-table thead th {
+    padding: 5px;
+    font-weight: bold;
+    background-color: #0082c9;
+    color: #fff;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #dbdbdb;
+}
+.elb-create-cal-event-table .col1 {
+    width: 15%;
+    text-align: right;
+}
+.elb-create-cal-event-table .col2 {
+    width: 85%;
+}
+.elb-create-cal-event-table td.col1 {
+    vertical-align: top;
+    padding: 8px 5px;
+    font-weight: 500;
+}
+.elb-create-cal-event-table td.col2 {
+    padding: 3px;
+}
+input[type="text"] {
+    width: 100%;
+}
+textarea,
+div.multiselect {
+    width: 100%;
 }
 </style>
