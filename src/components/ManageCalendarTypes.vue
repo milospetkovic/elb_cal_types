@@ -285,6 +285,7 @@ export default {
 							},
 						],
 					},
+					bullet: '#0082c9',
 				}
 			}
 		},
@@ -614,7 +615,7 @@ export default {
 				this.$delete(this.assignedGroupFoldersForCalTypes[this.currentCalTypeID], linkID)
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not remove reminder for calendar type'))
+				OCP.Toast.error(t('elb_cal_types', 'Could not remove assigned group folder for calendar type'))
 			}
 		},
 	},
