@@ -44,28 +44,10 @@ class CalendarManager
         $this->connection = $connection;
     }
 
-
-
-
-
-
-
-    /**
-     * Create calendar event for shared file with expiration date
-     *
-     * @param $calendarID
-     * @param $shareData
-     * @return bool
-     * @throws Exception\BadRequest
-     */
-    public function createCalendarEvent($calendarID, $shareData)
+    public function createCalendarEvent($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime)
     {
         // uuid for .ics
         $calDataUri[0] = strtoupper(UUIDUtil::getUUID()) . '.ics';
-
-        $userInitiatorForShare = $shareData['uid_initiator'];
-
-        $shareTarget = trim($shareData['file_target'], '/');
 
         $currentTimeFormat = date('Ymd');
 
@@ -79,14 +61,12 @@ class CalendarManager
         $calObjectUUID[0] = strtolower(UUIDUtil::getUUID());
 
         // the name for calendar event
-        $eventSummaryRaw = $this->l->t("User {user} shared {file} with you");
-        $eventSummary = $this->translateSharedFileCalenderEvent($eventSummaryRaw, ['user' => $userInitiatorForShare, 'file' => $shareTarget]);
+        $eventSummary = $calTypeEventTitle;
 
         // the end datetime of calendar event
         $endDateTimeOfEvent = $startDateTimeOfEvent;
 
-        $endDateTimeFormat = date('Ymd', strtotime($shareData['expiration']));
-
+        $eventStartDatetime = $endDateTimeFormat = date('Ymd\THis\Z', strtotime($calTypeEventDatetime));
 
         $timeZone = 'Europe/Belgrade';
 
@@ -102,8 +82,8 @@ DTSTAMP:$createdDateTime
 LAST-MODIFIED:$createdDateTime
 SEQUENCE:2
 UID:$calObjectUUID[0]
-DTSTART;TZID=$timeZone:$startDateTimeOfEvent
-DTEND;TZID=$timeZone:$endDateTimeOfEvent
+DTSTART;TZID=$timeZone:$eventStartDatetime
+DTEND;TZID=$timeZone:$eventStartDatetime
 LAST-MODIFIED;VALUE=DATE-TIME:$createdDateTime
 DTSTAMP;VALUE=DATE-TIME:$createdDateTime
 SUMMARY:$eventSummary
@@ -192,7 +172,6 @@ EOD;
         $calTypeEventAssignedUsers = $data['event_assigned_users'];
         $calTypeEventAssignedReminders = $data['event_assigned_reminders'];
 
-
         // start transaction
         $this->connection->beginTransaction();
 
@@ -202,7 +181,11 @@ EOD;
                 $error++;
                 break;
             }
-            //$this->createCalendarEvent($calendarID, $elem);
+            $resCreateEvent = $this->createCalendarEvent($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime);
+            if (!$resCreateEvent) {
+                $error++;
+                break;
+            }
         }
 
         // close transaction
