@@ -7,6 +7,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use Sabre\DAV\Exception;
 use Sabre\DAV\UUIDUtil;
+use OCA\DAV\CalDAV\Reminder\Backend as CalendarReminderManager;
 
 class CalendarManager
 {
@@ -28,23 +29,30 @@ class CalendarManager
      * @var IL10N
      */
     private $l;
+    /**
+     * @var CalendarReminderManager
+     */
+    private $calendarReminderManager;
 
     /**
      * CalendarManager constructor.
      * @param CalDavBackend $calDavBackend
      * @param IL10N $l
      * @param IDBConnection $connection
+     * @param CalendarReminderManager $calendarReminderManager
      */
     public function __construct(CalDavBackend $calDavBackend,
                                 IL10N $l,
-                                IDBConnection $connection)
+                                IDBConnection $connection,
+                                CalendarReminderManager $calendarReminderManager)
     {
         $this->calDavBackend = $calDavBackend;
         $this->l = $l;
         $this->connection = $connection;
+        $this->calendarReminderManager = $calendarReminderManager;
     }
 
-    public function createCalendarEvent($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime)
+    public function createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, array $eventReminders)
     {
         // uuid for .ics
         $calDataUri[0] = strtoupper(UUIDUtil::getUUID()) . '.ics';
@@ -118,6 +126,24 @@ EOD;
             if (!strlen($response)) {
                 return false; // error during saving cal. event
             }
+
+            if (count($eventReminders)) {
+                // fetch newly created calendar event
+                //$event = $this->calDavBackend->getCalendarObject($calendarID, $calDataUri[$ind], $calendarType);
+                $event = $this->getCalendarEventObject($calendarID, $calDataUri[$ind], $calendarType);
+                $eventID = $event['id'];
+                $eventUID = $event['uid'];
+                foreach ($eventReminders as $reminder) {
+                    $res = $this->calendarReminderManager->insertReminder(
+                        $calendarID,
+                        $eventID,
+                        $eventUID
+                    );
+                    if (!($res > 0)) {
+                        return false;
+                    }
+                }
+            }
         }
 
         return true;
@@ -181,7 +207,7 @@ EOD;
                 $error++;
                 break;
             }
-            $resCreateEvent = $this->createCalendarEvent($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime);
+            $resCreateEvent = $this->createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, $calTypeEventAssignedReminders);
             if (!$resCreateEvent) {
                 $error++;
                 break;
@@ -192,9 +218,25 @@ EOD;
         (!$error) ? $this->connection->commit() : $this->connection->rollBack();
 
         return (!$error);
+    }
 
-//        var_dump($data);
-//        die('stopppp');
+
+    public function getCalendarEventObject($id, $objectUri, $calendarType)
+    {
+        $query = $this->connection->getQueryBuilder();
+        $query->select('*')
+            ->from('calendarobjects')
+            ->where($query->expr()->eq('calendarid', $query->createNamedParameter($id)))
+            ->andWhere($query->expr()->eq('uri', $query->createNamedParameter($objectUri)))
+            ->andWhere($query->expr()->eq('calendartype', $query->createNamedParameter($calendarType)));
+        $stmt = $query->execute();
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if(!$row) {
+            return null;
+        }
+
+        return $row;
     }
 
 }
