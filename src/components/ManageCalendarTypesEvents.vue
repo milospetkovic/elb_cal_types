@@ -405,7 +405,7 @@ export default {
 		},
 		saveCalendarEventForUsers(id) {
 			const data = {
-				linkid: id,
+				caltypeeventid: id,
             }
 			try {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendareventforusers'), data).then((result) => {

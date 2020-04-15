@@ -152,15 +152,10 @@ class ElbCalTypeEventService
         return $this->calendarTypeEventMapper->delete($calTypeEvent);
     }
 
-    public function saveCalendarEventForUsersforCalendarTypeEvent($data)
-    {
-        return $this->getCalendarTypeEventDataByItsID($data['linkid']);
-    }
-
-    public function getCalendarTypeEventDataByItsID($id)
+    public function saveCalendarEventForUsersForCalendarTypeEventID($data)
     {
         $ret = [];
-        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEventDataByLinkIDWithGroupFolder($id);
+        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEventDataByLinkIDWithGroupFolder($data['caltypeeventid']);
         if (is_array($res) && count($res)) {
             foreach($res as $ind => $arr) {
                 if (!array_key_exists($arr['cal_type_event_id'], $ret)) {
