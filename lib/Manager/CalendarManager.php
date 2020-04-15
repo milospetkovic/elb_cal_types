@@ -8,6 +8,7 @@ use OCP\IL10N;
 use Sabre\DAV\Exception;
 use Sabre\DAV\UUIDUtil;
 use OCA\DAV\CalDAV\Reminder\Backend as CalendarReminderManager;
+use OCA\DAV\CalDAV\Reminder\ReminderService;
 
 class CalendarManager
 {
@@ -72,9 +73,12 @@ class CalendarManager
         $eventSummary = $calTypeEventTitle;
 
         // the end datetime of calendar event
-        $endDateTimeOfEvent = $startDateTimeOfEvent;
+        // @TODO - discuss for event end date time
+        //$endDateTimeOfEvent = $startDateTimeOfEvent;
 
-        $eventStartDatetime = $endDateTimeFormat = date('Ymd\THis\Z', strtotime($calTypeEventDatetime));
+        $tsCalTypeEventDatetime = strtotime($calTypeEventDatetime);
+
+        $eventStartDatetime = $endDateTimeFormat = date('Ymd\THis\Z', $tsCalTypeEventDatetime);
 
         $timeZone = 'Europe/Belgrade';
 
@@ -137,7 +141,16 @@ EOD;
                     $res = $this->calendarReminderManager->insertReminder(
                         $calendarID,
                         $eventID,
-                        $eventUID
+                        $eventUID,
+                        false,
+                        0, // @TODO - see how to mapp this field (recurrenceId)
+                        false,
+                        'event_hash', // @TODO - see how to mapp this field (eventHash)
+                        'alarm_hash',// @TODO - see how to mapp this field (eventHash)
+                        ReminderService::REMINDER_TYPE_DISPLAY,
+                        true,
+                        ($tsCalTypeEventDatetime - ($reminder['def_reminder_minutes_before_event'] * 60)),
+                        false
                     );
                     if (!($res > 0)) {
                         return false;

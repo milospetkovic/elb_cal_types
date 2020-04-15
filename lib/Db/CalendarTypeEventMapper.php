@@ -53,7 +53,7 @@ class CalendarTypeEventMapper extends QBMapper
             'cte.event_datetime', 'cte.executed as event_executed',
             'eeu.fk_user as assigned_user_id',
             'eer.fk_cal_def_reminder as event_def_reminder_id',
-            'ecdr.title as def_reminder_title',
+            'ecdr.title as def_reminder_title', 'ecdr.minutes_before_event as def_reminder_minutes_before_event',
             'ect.title as cal_type_title', 'ect.description as cal_type_description', 'ect.slug as cal_type_slug')
             ->from('elb_cal_type_events', 'cte')
             ->leftJoin('cte', 'elb_event_users', 'eeu', $qb->expr()->eq('eeu.fk_cal_type_event', 'cte.id'))
