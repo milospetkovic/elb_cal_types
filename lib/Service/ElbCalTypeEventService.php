@@ -166,6 +166,9 @@ class ElbCalTypeEventService
                         'event_datetime' => $arr['event_datetime'],
                         'event_executed' => $arr['event_executed'],
                         'event_title' => $arr['event_title'],
+                        'event_cal_type_title' => $arr['cal_type_title'],
+                        'event_cal_type_description' => $arr['cal_type_description'],
+                        'event_cal_type_slug' => $arr['cal_type_slug'],
                         'event_assigned_users' => [],
                         'event_assigned_reminders' => []
                     ];
