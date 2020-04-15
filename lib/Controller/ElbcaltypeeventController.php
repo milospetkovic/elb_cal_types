@@ -71,7 +71,7 @@ class ElbcaltypeeventController extends Controller
      */
     public function saveacalendareventforusers()
     {
-        return new JSONResponse($this->calTypeEventService->saveaCalendarEventsforCalendarTypeEvent($this->request->params));
+        return new JSONResponse($this->calTypeEventService->saveCalendarEventForUsersforCalendarTypeEvent($this->request->params));
     }
 
 }

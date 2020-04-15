@@ -176,7 +176,7 @@
 										<input type="button"
 											   class="primary pull-left"
 											   :value="t('elb_cal_types', 'Execute event')"
-											   @click="saveCalendarEventForUsers">
+											   @click="saveCalendarEventForUsers(calEvent.link_id)">
 									</template>
 									<template v-show="!calEvent.event_executed">
 										<button class="icon-delete pull-right" @click="deleteCalendarTypeEvent(calEvent.link_id)"></button>

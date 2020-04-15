@@ -113,7 +113,7 @@ class ElbCalTypeEventService
     public function getCalendarTypeEvents($data)
     {
         $ret = [];
-        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEvents($data['caltypelinkid']);
+        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEventsByLinkIDWithGroupFolder($data['caltypelinkid']);
         if (is_array($res) && count($res)) {
             foreach($res as $ind => $arr) {
                 if (!array_key_exists($arr['cal_type_event_id'], $ret)) {
@@ -152,10 +152,43 @@ class ElbCalTypeEventService
         return $this->calendarTypeEventMapper->delete($calTypeEvent);
     }
 
-    public function saveaCalendarEventsforCalendarTypeEvent($data)
+    public function saveCalendarEventForUsersforCalendarTypeEvent($data)
     {
-        $linkID = $data['linkid'];
-        return [$linkID];
+        return $this->getCalendarTypeEventDataByItsID($data['linkid']);
+    }
+
+    public function getCalendarTypeEventDataByItsID($id)
+    {
+        $ret = [];
+        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEventDataByLinkIDWithGroupFolder($id);
+        if (is_array($res) && count($res)) {
+            foreach($res as $ind => $arr) {
+                if (!array_key_exists($arr['cal_type_event_id'], $ret)) {
+                    $ret[$arr['cal_type_event_id']] = [
+                        'link_id' => $arr['cal_type_event_id'],
+                        'event_title' => $arr['event_title'],
+                        'event_description' => $arr['event_description'],
+                        'event_datetime' => $arr['event_datetime'],
+                        'event_executed' => $arr['event_executed'],
+                        'event_title' => $arr['event_title'],
+                        'event_assigned_users' => [],
+                        'event_assigned_reminders' => []
+                    ];
+                }
+
+                if (!in_array($arr['assigned_user_id'], $ret[$arr['cal_type_event_id']]['event_assigned_users'])) {
+                    $ret[$arr['cal_type_event_id']]['event_assigned_users'][] = $arr['assigned_user_id'];
+                }
+
+                if (!array_key_exists($arr['event_def_reminder_id'], $ret[$arr['cal_type_event_id']]['event_assigned_reminders'])) {
+                    $ret[$arr['cal_type_event_id']]['event_assigned_reminders'][$arr['event_def_reminder_id']] = ['def_reminder_title' => $arr['def_reminder_title']];
+                }
+            }
+        }
+        if (!count($ret)) {
+            return false;
+        }
+        return $ret;
     }
 
 }
