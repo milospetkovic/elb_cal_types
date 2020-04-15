@@ -46,7 +46,7 @@ class CalendarTypeEventMapper extends QBMapper
         return $qb->execute()->fetchAll();
     }
 
-    public function fetchCalendarTypeEventDataByLinkIDWithGroupFolder($id)
+    public function fetchCalendarTypeEventDataByCalTypeEventID($id)
     {
         $qb = $this->db->getQueryBuilder();
         $qb->select('cte.id as cal_type_event_id', 'cte.title as event_title', 'cte.description as event_description',

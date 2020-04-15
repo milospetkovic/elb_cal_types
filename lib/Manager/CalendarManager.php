@@ -12,16 +12,12 @@ class CalendarManager
 {
     const CALENDAR_PRINCIPAL_URI_PREFIX = 'principals/users/';
 
-    CONST CALENDAR_URI = 'test-cal-123';
-
     /**
      * @var CalDavBackend
      */
     private $calDavBackend;
 
     private $checkedIfCalendarExistsForUser = [];
-
-    private $calendarDisplayName = 'Test';
 
     /**
      * @var IDBConnection
@@ -48,55 +44,11 @@ class CalendarManager
         $this->connection = $connection;
     }
 
-    /**
-     * Translation for calendar's name
-     *
-     * @return string
-     */
-    private function getCalendarDisplayName()
-    {
-        return $this->l->t($this->calendarDisplayName);
-    }
-
-    /**
-     * Create a calendar which will hold all events for shared files with expiration date for a user (if the calendar doesn't exist)
-     * and create event(s) in the calendar
-     */
-    public function creteCalendarAndEventForUser()
-    {
 
 
-        // start transaction
-        $this->connection->beginTransaction();
 
-        try {
-            foreach ($rows as $ind => $elem) {
-                $calendarID = $this->createCalendarForUserIfCalendarNotExists($elem['share_with']);
-                $this->createCalendarEvent($calendarID, $elem);
-            }
-            $this->connection->commit();
-        } catch (\Exception $e) {
-            $this->connection->rollBack();
-            echo 'Exception: '.$e->getMessage();
-            echo ' DB error: '.$this->connection->errorInfo();
-        }
 
-    }
 
-    /**
-     * Replace placeholders with data from parameters variable
-     *
-     * @param $subject
-     * @param array $parameters
-     * @return string|string[]
-     */
-    private function translateSharedFileCalenderEvent($subject, array $parameters)
-    {
-        foreach ($parameters as $paramKey => $paramVal) {
-            $subject = str_replace('{'.$paramKey.'}', $paramVal, $subject);
-        }
-        return $subject;
-    }
 
     /**
      * Create calendar event for shared file with expiration date
@@ -191,23 +143,17 @@ EOD;
         return true;
     }
 
-    /**
-     * Create a calendar for shared files which have expiration date for user (if the calendar doesn't exist, otherwise return ID of the existing calendar.
-     *
-     * @param $calendarForUser
-     * @return int|mixed|null
-     */
-    public function createCalendarForUserIfCalendarNotExists($calendarForUser)
+    public function createCalendarForUserIfCalendarNotExists($calendarForUser, $calendarSlug, $calendarTitle)
     {
         if (!array_key_exists($calendarForUser, $this->checkedIfCalendarExistsForUser)) {
 
             // fetch existing calendars for user
-            $existingCalendarsForUser = $this->calDavBackend->getCalendarsForUser(self::CALENDAR_PRINCIPAL_URI_PREFIX.$calendarForUser);
+            $existingCalendarsForUser = $this->calDavBackend->getCalendarsForUser($this->returnCalendarPrincipalUriForUser($calendarForUser));
 
             // check up if calendar already exists (return id of calendar in that case)
             if (is_array($existingCalendarsForUser) && count($existingCalendarsForUser)) {
                 foreach ($existingCalendarsForUser as $ind => $arr) {
-                    if ($arr['uri'] == self::CALENDAR_URI) {
+                    if ($arr['uri'] == $calendarSlug) {
                         $this->checkedIfCalendarExistsForUser[$calendarForUser] = $arr['id'];
                         return $arr['id'];
                     }
@@ -216,7 +162,7 @@ EOD;
 
             // calendar doesn't exist -> create a calendar for the user
             try {
-                $newCalendarID =  $this->calDavBackend->createCalendar(self::CALENDAR_PRINCIPAL_URI_PREFIX . $calendarForUser, self::CALENDAR_URI, ['{DAV:}displayname' => $this->getCalendarDisplayName()]);
+                $newCalendarID =  $this->calDavBackend->createCalendar($this->returnCalendarPrincipalUriForUser($calendarForUser), $calendarSlug, ['{DAV:}displayname' => $calendarTitle ]);
                 $this->checkedIfCalendarExistsForUser[$calendarForUser] = $newCalendarID;
                 return $newCalendarID;
             } catch (Exception $e) {
@@ -224,6 +170,48 @@ EOD;
             }
         }
         return $this->checkedIfCalendarExistsForUser[$calendarForUser];
+    }
+
+    private function returnCalendarPrincipalUriForUser($userID)
+    {
+        return self::CALENDAR_PRINCIPAL_URI_PREFIX.$userID;
+    }
+
+    public function createCalendarWithEventAndRemindersForUsersForCalTypeEvent($data)
+    {
+        $error = 0;
+
+        $calTypeEventID = $data['event_id'];
+        $calTypeEventTitle = $data['event_title'];
+        $calTypeEventDescription = $data['event_description'];
+        $calTypeEventDatetime = $data['event_datetime'];
+        $calTypeEventExecuted = $data['event_executed'];
+        $calTypeTitle = $data['event_cal_type_title'];
+        $calTypeDescription = $data['event_cal_type_description'];
+        $calTypeSlug = $data['event_cal_type_slug'];
+        $calTypeEventAssignedUsers = $data['event_assigned_users'];
+        $calTypeEventAssignedReminders = $data['event_assigned_reminders'];
+
+
+        // start transaction
+        $this->connection->beginTransaction();
+
+        foreach ($calTypeEventAssignedUsers as $ind => $userID) {
+            $calendarID = $this->createCalendarForUserIfCalendarNotExists($userID, $calTypeSlug, $calTypeTitle);
+            if (!($calendarID > 0)) {
+                $error++;
+                break;
+            }
+            //$this->createCalendarEvent($calendarID, $elem);
+        }
+
+        // close transaction
+        (!$error) ? $this->connection->commit() : $this->connection->rollBack();
+
+        return (!$error);
+
+//        var_dump($data);
+//        die('stopppp');
     }
 
 }

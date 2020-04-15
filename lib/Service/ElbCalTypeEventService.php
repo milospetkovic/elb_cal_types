@@ -11,6 +11,7 @@ use OCA\ElbCalTypes\Db\CalendarTypeEventReminder;
 use OCA\ElbCalTypes\Db\CalendarTypeEventReminderMapper;
 use OCA\ElbCalTypes\Db\CalendarTypeEventUser;
 use OCA\ElbCalTypes\Db\CalendarTypeEventUserMapper;
+use OCA\ElbCalTypes\Manager\CalendarManager;
 
 class ElbCalTypeEventService
 {
@@ -46,6 +47,10 @@ class ElbCalTypeEventService
      * @var ElbCalEventService
      */
     private $calEventService;
+    /**
+     * @var CalendarManager
+     */
+    private $calendarManager;
 
     public function __construct(CalendarTypeEventMapper $calendarTypeEventMapper,
                                 CalendarTypeEvent $calendarTypeEvent,
@@ -54,7 +59,8 @@ class ElbCalTypeEventService
                                 CalendarTypeEventUserMapper $calendarTypeEventUserMapper,
                                 CalendarTypeEventUser $calendarTypeEventUser,
                                 CurrentUser $currentUser,
-                                ElbCalEventService $calEventService)
+                                ElbCalEventService $calEventService,
+                                CalendarManager $calendarManager)
     {
         $this->calendarTypeEventMapper = $calendarTypeEventMapper;
         $this->calendarTypeEvent = $calendarTypeEvent;
@@ -64,6 +70,7 @@ class ElbCalTypeEventService
         $this->calendarTypeEventUserMapper = $calendarTypeEventUserMapper;
         $this->calendarTypeEventUser = $calendarTypeEventUser;
         $this->calEventService = $calEventService;
+        $this->calendarManager = $calendarManager;
     }
 
     // @TODO implement validation and empty values as null...
@@ -152,15 +159,27 @@ class ElbCalTypeEventService
         return $this->calendarTypeEventMapper->delete($calTypeEvent);
     }
 
-    public function saveCalendarEventForUsersForCalendarTypeEventID($data)
+    public function saveCalendarEventForUsersForCalendarTypeEventID($params)
+    {
+        $ret = false;
+        $data = $this->getCalendarTypeEventDataByCalTypeEventID($params['caltypeeventid']);
+        if (is_array($data) && count($data)) {
+            $res = $this->calendarManager->createCalendarWithEventAndRemindersForUsersForCalTypeEvent($data[$params['caltypeeventid']]);
+        }
+
+
+        return $ret;
+    }
+
+    private function getCalendarTypeEventDataByCalTypeEventID($id)
     {
         $ret = [];
-        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEventDataByLinkIDWithGroupFolder($data['caltypeeventid']);
+        $res = $this->calendarTypeEventMapper->fetchCalendarTypeEventDataByCalTypeEventID($id);
         if (is_array($res) && count($res)) {
             foreach($res as $ind => $arr) {
                 if (!array_key_exists($arr['cal_type_event_id'], $ret)) {
                     $ret[$arr['cal_type_event_id']] = [
-                        'link_id' => $arr['cal_type_event_id'],
+                        'event_id' => $arr['cal_type_event_id'],
                         'event_title' => $arr['event_title'],
                         'event_description' => $arr['event_description'],
                         'event_datetime' => $arr['event_datetime'],
