@@ -96,7 +96,6 @@ SEQUENCE:2
 UID:$calObjectUUID[0]
 DTSTART;TZID=$timeZone:$eventStartDatetime
 DTEND;TZID=$timeZone:$eventStartDatetime
-LAST-MODIFIED;VALUE=DATE-TIME:$createdDateTime
 DTSTAMP;VALUE=DATE-TIME:$createdDateTime
 SUMMARY:$eventSummary
 END:VEVENT
