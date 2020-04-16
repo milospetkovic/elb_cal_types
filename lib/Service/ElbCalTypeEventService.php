@@ -164,7 +164,7 @@ class ElbCalTypeEventService
         $ret = false;
         $data = $this->getCalendarTypeEventDataByCalTypeEventID($params['caltypeeventid']);
         if (is_array($data) && count($data)) {
-            $res = $this->calendarManager->createCalendarWithEventAndRemindersForUsersForCalTypeEvent($data[$params['caltypeeventid']]);
+            $ret = $this->calendarManager->createCalendarWithEventAndRemindersForUsersForCalTypeEvent($data[$params['caltypeeventid']]);
         }
         return $ret;
     }
