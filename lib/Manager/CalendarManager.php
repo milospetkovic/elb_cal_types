@@ -3,6 +3,7 @@
 namespace OCA\ElbCalTypes\Manager;
 
 use OCA\DAV\CalDAV\CalDavBackend;
+use OCA\ElbCalTypes\Service\ElbCalDefRemindersService;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use Sabre\DAV\Exception;
@@ -34,6 +35,10 @@ class CalendarManager
      * @var CalendarReminderManager
      */
     private $calendarReminderManager;
+    /**
+     * @var ElbCalDefRemindersService
+     */
+    private $elbCalDefRemindersService;
 
     /**
      * CalendarManager constructor.
@@ -41,16 +46,19 @@ class CalendarManager
      * @param IL10N $l
      * @param IDBConnection $connection
      * @param CalendarReminderManager $calendarReminderManager
+     * @param ElbCalDefRemindersService $calDefRemindersService
      */
     public function __construct(CalDavBackend $calDavBackend,
                                 IL10N $l,
                                 IDBConnection $connection,
-                                CalendarReminderManager $calendarReminderManager)
+                                CalendarReminderManager $calendarReminderManager,
+                                ElbCalDefRemindersService $elbCalDefRemindersService)
     {
         $this->calDavBackend = $calDavBackend;
         $this->l = $l;
         $this->connection = $connection;
         $this->calendarReminderManager = $calendarReminderManager;
+        $this->elbCalDefRemindersService = $elbCalDefRemindersService;
     }
 
     public function createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, array $eventReminders)
@@ -98,10 +106,16 @@ DTEND;TZID=$timeZone:$eventStartDatetime\r\n
 DTSTAMP;VALUE=DATE-TIME:$createdDateTime\r\n
 SUMMARY:$eventSummary\r\n";
 
-$calData[0].="BEGIN:VALARM\r\n
+if (count($eventReminders)) {
+    $arrRemSyntax = $this->elbCalDefRemindersService->returnCalendarReminderSyntaxForDefaultReminders();
+    foreach ($eventReminders as $reminder) {
+        $calObjRemSyntax = $arrRemSyntax[$reminder['def_reminder_minutes_before_event']];
+        $calData[0] .= "BEGIN:VALARM\r\n
 ACTION:DISPLAY\r\n
-TRIGGER;RELATED=START:-P6DT15H\r\n
+TRIGGER;RELATED=START:$calObjRemSyntax\r\n
 END:VALARM\r\n";
+    }
+}
 
 $calData[0].="END:VEVENT\r\n";
 

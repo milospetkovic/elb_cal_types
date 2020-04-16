@@ -62,6 +62,36 @@ class ElbCalDefRemindersService
         ];
     }
 
+    public function returnCalendarReminderSyntaxForDefaultReminders()
+    {
+        return [
+            0 => 'PT0S',
+            1 => '-PT1M',
+            2 => '-PT2M',
+            5 => '-PT5M',
+            10 => '-PT10M',
+            15 => '-PT15M',
+            20 => '-PT20M',
+            30 => '-PT30M',
+            45 => '-PT40M',
+            60 => '-PT1H',
+            120 => '-PT2H',
+            180 => '-PT3H',
+            360 => '-PT6H',
+            1440 => '-P1D',
+            2880 => '-P2D',
+            4320 => '-P3D',
+            7200 => '-P5D',
+            10080 => '-P7D',
+            20160 => '-P2W',
+            43200 => '-P30D',
+            86400 => '-P60D',
+            129600 => '-P90D',
+            259200 => '-P180D',
+            525600 => '-P365D',
+        ];
+    }
+
     /**
      * Fetch all default calendar reminders
      *
