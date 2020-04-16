@@ -83,41 +83,47 @@ class CalendarManager
         $timeZone = 'Europe/Belgrade';
 
         // populate start calendar event with data
-        $calData[0] = <<<EOD
-BEGIN:VCALENDAR
-PRODID:-//IDN nextcloud.com//Calendar app 2.0.1//EN
-CALSCALE:GREGORIAN
-VERSION:2.0
-BEGIN:VEVENT
-CREATED:$createdDateTime
-DTSTAMP:$createdDateTime
-LAST-MODIFIED:$createdDateTime
-SEQUENCE:2
-UID:$calObjectUUID[0]
-DTSTART;TZID=$timeZone:$eventStartDatetime
-DTEND;TZID=$timeZone:$eventStartDatetime
-DTSTAMP;VALUE=DATE-TIME:$createdDateTime
-SUMMARY:$eventSummary
-END:VEVENT
-BEGIN:VTIMEZONE
-TZID:$timeZone
-BEGIN:DAYLIGHT
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-TZNAME:CEST
-DTSTART:19700329T020000
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
-END:DAYLIGHT
-BEGIN:STANDARD
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-TZNAME:CET
-DTSTART:19701025T030000
-RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
-END:STANDARD
-END:VTIMEZONE
-END:VCALENDAR
-EOD;
+        $calData[0] = "BEGIN:VCALENDAR\r\n
+PRODID:-//IDN nextcloud.com//Calendar app 2.0.1//EN\r\n
+CALSCALE:GREGORIAN\r\n
+VERSION:2.0\r\n
+BEGIN:VEVENT\r\n
+CREATED:$createdDateTime\r\n
+DTSTAMP:$createdDateTime\r\n
+LAST-MODIFIED:$createdDateTime\r\n
+SEQUENCE:2\r\n
+UID:$calObjectUUID[0]\r\n
+DTSTART;TZID=$timeZone:$eventStartDatetime\r\n
+DTEND;TZID=$timeZone:$eventStartDatetime\r\n
+DTSTAMP;VALUE=DATE-TIME:$createdDateTime\r\n
+SUMMARY:$eventSummary\r\n";
+
+$calData[0].="BEGIN:VALARM\r\n
+ACTION:DISPLAY\r\n
+TRIGGER;RELATED=START:-P6DT15H\r\n
+END:VALARM\r\n";
+
+$calData[0].="END:VEVENT\r\n";
+
+$calData[0].="BEGIN:VTIMEZONE\r\n
+TZID:$timeZone\r\n
+BEGIN:DAYLIGHT\r\n
+TZOFFSETFROM:+0100\r\n
+TZOFFSETTO:+0200\r\n
+TZNAME:CEST\r\n
+DTSTART:19700329T020000\r\n
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\n
+END:DAYLIGHT\r\n
+BEGIN:STANDARD\r\n
+TZOFFSETFROM:+0200\r\n
+TZOFFSETTO:+0100\r\n
+TZNAME:CET\r\n
+DTSTART:19701025T030000\r\n
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\r\n
+END:STANDARD\r\n
+END:VTIMEZONE\r\n";
+
+$calData[0].="END:VCALENDAR";
 
         $calendarType = CalDavBackend::CALENDAR_TYPE_CALENDAR;
 
