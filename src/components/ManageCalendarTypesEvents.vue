@@ -427,14 +427,15 @@ export default {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendareventforusers'), data).then((result) => {
 					console.log('response for save calendar events for users for calendar type event: ', result)
 					if (!result.data) {
-						OCP.Toast.error(t('elb_cal_types', 'Could not save calendar event for users for calendar type event'))
+                        OC.dialogs.alert(t('elbcaltypes', 'Could not save calendar event for users for calendar type event'), t('elbcaltypes', 'Error'))
 					} else {
-						OCP.Toast.success(t('elb_cal_types', 'Calendar event has been saved for assigned users'))
+                        this.getCalTypeEvents()
+                        OC.dialogs.info(t('elbcaltypes', 'Calendar event has been saved for assigned users'), t('elbcaltypes', 'Success'))
 					}
 				})
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not save calendar event for users for calendar type event'))
+                OC.dialogs.alert(t('elbcaltypes', 'Could not save calendar event for users for calendar type event'), t('elbcaltypes', 'Error'))
 			}
 		},
 		deleteCalendarTypeEvent(id) {

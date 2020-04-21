@@ -3,6 +3,7 @@
 namespace OCA\ElbCalTypes\Manager;
 
 use OCA\DAV\CalDAV\CalDavBackend;
+use OCA\ElbCalTypes\Db\CalendarTypeEventMapper;
 use OCA\ElbCalTypes\Service\ElbCalDefRemindersService;
 use OCP\IDBConnection;
 use OCP\IL10N;
@@ -39,6 +40,10 @@ class CalendarManager
      * @var ElbCalDefRemindersService
      */
     private $elbCalDefRemindersService;
+    /**
+     * @var CalendarTypeEventMapper
+     */
+    private $calendarTypeEventMapper;
 
     /**
      * CalendarManager constructor.
@@ -52,13 +57,15 @@ class CalendarManager
                                 IL10N $l,
                                 IDBConnection $connection,
                                 CalendarReminderManager $calendarReminderManager,
-                                ElbCalDefRemindersService $elbCalDefRemindersService)
+                                ElbCalDefRemindersService $elbCalDefRemindersService,
+                                CalendarTypeEventMapper $calendarTypeEventMapper)
     {
         $this->calDavBackend = $calDavBackend;
         $this->l = $l;
         $this->connection = $connection;
         $this->calendarReminderManager = $calendarReminderManager;
         $this->elbCalDefRemindersService = $elbCalDefRemindersService;
+        $this->calendarTypeEventMapper = $calendarTypeEventMapper;
     }
 
     public function createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, array $eventReminders)
@@ -244,6 +251,13 @@ $calData[0].="END:VCALENDAR";
                 $error++;
                 break;
             }
+        }
+
+        // mark calendar type event as executed
+        if (!$error) {
+            $calTypeEvent = $this->calendarTypeEventMapper->find($calTypeEventID);
+            $calTypeEvent->setExecuted(1);
+            $res = $this->calendarTypeEventMapper->update($calTypeEvent);
         }
 
         // close transaction

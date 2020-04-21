@@ -17,6 +17,15 @@ class CalendarTypeEventMapper extends QBMapper
         parent::__construct($db, $this->table_name, CalendarTypeEvent::class);
     }
 
+    public function find(int $id): CalendarTypeEvent
+    {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('*')
+            ->from($this->table_name)
+            ->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+        return $this->findEntity($qb);
+    }
+
     /**
      * Fetch all calendar type event records
      *
