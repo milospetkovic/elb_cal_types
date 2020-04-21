@@ -80,7 +80,17 @@ class ElbCalTypeEventService
         $calTypeLinkId = $data['caltypelinkid'];
         (empty($data['eventname']) ? $eventName=null : $eventName=trim($data['eventname']));
         $eventDescription = $data['eventdesc'];
-        $eventDateTime = $data['eventdatetime'];
+
+        $timeOffset = $data['timezoneoffset'];
+
+        $tsEventDateTime = strtotime($data['eventdatetime']);
+
+        if ($timeOffset) {
+            $tsEventDateTime +=  $timeOffset * (-1) * 60;
+        }
+
+        $eventDateTime = date('Y-m-d\TH:i:s.000Z', $tsEventDateTime);
+
         $eventAssignedReminders = $data['reminders'];
         $eventAssignedUsers = $data['assignedusers'];
 

@@ -29,8 +29,8 @@
 			</div>
 
 			<div v-if="visibleCreateNewEventForm">
-                <hr class="elb-hr-sep">
-                <h3 class="font-bold">{{ t('elb_cal_types', 'Form for creating event for selected calendar type') }}</h3>
+				<hr class="elb-hr-sep">
+				<h3 class="font-bold">{{ t('elb_cal_types', 'Form for creating event for selected calendar type') }}</h3>
 				<div class="table-responsive">
 					<table class="table elb-create-cal-event-table">
 						<thead>
@@ -134,11 +134,11 @@
 						</tfoot>
 					</table>
 				</div>
-                <hr class="elb-hr-sep">
+				<hr class="elb-hr-sep">
 			</div>
 			<div v-if="calTypeEvents">
 
-                <h3 class="font-bold">{{ t('elb_cal_types', 'Created events for selected calendar type') }}</h3>
+				<h3 class="font-bold">{{ t('elb_cal_types', 'Created events for selected calendar type') }}</h3>
 
 				<div class="table-responsive">
 					<table class="table elb-events-table">
@@ -162,7 +162,7 @@
 								<td>{{ calEvent.event_datetime }}</td>
 								<td>
 									<template v-for="eventAssignedUser in calEvent.event_assigned_users">
-                                        <div class="item-as-box">{{ eventAssignedUser }}</div>
+										<div class="item-as-box">{{ eventAssignedUser }}</div>
 									</template>
 								</td>
 								<td>
@@ -201,6 +201,9 @@ import {
 	Multiselect,
 } from 'nextcloud-vue'
 
+// import DatePicker from 'vue2-datepicker'
+// import 'vue2-datepicker/index.css';
+
 import axios from '@nextcloud/axios'
 
 export default {
@@ -210,7 +213,8 @@ export default {
 		AppNavigationNew,
 		AppNavigationItem,
 		AppContent,
-		DatetimePicker,
+		// DatePicker,
+        DatetimePicker,
 		Multiselect,
 	},
 	data() {
@@ -246,7 +250,7 @@ export default {
 					text: this.calTypeEntryItemName(calType),
 					action: () => this.openCalType(calType),
 					classes: this.currentCalTypeLinkID === calType.link_id ? 'active' : '',
-                    bullet: '#0082c9',
+					bullet: '#0082c9',
 				}
 			}
 		},
@@ -349,6 +353,7 @@ export default {
 				eventname: this.eventTitle,
 				eventdesc: this.eventDescription,
 				eventdatetime: this.eventDateTime,
+				timezoneoffset: this.eventDateTime.getTimezoneOffset(),
 				reminders: this.preselectedCalReminders,
 				assignedusers: this.usersForEvent,
 			}
@@ -406,15 +411,15 @@ export default {
 		saveCalendarEventForUsers(id) {
 			const data = {
 				caltypeeventid: id,
-            }
+			}
 			try {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendareventforusers'), data).then((result) => {
-                    console.log('response for save calendar events for users for calendar type event: ', result)
-                    if (!result.data) {
+					console.log('response for save calendar events for users for calendar type event: ', result)
+					if (!result.data) {
 						OCP.Toast.error(t('elb_cal_types', 'Could not save calendar event for users for calendar type event'))
 					} else {
 						OCP.Toast.success(t('elb_cal_types', 'Calendar event has been saved for assigned users'))
-                    }
+					}
 				})
 			} catch (e) {
 				console.error(e)
@@ -462,55 +467,55 @@ td.text-right {
    background-color: transparent;
 }
 .elb-events-table .icon-delete:hover {
-    border-color: #f00;
+	border-color: #f00;
 }
 .item-as-box {
-    background-color: #ededed;
-    border: 1px solid #dbdbdb;
-    border-radius: 2px;
-    box-sizing: border-box;
-    margin: 2px;
-    padding: 3px;
+	background-color: #ededed;
+	border: 1px solid #dbdbdb;
+	border-radius: 2px;
+	box-sizing: border-box;
+	margin: 2px;
+	padding: 3px;
 }
 .elb-hr-sep {
-    border-bottom: 1px solid #dbdbdb;
-    border-top: 0;
-    margin: 15px 0;
+	border-bottom: 1px solid #dbdbdb;
+	border-top: 0;
+	margin: 15px 0;
 }
 .font-bold {
-    font-weight: 700;
+	font-weight: 700;
 }
 .elb-create-cal-event-table {
-    width: 100%;
+	width: 100%;
 }
 .elb-create-cal-event-table thead th {
-    padding: 5px;
-    font-weight: bold;
-    background-color: #0082c9;
-    color: #fff;
-    border-right: 1px solid #fff;
-    border-bottom: 1px solid #dbdbdb;
+	padding: 5px;
+	font-weight: bold;
+	background-color: #0082c9;
+	color: #fff;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #dbdbdb;
 }
 .elb-create-cal-event-table .col1 {
-    width: 15%;
-    text-align: right;
+	width: 15%;
+	text-align: right;
 }
 .elb-create-cal-event-table .col2 {
-    width: 85%;
+	width: 85%;
 }
 .elb-create-cal-event-table td.col1 {
-    vertical-align: top;
-    padding: 8px 5px;
-    font-weight: 500;
+	vertical-align: top;
+	padding: 8px 5px;
+	font-weight: 500;
 }
 .elb-create-cal-event-table td.col2 {
-    padding: 3px;
+	padding: 3px;
 }
 input[type="text"] {
-    width: 100%;
+	width: 100%;
 }
 textarea,
 div.multiselect {
-    width: 100%;
+	width: 100%;
 }
 </style>
