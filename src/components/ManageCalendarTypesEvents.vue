@@ -352,14 +352,25 @@ export default {
 				caltypelinkid: this.currentCalTypeLinkID,
 				eventname: this.eventTitle,
 				eventdesc: this.eventDescription,
-				eventdatetime: this.eventDateTime,
-				timezoneoffset: this.eventDateTime.getTimezoneOffset(),
+				eventdatetime: (this.eventDateTime !== null) ? this.eventDateTime : null,
+				timezoneoffset: (this.eventDateTime !== null) ? this.eventDateTime.getTimezoneOffset() : null,
 				reminders: this.preselectedCalReminders,
 				assignedusers: this.usersForEvent,
 			}
 			console.log('data for save event: ', data)
 			try {
 				res = await axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendartypeevent'), data)
+				if (res.data.error) {
+					OC.dialogs.alert(
+						t('elbcaltypes', res.data.error_msg),
+						t('elbcaltypes', 'Error')
+					)
+				} else {
+                    OC.dialogs.info(
+                        t('elbcaltypes', 'Calendar event has been saved. Please execute created event for users.'),
+                        t('elbcaltypes', 'Success')
+					)
+				}
 				this.getCalTypeEvents()
 				console.log('response for save event: ', res)
 			} catch (e) {

@@ -12,6 +12,7 @@ use OCA\ElbCalTypes\Db\CalendarTypeEventReminderMapper;
 use OCA\ElbCalTypes\Db\CalendarTypeEventUser;
 use OCA\ElbCalTypes\Db\CalendarTypeEventUserMapper;
 use OCA\ElbCalTypes\Manager\CalendarManager;
+use OCP\IL10N;
 
 class ElbCalTypeEventService
 {
@@ -51,6 +52,10 @@ class ElbCalTypeEventService
      * @var CalendarManager
      */
     private $calendarManager;
+    /**
+     * @var IL10N
+     */
+    private $l;
 
     public function __construct(CalendarTypeEventMapper $calendarTypeEventMapper,
                                 CalendarTypeEvent $calendarTypeEvent,
@@ -60,7 +65,8 @@ class ElbCalTypeEventService
                                 CalendarTypeEventUser $calendarTypeEventUser,
                                 CurrentUser $currentUser,
                                 ElbCalEventService $calEventService,
-                                CalendarManager $calendarManager)
+                                CalendarManager $calendarManager,
+                                IL10N $l)
     {
         $this->calendarTypeEventMapper = $calendarTypeEventMapper;
         $this->calendarTypeEvent = $calendarTypeEvent;
@@ -71,61 +77,109 @@ class ElbCalTypeEventService
         $this->calendarTypeEventUser = $calendarTypeEventUser;
         $this->calEventService = $calEventService;
         $this->calendarManager = $calendarManager;
+        $this->l = $l;
     }
 
-    // @TODO implement validation and empty values as null...
     public function storeCalendarTypeEvent($data)
     {
-        // $calTypeId = $data['caltypeid'];
-        $calTypeLinkId = $data['caltypelinkid'];
-        (empty($data['eventname']) ? $eventName=null : $eventName=trim($data['eventname']));
-        $eventDescription = $data['eventdesc'];
+        $error = 0;
+        $error_msg = [];
 
-        $timeOffset = $data['timezoneoffset'];
-
-        $tsEventDateTime = strtotime($data['eventdatetime']);
-
-        if ($timeOffset) {
-            $tsEventDateTime +=  $timeOffset * (-1) * 60;
+        $validateRes = $this->validateCalTypeEventData($data);
+        if ($validateRes['error']) {
+            $error++;
+            $error_msg = $validateRes['error_msg'];
         }
 
-        $eventDateTime = date('Y-m-d\TH:i:s.000Z', $tsEventDateTime);
+        if (!$error) {
 
-        $eventAssignedReminders = $data['reminders'];
-        $eventAssignedUsers = $data['assignedusers'];
+            $calTypeLinkId = $data['caltypelinkid'];
+            (empty($data['eventname']) ? $eventName = null : $eventName = trim($data['eventname']));
+            $eventDescription = $data['eventdesc'];
 
-        $calTypeEvent = new $this->calendarTypeEvent;
-        $calTypeEvent->setFkGfCalType($calTypeLinkId);
-        $calTypeEvent->setUserAuthor($this->currentUser->getUID());
-        $calTypeEvent->setCreatedAt(date('Y-m-d H:i:s', time()));
-        $calTypeEvent->setTitle($eventName);
-        $calTypeEvent->setDescription($eventDescription);
-        $calTypeEvent->setEventDatetime($eventDateTime);
-        $this->calendarTypeEventMapper->insert($calTypeEvent);
+            $timeOffset = $data['timezoneoffset'];
 
-        if ($calTypeEvent->id > 0) {
+            $tsEventDateTime = strtotime($data['eventdatetime']);
 
-            $calTypeEventID = $calTypeEvent->id;
-
-            if (is_array($eventAssignedReminders) && count($eventAssignedReminders)) {
-                foreach ($eventAssignedReminders as $aRem) {
-                    $calTypeEventReminder = new $this->calendarTypeEventReminder;
-                    $calTypeEventReminder->setFkCalTypeEvent($calTypeEventID);
-                    $calTypeEventReminder->setFkCalDefReminder($aRem['id']);
-                    $this->calendarTypeEventReminderMapper->insert($calTypeEventReminder);
-                }
+            if ($timeOffset) {
+                $tsEventDateTime += $timeOffset * (-1) * 60;
             }
 
-            if (is_array($eventAssignedUsers) && count($eventAssignedUsers)) {
-                foreach ($eventAssignedUsers as $aUserData) {
-                    $calTypeEventUser = new $this->calendarTypeEventUser;
-                    $calTypeEventUser->setFkCalTypeEvent($calTypeEventID);
-                    $calTypeEventUser->setFkUser($aUserData['userID']);
-                    $this->calendarTypeEventUserMapper->insert($calTypeEventUser);
+            $eventDateTime = date('Y-m-d\TH:i:s.000Z', $tsEventDateTime);
+
+            $eventAssignedReminders = $data['reminders'];
+            $eventAssignedUsers = $data['assignedusers'];
+
+            $calTypeEvent = new $this->calendarTypeEvent;
+            $calTypeEvent->setFkGfCalType($calTypeLinkId);
+            $calTypeEvent->setUserAuthor($this->currentUser->getUID());
+            $calTypeEvent->setCreatedAt(date('Y-m-d H:i:s', time()));
+            $calTypeEvent->setTitle($eventName);
+            $calTypeEvent->setDescription($eventDescription);
+            $calTypeEvent->setEventDatetime($eventDateTime);
+            $this->calendarTypeEventMapper->insert($calTypeEvent);
+
+            if ($calTypeEvent->id > 0) {
+
+                $calTypeEventID = $calTypeEvent->id;
+
+                if (is_array($eventAssignedReminders) && count($eventAssignedReminders)) {
+                    foreach ($eventAssignedReminders as $aRem) {
+                        $calTypeEventReminder = new $this->calendarTypeEventReminder;
+                        $calTypeEventReminder->setFkCalTypeEvent($calTypeEventID);
+                        $calTypeEventReminder->setFkCalDefReminder($aRem['id']);
+                        $this->calendarTypeEventReminderMapper->insert($calTypeEventReminder);
+                    }
+                }
+
+                if (is_array($eventAssignedUsers) && count($eventAssignedUsers)) {
+                    foreach ($eventAssignedUsers as $aUserData) {
+                        $calTypeEventUser = new $this->calendarTypeEventUser;
+                        $calTypeEventUser->setFkCalTypeEvent($calTypeEventID);
+                        $calTypeEventUser->setFkUser($aUserData['userID']);
+                        $this->calendarTypeEventUserMapper->insert($calTypeEventUser);
+                    }
                 }
             }
         }
+
+        return [
+            'error' => $error,
+            'error_msg' => $error_msg
+        ];
     }
+
+    private function validateCalTypeEventData($data)
+    {
+        $ret = ['error' => 0, 'error_msg' => []];
+
+        if (empty($data['caltypelinkid'])) {
+            $ret['error'] += 1;
+            $ret['error_msg'][]= $this->l->t('Link with calendar type is required');
+        }
+        if (empty($data['eventname'])) {
+            $ret['error'] += 1;
+            $ret['error_msg'][]= $this->l->t('Event name is required');
+        }
+
+        if (!strtotime($data['eventdatetime'])) {
+            $ret['error'] += 1;
+            $ret['error_msg'][]= $this->l->t('Event date and time is required');
+        }
+
+        if (!(is_array($data['reminders']) && count($data['reminders']))) {
+            $ret['error'] += 1;
+            $ret['error_msg'][]= $this->l->t('At least one reminder for calendar event is required');
+        }
+
+        if (!(is_array($data['assignedusers']) && count($data['assignedusers']))) {
+            $ret['error'] += 1;
+            $ret['error_msg'][]= $this->l->t('At least one assigned user for calendar event is required');
+        }
+
+        return $ret;
+    }
+
 
     public function getCalendarTypeEvents($data)
     {
