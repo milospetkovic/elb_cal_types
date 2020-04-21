@@ -12,6 +12,7 @@ use OCA\ElbCalTypes\Db\CalendarTypeEventReminderMapper;
 use OCA\ElbCalTypes\Db\CalendarTypeEventUser;
 use OCA\ElbCalTypes\Db\CalendarTypeEventUserMapper;
 use OCA\ElbCalTypes\Manager\CalendarManager;
+use OCP\IDBConnection;
 use OCP\IL10N;
 
 class ElbCalTypeEventService
@@ -56,6 +57,10 @@ class ElbCalTypeEventService
      * @var IL10N
      */
     private $l;
+    /**
+     * @var IDBConnection
+     */
+    private $connection;
 
     public function __construct(CalendarTypeEventMapper $calendarTypeEventMapper,
                                 CalendarTypeEvent $calendarTypeEvent,
@@ -66,7 +71,8 @@ class ElbCalTypeEventService
                                 CurrentUser $currentUser,
                                 ElbCalEventService $calEventService,
                                 CalendarManager $calendarManager,
-                                IL10N $l)
+                                IL10N $l,
+                                IDBConnection $connection)
     {
         $this->calendarTypeEventMapper = $calendarTypeEventMapper;
         $this->calendarTypeEvent = $calendarTypeEvent;
@@ -78,6 +84,7 @@ class ElbCalTypeEventService
         $this->calEventService = $calEventService;
         $this->calendarManager = $calendarManager;
         $this->l = $l;
+        $this->connection = $connection;
     }
 
     public function storeCalendarTypeEvent($data)
@@ -90,6 +97,9 @@ class ElbCalTypeEventService
             $error++;
             $error_msg = $validateRes['error_msg'];
         }
+
+        // start transaction
+        $this->connection->beginTransaction();
 
         if (!$error) {
 
@@ -129,23 +139,40 @@ class ElbCalTypeEventService
                         $calTypeEventReminder->setFkCalTypeEvent($calTypeEventID);
                         $calTypeEventReminder->setFkCalDefReminder($aRem['id']);
                         $this->calendarTypeEventReminderMapper->insert($calTypeEventReminder);
+                        if (!($calTypeEvent->id > 0)) {
+                            $error++;
+                            $error_msg[] = $this->l->t('Error saving reminder for calendar type event');
+                            break;
+                        }
                     }
                 }
 
-                if (is_array($eventAssignedUsers) && count($eventAssignedUsers)) {
-                    foreach ($eventAssignedUsers as $aUserData) {
-                        $calTypeEventUser = new $this->calendarTypeEventUser;
-                        $calTypeEventUser->setFkCalTypeEvent($calTypeEventID);
-                        $calTypeEventUser->setFkUser($aUserData['userID']);
-                        $this->calendarTypeEventUserMapper->insert($calTypeEventUser);
+                if (!$error) {
+                    if (is_array($eventAssignedUsers) && count($eventAssignedUsers)) {
+                        foreach ($eventAssignedUsers as $aUserData) {
+                            $calTypeEventUser = new $this->calendarTypeEventUser;
+                            $calTypeEventUser->setFkCalTypeEvent($calTypeEventID);
+                            $calTypeEventUser->setFkUser($aUserData['userID']);
+                            $this->calendarTypeEventUserMapper->insert($calTypeEventUser);
+                            if (!($calTypeEventUser->id > 0)) {
+                                $error++;
+                                $error_msg[] = $this->l->t('Error assigning user for calendar type event');
+                                break;
+                            }
+                        }
                     }
                 }
+            } else {
+                $error++;
+                $error_msg[] = $this->l->t('Error saving event for calendar type');
             }
         }
 
+        (!$error) ? $this->connection->commit() : $this->connection->rollBack();
+
         return [
             'error' => $error,
-            'error_msg' => $error_msg
+            'error_msg' => count($error_msg) ? implode(". ", $error_msg) : ''
         ];
     }
 
@@ -179,7 +206,6 @@ class ElbCalTypeEventService
 
         return $ret;
     }
-
 
     public function getCalendarTypeEvents($data)
     {

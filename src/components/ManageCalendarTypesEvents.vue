@@ -366,12 +366,12 @@ export default {
 						t('elbcaltypes', 'Error')
 					)
 				} else {
+                    this.getCalTypeEvents()
                     OC.dialogs.info(
-                        t('elbcaltypes', 'Calendar event has been saved. Please execute created event for users.'),
+                        t('elbcaltypes', 'Calendar event has been saved. Please press "Execute event" button to save calendar event for each assigned user.'),
                         t('elbcaltypes', 'Success')
 					)
 				}
-				this.getCalTypeEvents()
 				console.log('response for save event: ', res)
 			} catch (e) {
 				console.error(e)
