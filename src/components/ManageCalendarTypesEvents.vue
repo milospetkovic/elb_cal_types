@@ -423,11 +423,15 @@ export default {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
                     console.log('events raw data: ', result.data)
 					this.calTypeEvents = result.data
-					if (this.calTypeEvents) {
-					   	console.log('do sort!!!')
-						// this.calTypeEvents = this.calTypeEvents.sort(this.calTypeEventsSorted())
-                        this.calTypeEvents = this.calTypeEvents.reverse
-					}
+					// if (this.calTypeEvents) {
+					//    	console.log('do sort!!!')
+					// 	// this.calTypeEvents = this.calTypeEvents.sort(this.calTypeEventsSorted())
+					//
+					// 	let test = this.convertObjectToArray(this.calTypeEvents).reverse()
+                    //     this.calTypeEvents = null
+					// 	this.calTypeEvents = test
+                    //     console.log('test convert: ', this.calTypeEvents)
+					// }
 					console.log('calTypeEvents: ', this.calTypeEvents)
 				})
 			} catch (e) {
@@ -474,6 +478,11 @@ export default {
             }
             return true
         },
+		convertObjectToArray(obj) {
+            return Object.keys(obj).map(function(key) {
+                return [Number(key), obj[key]]
+            })
+		},
 	},
 }
 </script>
