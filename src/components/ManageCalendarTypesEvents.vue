@@ -12,7 +12,7 @@
 					v-if="allowSuperAdminSwitch"
 					button-id="new-caltype-event-button"
 					button-class="icon-toggle"
-					@click="newCalendarTypeEvent" />
+					@click="changeView" />
 
 			<AppNavigationNew
 				:text="t('elbcaltypes', 'Create event')"
@@ -494,6 +494,9 @@ export default {
                 return [Number(key), obj[key]]
             })
 		},
+        changeView() {
+            this.$emit('perform-switch')
+        },
 	},
 }
 </script>

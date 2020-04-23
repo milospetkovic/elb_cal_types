@@ -10,7 +10,7 @@
 						v-if="allowSuperAdminSwitch"
 						button-id="new-caltype-button"
 						button-class="icon-toggle"
-						@click="newCalendarType" />
+						@click="changeView" />
 
 				<AppNavigationNew
 					:text="t('elbcaltypes', 'New calendar type')"
@@ -631,6 +631,9 @@ export default {
 				console.error(e)
 				OCP.Toast.error(t('elb_cal_types', 'Could not remove assigned group folder for calendar type'))
 			}
+		},
+        changeView() {
+		    this.$emit('perform-switch')
 		},
 	},
 }
