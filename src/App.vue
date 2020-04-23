@@ -3,10 +3,10 @@
 		<div v-if="permissionToManageCalendarTypes">
 			<ManageCalendarTypes :isSuperAdminUser='isSuperAdminUser' :allowSuperAdminSwitch="permissionToSwitchBetweenCalendarTypesAndEvents" />
 		</div>
-		<div v-else-if="permissionToManageCalendarTypesEvents">
-			<ManageCalendarTypesEvents />
+		<div v-if="permissionToManageCalendarTypesEvents">
+			<ManageCalendarTypesEvents :allowSuperAdminSwitch="permissionToSwitchBetweenCalendarTypesAndEvents" />
 		</div>
-        <div v-else="userWithoutAccessPermission">
+        <div v-if="userWithoutAccessPermission">
             <ForbiddenAccess />
         </div>
 	</div>
@@ -29,7 +29,7 @@ export default {
 		return {
 			isSuperAdminUser: false,
 			isGroupFolderAdminUser: false,
-            superAdminView: false,
+            administratorForCalTypesView: false,
 		}
 	},
 	computed: {
@@ -38,10 +38,10 @@ export default {
 		 * @returns {Boolean}
 		 */
 		permissionToManageCalendarTypes() {
-			return (this.isSuperAdminUser && this.isSuperAdminSwitchAllowed)
+			return (this.isSuperAdminUser && this.administratorForCalTypesView)
 		},
 		permissionToManageCalendarTypesEvents() {
-			return (this.isGroupFolderAdminUser && !this.isSuperAdminSwitchAllowed)
+			return (this.isGroupFolderAdminUser && !this.administratorForCalTypesView)
 		},
 		userWithoutAccessPermission() {
 			return (!this.isSuperAdminUser && !this.isGroupFolderAdminUser)
@@ -53,7 +53,8 @@ export default {
 	beforeMount() {
 		// Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
-			this.isSuperAdminUser = this.isSuperAdminSwitchAllowed = result.data.isSuperAdmin
+			this.isSuperAdminUser = result.data.isSuperAdmin
+			this.administratorForCalTypesView = result.data.isSuperAdmin
 		})
 		// perform ajax call to check up if current logged in user is administrator of group folder
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isuseradminforgroupfolder')).then((result) => {

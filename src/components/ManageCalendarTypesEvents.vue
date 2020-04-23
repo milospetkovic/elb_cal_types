@@ -10,9 +10,9 @@
 					:title="t('elbcaltypes', 'Click button to toggle between super admin and group folder admin view')"
 					:disabled="false"
 					v-if="allowSuperAdminSwitch"
-					button-id="new-caltype-button"
+					button-id="new-caltype-event-button"
 					button-class="icon-toggle"
-					@click="newCalendarType" />
+					@click="newCalendarTypeEvent" />
 
 			<AppNavigationNew
 				:text="t('elbcaltypes', 'Create event')"
@@ -207,9 +207,6 @@ import {
 	Multiselect,
 } from 'nextcloud-vue'
 
-// import DatePicker from 'vue2-datepicker'
-// import 'vue2-datepicker/index.css';
-
 import axios from '@nextcloud/axios'
 
 export default {
@@ -219,7 +216,6 @@ export default {
 		AppNavigationNew,
 		AppNavigationItem,
 		AppContent,
-		// DatePicker,
         DatetimePicker,
 		Multiselect,
 	},
