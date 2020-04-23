@@ -4,7 +4,8 @@
 			<AppNavigation>
 
 				<AppNavigationNew
-						:text="t('elbcaltypes', 'Switch to events view')"
+						:text="t('elbcaltypes', 'Switch view')"
+						:title="t('elbcaltypes', 'Click button to toggle between super admin and group folder admin view')"
 						:disabled="false"
 						v-if="allowSuperAdminSwitch"
 						button-id="new-caltype-button"

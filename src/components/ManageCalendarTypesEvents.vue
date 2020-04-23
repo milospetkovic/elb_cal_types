@@ -6,6 +6,15 @@
 			</div>
 
 			<AppNavigationNew
+					:text="t('elbcaltypes', 'Switch view')"
+					:title="t('elbcaltypes', 'Click button to toggle between super admin and group folder admin view')"
+					:disabled="false"
+					v-if="allowSuperAdminSwitch"
+					button-id="new-caltype-button"
+					button-class="icon-toggle"
+					@click="newCalendarType" />
+
+			<AppNavigationNew
 				:text="t('elbcaltypes', 'Create event')"
 				:disabled="disableCreateNewEventButton"
 				button-id="new-caltype-event-button"
@@ -214,6 +223,12 @@ export default {
         DatetimePicker,
 		Multiselect,
 	},
+    props: {
+        allowSuperAdminSwitch: {
+            type: Boolean,
+            default: false
+        },
+    },
 	data() {
 		return {
 			assignedCalendarTypes: [],

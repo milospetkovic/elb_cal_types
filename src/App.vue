@@ -29,6 +29,7 @@ export default {
 		return {
 			isSuperAdminUser: false,
 			isGroupFolderAdminUser: false,
+            superAdminView: false,
 		}
 	},
 	computed: {
@@ -37,10 +38,10 @@ export default {
 		 * @returns {Boolean}
 		 */
 		permissionToManageCalendarTypes() {
-			return (this.isSuperAdminUser)
+			return (this.isSuperAdminUser && this.isSuperAdminSwitchAllowed)
 		},
 		permissionToManageCalendarTypesEvents() {
-			return (this.isGroupFolderAdminUser)
+			return (this.isGroupFolderAdminUser && !this.isSuperAdminSwitchAllowed)
 		},
 		userWithoutAccessPermission() {
 			return (!this.isSuperAdminUser && !this.isGroupFolderAdminUser)
@@ -52,7 +53,7 @@ export default {
 	beforeMount() {
 		// Perform ajax call to check up if current logged in user belongs to the super admin user group
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isusersuperadmin')).then((result) => {
-			this.isSuperAdminUser = result.data.isSuperAdmin
+			this.isSuperAdminUser = this.isSuperAdminSwitchAllowed = result.data.isSuperAdmin
 		})
 		// perform ajax call to check up if current logged in user is administrator of group folder
 		axios.post(OC.generateUrl('/apps/elb_cal_types/isuseradminforgroupfolder')).then((result) => {
