@@ -2,6 +2,15 @@
 	<div v-if="isSuperAdminUser">
 		<div id="content" class="app-elb-cal-types">
 			<AppNavigation>
+
+				<AppNavigationNew
+						:text="t('elbcaltypes', 'Switch to events view')"
+						:disabled="false"
+						v-if="allowSuperAdminSwitch"
+						button-id="new-caltype-button"
+						button-class="icon-toggle"
+						@click="newCalendarType" />
+
 				<AppNavigationNew
 					:text="t('elbcaltypes', 'New calendar type')"
 					:disabled="false"
@@ -174,6 +183,10 @@ export default {
 		isSuperAdminUser: {
 			type: Boolean,
 			default: false
+		},
+        allowSuperAdminSwitch: {
+            type: Boolean,
+            default: false
 		},
 	},
 	data: function() {

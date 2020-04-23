@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<div v-if="permissionToManageCalendarTypes">
-			<ManageCalendarTypes :isSuperAdminUser='isSuperAdminUser' />
+			<ManageCalendarTypes :isSuperAdminUser='isSuperAdminUser' :allowSuperAdminSwitch="permissionToSwitchBetweenCalendarTypesAndEvents" />
 		</div>
-		<div v-if="permissionToManageCalendarTypesEvents">
+		<div v-else-if="permissionToManageCalendarTypesEvents">
 			<ManageCalendarTypesEvents />
 		</div>
-        <div v-if="userWithoutAccessPermission">
+        <div v-else="userWithoutAccessPermission">
             <ForbiddenAccess />
         </div>
 	</div>
@@ -37,14 +37,17 @@ export default {
 		 * @returns {Boolean}
 		 */
 		permissionToManageCalendarTypes() {
-			return (this.isSuperAdminUser && !this.isGroupFolderAdminUser)
+			return (this.isSuperAdminUser)
 		},
 		permissionToManageCalendarTypesEvents() {
 			return (this.isGroupFolderAdminUser)
 		},
 		userWithoutAccessPermission() {
 			return (!this.isSuperAdminUser && !this.isGroupFolderAdminUser)
-        }
+        },
+		permissionToSwitchBetweenCalendarTypesAndEvents() {
+		    return (this.isSuperAdminUser && this.isGroupFolderAdminUser)
+		},
 	},
 	beforeMount() {
 		// Perform ajax call to check up if current logged in user belongs to the super admin user group
