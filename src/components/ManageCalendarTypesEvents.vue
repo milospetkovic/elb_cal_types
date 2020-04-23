@@ -172,15 +172,12 @@
 								</td>
 								<td>{{ calEvent.event_executed }}</td>
 								<td>
-									<template v-show="!calEvent.event_executed">
-										<input type="button"
-											   class="primary pull-left"
-											   :value="t('elb_cal_types', 'Execute event')"
-											   @click="saveCalendarEventForUsers(calEvent.link_id)">
-									</template>
-									<template v-show="!calEvent.event_executed">
-										<button class="icon-delete pull-right" @click="deleteCalendarTypeEvent(calEvent.link_id)"></button>
-									</template>
+									<input v-if="isEventNonExecuted(calEvent)"
+											type="button"
+										   class="primary pull-left"
+										   :value="t('elb_cal_types', 'Execute event')"
+										   @click="saveCalendarEventForUsers(calEvent.link_id)">
+									<button v-if="isEventNonExecuted(calEvent)" class="icon-delete pull-right" @click="deleteCalendarTypeEvent(calEvent.link_id)"></button>
 								</td>
 							</tr>
 						</tbody>
@@ -452,6 +449,12 @@ export default {
 				}
 			}
 		},
+        isEventNonExecuted(calEvent) {
+            if (calEvent.event_executed > 0) {
+                return false
+            }
+            return true
+        },
 	},
 }
 </script>
