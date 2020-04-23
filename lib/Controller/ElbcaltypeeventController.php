@@ -48,6 +48,7 @@ class ElbcaltypeeventController extends Controller
     public function getcalendartypeevents()
     {
         return new JSONResponse($this->calTypeEventService->getCalendarTypeEvents($this->request->params));
+        //return $this->calTypeEventService->getCalendarTypeEvents($this->request->params);
     }
 
     /**

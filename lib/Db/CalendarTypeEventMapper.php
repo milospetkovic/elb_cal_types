@@ -51,7 +51,8 @@ class CalendarTypeEventMapper extends QBMapper
             ->leftJoin('cte', 'elb_event_users', 'eeu', $qb->expr()->eq('eeu.fk_cal_type_event', 'cte.id'))
             ->leftJoin('eeu', 'elb_event_reminders', 'eer', $qb->expr()->eq('eer.fk_cal_type_event', 'eeu.fk_cal_type_event'))
             ->leftJoin('eeu', 'elb_cal_def_reminders', 'ecdr', $qb->expr()->eq('ecdr.id', 'eer.fk_cal_def_reminder'))
-            ->where($qb->expr()->eq('cte.fk_gf_cal_type', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+            ->where($qb->expr()->eq('cte.fk_gf_cal_type', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+            ->orderBy('cte.id', 'DESC');
         return $qb->execute()->fetchAll();
     }
 
@@ -70,7 +71,8 @@ class CalendarTypeEventMapper extends QBMapper
             ->leftJoin('eeu', 'elb_cal_def_reminders', 'ecdr', $qb->expr()->eq('ecdr.id', 'eer.fk_cal_def_reminder'))
             ->leftJoin('cte', 'elb_gf_cal_types', 'egct', $qb->expr()->eq('egct.id', 'cte.fk_gf_cal_type'))
             ->leftJoin('egct', 'elb_calendar_types', 'ect', $qb->expr()->eq('ect.id', 'egct.fk_elb_cal_type'))
-            ->where($qb->expr()->eq('cte.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+            ->where($qb->expr()->eq('cte.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+            ->orderBy('cte.id', 'DESC');;
         return $qb->execute()->fetchAll();
     }
 
