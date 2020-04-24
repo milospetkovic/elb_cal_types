@@ -212,16 +212,16 @@ export default {
 		AppNavigationNew,
 		AppNavigationItem,
 		AppContent,
-        DatetimePicker,
+		DatetimePicker,
 		Multiselect,
-        SwitchViewButton,
+		SwitchViewButton,
 	},
-    props: {
-        allowSuperAdminSwitch: {
-            type: Boolean,
-            default: false
-        },
-    },
+	props: {
+		allowSuperAdminSwitch: {
+			type: Boolean,
+			default: false
+		},
+	},
 	data() {
 		return {
 			assignedCalendarTypes: [],
@@ -300,19 +300,19 @@ export default {
 		})
 	},
 	methods: {
-        calTypeEventsSorted(a, b) {
-            //return this.calTypeEvents.reverse()
-            // const bandA = a.band.toUpperCase();
-            // const bandB = b.band.toUpperCase();
+		calTypeEventsSorted(a, b) {
+			//return this.calTypeEvents.reverse()
+			// const bandA = a.band.toUpperCase();
+			// const bandB = b.band.toUpperCase();
 
-            let comparison = 0;
-            if (a.link_id > b.link_id) {
-                comparison = 1;
-            } else {
-                comparison = -1;
-            }
-            return comparison;
-        },
+			let comparison = 0;
+			if (a.link_id > b.link_id) {
+				comparison = 1;
+			} else {
+				comparison = -1;
+			}
+			return comparison;
+		},
 		openCalType(calType) {
 			this.visibleCreateNewEventForm = false
 			this.currentCalTypeLinkID = calType.link_id
@@ -384,10 +384,10 @@ export default {
 						t('elbcaltypes', 'Error')
 					)
 				} else {
-                    this.getCalTypeEvents()
-                    OC.dialogs.info(
-                        t('elbcaltypes', 'Calendar event has been saved. Please press "Execute event" button to save calendar event for each assigned user.'),
-                        t('elbcaltypes', 'Success')
+					this.getCalTypeEvents()
+					OC.dialogs.info(
+						t('elbcaltypes', 'Calendar event has been saved. Please press "Execute event" button to save calendar event for each assigned user.'),
+						t('elbcaltypes', 'Success')
 					)
 				}
 				console.log('response for save event: ', res)
@@ -429,16 +429,16 @@ export default {
 			}
 			try {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
-                    console.log('events raw data: ', result.data)
+					console.log('events raw data: ', result.data)
 					this.calTypeEvents = result.data
 					// if (this.calTypeEvents) {
 					//    	console.log('do sort!!!')
 					// 	// this.calTypeEvents = this.calTypeEvents.sort(this.calTypeEventsSorted())
 					//
 					// 	let test = this.convertObjectToArray(this.calTypeEvents).reverse()
-                    //     this.calTypeEvents = null
+					//     this.calTypeEvents = null
 					// 	this.calTypeEvents = test
-                    //     console.log('test convert: ', this.calTypeEvents)
+					//     console.log('test convert: ', this.calTypeEvents)
 					// }
 					console.log('calTypeEvents: ', this.calTypeEvents)
 				})
@@ -455,15 +455,15 @@ export default {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendareventforusers'), data).then((result) => {
 					console.log('response for save calendar events for users for calendar type event: ', result)
 					if (!result.data) {
-                        OC.dialogs.alert(t('elbcaltypes', 'Could not save calendar event for users for calendar type event'), t('elbcaltypes', 'Error'))
+						OC.dialogs.alert(t('elbcaltypes', 'Could not save calendar event for users for calendar type event'), t('elbcaltypes', 'Error'))
 					} else {
-                        this.getCalTypeEvents()
-                        OC.dialogs.info(t('elbcaltypes', 'Calendar event has been saved for assigned users'), t('elbcaltypes', 'Success'))
+						this.getCalTypeEvents()
+						OC.dialogs.info(t('elbcaltypes', 'Calendar event has been saved for assigned users'), t('elbcaltypes', 'Success'))
 					}
 				})
 			} catch (e) {
 				console.error(e)
-                OC.dialogs.alert(t('elbcaltypes', 'Could not save calendar event for users for calendar type event'), t('elbcaltypes', 'Error'))
+				OC.dialogs.alert(t('elbcaltypes', 'Could not save calendar event for users for calendar type event'), t('elbcaltypes', 'Error'))
 			}
 		},
 		deleteCalendarTypeEvent(id) {
@@ -480,20 +480,20 @@ export default {
 				}
 			}
 		},
-        isEventNonExecuted(calEvent) {
-            if (calEvent.event_executed > 0) {
-                return false
-            }
-            return true
-        },
-		convertObjectToArray(obj) {
-            return Object.keys(obj).map(function(key) {
-                return [Number(key), obj[key]]
-            })
+		isEventNonExecuted(calEvent) {
+			if (calEvent.event_executed > 0) {
+				return false
+			}
+			return true
 		},
-        changeView() {
-            this.$emit('perform-switch')
-        },
+		convertObjectToArray(obj) {
+			return Object.keys(obj).map(function(key) {
+				return [Number(key), obj[key]]
+			})
+		},
+		changeView() {
+			this.$emit('perform-switch')
+		},
 	},
 }
 </script>

@@ -11,9 +11,9 @@
 					:allowSuperAdminSwitch="permissionToSwitchBetweenCalendarTypesAndEvents"
 					v-on:perform-switch="performSwitch" />
 		</div>
-        <div v-if="userWithoutAccessPermission">
-            <ForbiddenAccess />
-        </div>
+		<div v-if="userWithoutAccessPermission">
+			<ForbiddenAccess />
+		</div>
 	</div>
 </template>
 
@@ -34,7 +34,7 @@ export default {
 		return {
 			isSuperAdminUser: false,
 			isGroupFolderAdminUser: false,
-            administratorForCalTypesView: false,
+			administratorForCalTypesView: false,
 		}
 	},
 	computed: {
@@ -50,9 +50,9 @@ export default {
 		},
 		userWithoutAccessPermission() {
 			return (!this.isSuperAdminUser && !this.isGroupFolderAdminUser)
-        },
+		},
 		permissionToSwitchBetweenCalendarTypesAndEvents() {
-		    return (this.isSuperAdminUser && this.isGroupFolderAdminUser)
+			return (this.isSuperAdminUser && this.isGroupFolderAdminUser)
 		},
 	},
 	beforeMount() {
@@ -66,10 +66,10 @@ export default {
 			this.isGroupFolderAdminUser = result.data.isGroupFolderAdmin
 		})
 	},
-    methods: {
-        performSwitch() {
-            this.administratorForCalTypesView = !this.administratorForCalTypesView
-        }
-    }
+	methods: {
+		performSwitch() {
+			this.administratorForCalTypesView = !this.administratorForCalTypesView
+		}
+	}
 }
 </script>

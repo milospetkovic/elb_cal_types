@@ -2,6 +2,9 @@
 	<div v-if="isSuperAdminUser">
 		<div id="content" class="app-elb-cal-types">
 			<AppNavigation>
+				<div class="nav-title-field">
+					<h4>{{ t('elb_cal_types', 'Manage calendar types') }}</h4>
+				</div>
 
 				<template v-if="allowSuperAdminSwitch">
 					<SwitchViewButton v-on:perform-switch="changeView"></SwitchViewButton>
@@ -38,12 +41,12 @@
 
 				<div v-if="currentCalType">
 					<input ref="title"
-                           v-model="currentCalType.title"
-					    :placeholder="t('elbcaltypes', 'Name for calendar type')"
-					    type="text"
-					    :disabled="updating">
+						   v-model="currentCalType.title"
+						:placeholder="t('elbcaltypes', 'Name for calendar type')"
+						type="text"
+						:disabled="updating">
 					<textarea ref="content" v-model="currentCalType.description" :disabled="updating"
-                              rows="15" :placeholder="t('elbcaltypes', 'Description for calendar type')"/>
+							  rows="15" :placeholder="t('elbcaltypes', 'Description for calendar type')"/>
 					<input type="button"
 						   class="primary"
 						   :value="t('elbcaltypes', 'Save')"
@@ -128,12 +131,12 @@
 					<ul v-if="groupFolders.length" class="group-folders-for-cal-type">
 						<li v-for="gf in groupFolders">
 							<input :id="'gf-checkbox'+ gf.folder_id"
-                                v-model="modelGroupFolder"
-                                name="gf-checkbox[]"
-                                :disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
-                                class="checkbox gf-checkbox"
-                                :value="gf.folder_id"
-                                type="checkbox">
+								v-model="modelGroupFolder"
+								name="gf-checkbox[]"
+								:disabled="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)"
+								class="checkbox gf-checkbox"
+								:value="gf.folder_id"
+								type="checkbox">
 							<label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
 
 							<button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)"></button>
@@ -175,16 +178,16 @@ export default {
 		AppSidebar,
 		AppSidebarTab,
 		AppNavigationCounter,
-        SwitchViewButton,
+		SwitchViewButton,
 	},
 	props: {
 		isSuperAdminUser: {
 			type: Boolean,
 			default: false
 		},
-        allowSuperAdminSwitch: {
-            type: Boolean,
-            default: false
+		allowSuperAdminSwitch: {
+			type: Boolean,
+			default: false
 		},
 	},
 	data() {
@@ -338,7 +341,7 @@ export default {
 		/**
 		 * Check up if default reminder id is already assigned to the selected calendar type id
 		 * @param {int} defRemID Id of default reminder
-         * @returns {boolean}
+		 * @returns {boolean}
 		 */
 		checkIfDefCalReminderIsAssignedToCalTypeID(defRemID) {
 
@@ -361,7 +364,7 @@ export default {
 		},
 		/**
 		 * Check up if group folder id is already assigned to the selected calendar type id
-         * @param {int} gfID Id of group folder
+		 * @param {int} gfID Id of group folder
 		 * @returns {boolean}
 		 */
 		checkIfGroupFolderIsAssignedToCalTypeID(gfID) {
@@ -629,57 +632,65 @@ export default {
 				OCP.Toast.error(t('elb_cal_types', 'Could not remove assigned group folder for calendar type'))
 			}
 		},
-        changeView() {
-		    this.$emit('perform-switch')
+		changeView() {
+			this.$emit('perform-switch')
 		},
 	},
 }
 </script>
 <style scoped>
-	ul.reminders-for-cal-type,
-	ul.group-folders-for-cal-type {
-		padding: 10px 4px;
-	}
-	ul.assigned-reminders-for-cal-type li {
-		padding: 6px 0;
-	}
-	ul.assigned-reminders-for-cal-type button {
-		background-color: transparent;
-		opacity: 1;
-		border: none;
-	}
-	ul.group-folders-for-cal-type button.icon-delete {
-		background-color: transparent;
-		opacity: 1;
-		border: none;
-	}
-	ul.reminders-for-cal-type li,
-	ul.group-folders-for-cal-type li {
-		padding: 3px 0;
-	}
-	#app-content {
-		padding: 20px;
-	}
-	#app-content > div {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-	}
-	input[type="text"] {
-		width: 100%;
-	}
-	textarea {
-		width: 100%;
-	}
-	.app-sidebar-tab__buttons button {
-		width: 100%;
-	}
-	#content #app-sidebar .app-sidebar-header > .app-sidebar__close.icon-close {
-		top: 10px;
-	}
-	#app-sidebar hr {
-		opacity: 0.1;
-	}
+.nav-title-field {
+	display: inline-block;
+	padding: 10px 10px 10px 20px;
+	background-color: #EDEDED;
+	border: 1px solid #DBDBDB;
+	margin: 10px 10px;
+	font-weight: bold;
+}
+ul.reminders-for-cal-type,
+ul.group-folders-for-cal-type {
+	padding: 10px 4px;
+}
+ul.assigned-reminders-for-cal-type li {
+	padding: 6px 0;
+}
+ul.assigned-reminders-for-cal-type button {
+	background-color: transparent;
+	opacity: 1;
+	border: none;
+}
+ul.group-folders-for-cal-type button.icon-delete {
+	background-color: transparent;
+	opacity: 1;
+	border: none;
+}
+ul.reminders-for-cal-type li,
+ul.group-folders-for-cal-type li {
+	padding: 3px 0;
+}
+#app-content {
+	padding: 20px;
+}
+#app-content > div {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+input[type="text"] {
+	width: 100%;
+}
+textarea {
+	width: 100%;
+}
+.app-sidebar-tab__buttons button {
+	width: 100%;
+}
+#content #app-sidebar .app-sidebar-header > .app-sidebar__close.icon-close {
+	top: 10px;
+}
+#app-sidebar hr {
+	opacity: 0.1;
+}
 </style>
