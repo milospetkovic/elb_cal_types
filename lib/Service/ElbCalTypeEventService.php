@@ -46,10 +46,6 @@ class ElbCalTypeEventService
      */
     private $calendarTypeEventUser;
     /**
-     * @var ElbCalEventService
-     */
-    private $calEventService;
-    /**
      * @var CalendarManager
      */
     private $calendarManager;
@@ -69,7 +65,6 @@ class ElbCalTypeEventService
                                 CalendarTypeEventUserMapper $calendarTypeEventUserMapper,
                                 CalendarTypeEventUser $calendarTypeEventUser,
                                 CurrentUser $currentUser,
-                                ElbCalEventService $calEventService,
                                 CalendarManager $calendarManager,
                                 IL10N $l,
                                 IDBConnection $connection)
@@ -81,7 +76,6 @@ class ElbCalTypeEventService
         $this->currentUser = $currentUser;
         $this->calendarTypeEventUserMapper = $calendarTypeEventUserMapper;
         $this->calendarTypeEventUser = $calendarTypeEventUser;
-        $this->calEventService = $calEventService;
         $this->calendarManager = $calendarManager;
         $this->l = $l;
         $this->connection = $connection;
