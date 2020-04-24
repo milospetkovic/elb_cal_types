@@ -87,6 +87,29 @@
 
 							<tr>
 								<td class="col1">
+									{{ t('elb_cal_types', 'Event end date and time (optional)') }}
+								</td>
+								<td class="col2">
+									<template>
+										<span>
+											<DatetimePicker
+													v-model="eventEndDateTime"
+													type="datetime"
+													:default-value="new Date()"
+													:clearable="true"
+													:format="'DD.MM.YYYY HH:mm'"
+													:show-second="false"
+													:time-select-options="{minutes: [0,5,10,15,20,25,30,35,40,45,50,55]}"
+													:lang="'en'"
+													:first-day-of-week="1"
+													:not-before="new Date()" />
+										</span>
+									</template>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="col1">
 									{{ t('elb_cal_types', 'Reminders for event') }}
 								</td>
 								<td class="col2">
@@ -152,6 +175,7 @@
 								<th>{{ t('elb_cal_types', 'Event title') }}</th>
 								<th>{{ t('elb_cal_types', 'Event description') }}</th>
 								<th>{{ t('elb_cal_types', 'Event datetime') }}</th>
+								<th>{{ t('elb_cal_types', 'Event end datetime') }}</th>
 								<th>{{ t('elb_cal_types', 'Event assigned users') }}</th>
 								<th>{{ t('elb_cal_types', 'Event reminders') }}</th>
 								<th>{{ t('elb_cal_types', 'Event executed') }}</th>
@@ -164,6 +188,7 @@
 								<td>{{ calEvent.event_title }}</td>
 								<td>{{ calEvent.event_description }}</td>
 								<td>{{ calEvent.event_datetime }}</td>
+								<td>{{ calEvent.event_end_datetime }}</td>
 								<td>
 									<template v-for="eventAssignedUser in calEvent.event_assigned_users">
 										<div class="item-as-box">{{ eventAssignedUser }}</div>
@@ -232,6 +257,7 @@ export default {
 			eventTitle: null,
 			eventDescription: null,
 			eventDateTime: null,
+			eventEndDateTime: null,
 			defaultCalReminders: [],
 			eventReminders: null,
 			usersForEvent: null,
@@ -371,6 +397,7 @@ export default {
 				eventname: this.eventTitle,
 				eventdesc: this.eventDescription,
 				eventdatetime: (this.eventDateTime !== null) ? this.eventDateTime : null,
+				eventenddatetime: (this.eventEndDateTime !== null) ? this.eventEndDateTime : null,
 				timezoneoffset: (this.eventDateTime !== null) ? this.eventDateTime.getTimezoneOffset() : null,
 				reminders: this.preselectedCalReminders,
 				assignedusers: this.usersForEvent,
