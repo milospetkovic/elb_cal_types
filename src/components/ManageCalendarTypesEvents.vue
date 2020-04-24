@@ -5,14 +5,9 @@
 				<h4>{{ t('elb_cal_types', 'Assigned calendar types') }}</h4>
 			</div>
 
-			<AppNavigationNew
-					:text="t('elbcaltypes', 'Switch view')"
-					:title="t('elbcaltypes', 'Click button to toggle between super admin and group folder admin view')"
-					:disabled="false"
-					v-if="allowSuperAdminSwitch"
-					button-id="new-caltype-event-button"
-					button-class="icon-toggle"
-					@click="changeView" />
+			<template v-if="allowSuperAdminSwitch">
+				<SwitchViewButton v-on:perform-switch="changeView"></SwitchViewButton>
+			</template>
 
 			<AppNavigationNew
 				:text="t('elbcaltypes', 'Create event')"
@@ -208,6 +203,7 @@ import {
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
+import SwitchViewButton from "./SwitchViewButton";
 
 export default {
 	name: 'ManageCalendarTypesEvents',
@@ -218,6 +214,7 @@ export default {
 		AppContent,
         DatetimePicker,
 		Multiselect,
+        SwitchViewButton,
 	},
     props: {
         allowSuperAdminSwitch: {
