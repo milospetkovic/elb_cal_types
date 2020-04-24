@@ -7,6 +7,7 @@ namespace OCA\ElbCalTypes\Controller;
 use OCA\ElbCalTypes\Service\ElbCalTypeEventService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\IConfig;
 use OCP\IRequest;
 
 class ElbcaltypeeventController extends Controller
@@ -16,14 +17,39 @@ class ElbcaltypeeventController extends Controller
      * @var ElbCalTypeEventService
      */
     private $calTypeEventService;
+    /**
+     * @var IConfig
+     */
+    private $config;
 
+    /**
+     * ElbcaltypeeventController constructor.
+     * @param $appName
+     * @param IRequest $request
+     * @param ElbCalTypeEventService $calTypeEventService
+     * @param IConfig $config
+     */
     public function __construct($appName,
                                 IRequest $request,
-                                ElbCalTypeEventService $calTypeEventService)
+                                ElbCalTypeEventService $calTypeEventService,
+                                IConfig $config)
     {
         parent::__construct($appName, $request);
-
         $this->calTypeEventService = $calTypeEventService;
+        $this->config = $config;
+        $this->setDefaultDateTimeZone();
+    }
+
+    /**
+     * Set default time zone (needed for time() function)
+     */
+    public function setDefaultDateTimeZone()
+    {
+        if ($this->config->getSystemValue('logtimezone')) {
+            date_default_timezone_set($this->config->getSystemValue('logtimezone'));
+        } else {
+            date_default_timezone_set("Europe/Berlin");
+        }
     }
 
     /**

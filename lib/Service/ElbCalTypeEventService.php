@@ -111,9 +111,9 @@ class ElbCalTypeEventService
 
             $tsEventDateTime = strtotime($data['eventdatetime']);
 
-            if ($timeOffset) {
-                $tsEventDateTime += $timeOffset * (-1) * 60;
-            }
+//            if ($timeOffset) {
+//                $tsEventDateTime += $timeOffset * (-1) * 60;
+//            }
 
             $eventDateTime = date('Y-m-d\TH:i:s.000Z', $tsEventDateTime);
 

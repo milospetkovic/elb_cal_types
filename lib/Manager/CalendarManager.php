@@ -256,7 +256,8 @@ $calData[0].="END:VCALENDAR";
         // mark calendar type event as executed
         if (!$error) {
             $calTypeEvent = $this->calendarTypeEventMapper->find($calTypeEventID);
-            $calTypeEvent->setExecuted(1);
+            $dateTimeOfExecution = date('Y-m-d H:i:s', time());
+            $calTypeEvent->setExecuted($dateTimeOfExecution);
             $res = $this->calendarTypeEventMapper->update($calTypeEvent);
         }
 
