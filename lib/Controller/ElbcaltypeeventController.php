@@ -45,11 +45,7 @@ class ElbcaltypeeventController extends Controller
      */
     public function setDefaultDateTimeZone()
     {
-        if ($this->config->getSystemValue('logtimezone')) {
-            date_default_timezone_set($this->config->getSystemValue('logtimezone'));
-        } else {
-            date_default_timezone_set("Europe/Berlin");
-        }
+        date_default_timezone_set($this->config->getSystemValue('logtimezone', "Europe/Berlin"));
     }
 
     /**
