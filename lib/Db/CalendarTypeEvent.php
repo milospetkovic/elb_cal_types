@@ -15,6 +15,7 @@ class CalendarTypeEvent extends Entity implements JsonSerializable
     protected $title;
     protected $description;
     protected $eventDatetime;
+    protected $eventEndDatetime;
     protected $executed;
 
     public function jsonSerialize(): array
@@ -27,6 +28,7 @@ class CalendarTypeEvent extends Entity implements JsonSerializable
             'title' => $this->title,
             'description' => $this->description,
             'event_datetime' => $this->eventDatetime,
+            'event_end_datetime' => $this->eventEndDatetime,
             'executed' => $this->executed,
         ];
     }

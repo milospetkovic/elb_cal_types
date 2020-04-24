@@ -43,7 +43,7 @@ class CalendarTypeEventMapper extends QBMapper
     {
         $qb = $this->db->getQueryBuilder();
         $qb->select('cte.id as cal_type_event_id', 'cte.title as event_title', 'cte.description as event_description',
-            'cte.event_datetime', 'cte.executed as event_executed',
+            'cte.event_datetime', 'cte.event_end_datetime', 'cte.executed as event_executed',
             'eeu.fk_user as assigned_user_id',
             'eer.fk_cal_def_reminder as event_def_reminder_id',
             'ecdr.title as def_reminder_title')
@@ -60,7 +60,7 @@ class CalendarTypeEventMapper extends QBMapper
     {
         $qb = $this->db->getQueryBuilder();
         $qb->select('cte.id as cal_type_event_id', 'cte.title as event_title', 'cte.description as event_description',
-            'cte.event_datetime', 'cte.executed as event_executed',
+            'cte.event_datetime', 'cte.event_end_datetime', 'cte.executed as event_executed',
             'eeu.fk_user as assigned_user_id',
             'eer.fk_cal_def_reminder as event_def_reminder_id',
             'ecdr.title as def_reminder_title', 'ecdr.minutes_before_event as def_reminder_minutes_before_event',

@@ -107,15 +107,14 @@ class ElbCalTypeEventService
             (empty($data['eventname']) ? $eventName = null : $eventName = trim($data['eventname']));
             $eventDescription = $data['eventdesc'];
 
-            $timeOffset = $data['timezoneoffset'];
-
             $tsEventDateTime = strtotime($data['eventdatetime']);
-
-//            if ($timeOffset) {
-//                $tsEventDateTime += $timeOffset * (-1) * 60;
-//            }
-
             $eventDateTime = date('Y-m-d\TH:i:s.000Z', $tsEventDateTime);
+
+            $eventEndDateTime = null;
+            if ($data['eventenddatetime']) {
+                $tsEventEndDateTime = strtotime($data['eventenddatetime']);
+                $eventEndDateTime = date('Y-m-d\TH:i:s.000Z', $tsEventEndDateTime);
+            }
 
             $eventAssignedReminders = $data['reminders'];
             $eventAssignedUsers = $data['assignedusers'];
@@ -127,6 +126,7 @@ class ElbCalTypeEventService
             $calTypeEvent->setTitle($eventName);
             $calTypeEvent->setDescription($eventDescription);
             $calTypeEvent->setEventDatetime($eventDateTime);
+            $calTypeEvent->setEventEndDatetime($eventEndDateTime);
             $this->calendarTypeEventMapper->insert($calTypeEvent);
 
             if ($calTypeEvent->id > 0) {
@@ -219,6 +219,7 @@ class ElbCalTypeEventService
                         'event_title' => $arr['event_title'],
                         'event_description' => $arr['event_description'],
                         'event_datetime' => $arr['event_datetime'],
+                        'event_end_datetime' => $arr['event_end_datetime'],
                         'event_executed' => $arr['event_executed'],
                         'event_title' => $arr['event_title'],
                         'event_assigned_users' => [],
@@ -271,6 +272,7 @@ class ElbCalTypeEventService
                         'event_title' => $arr['event_title'],
                         'event_description' => $arr['event_description'],
                         'event_datetime' => $arr['event_datetime'],
+                        'event_end_datetime' => $arr['event_end_datetime'],
                         'event_executed' => $arr['event_executed'],
                         'event_title' => $arr['event_title'],
                         'event_cal_type_title' => $arr['cal_type_title'],
