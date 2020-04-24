@@ -73,10 +73,10 @@ class Version100000000Date20200408145400 extends SimpleMigrationStep
                 'notnull' => true
             ])->setComment('Datetime when calendar event starts');
 
-            $table->addColumn('executed', 'smallint', [
+            $table->addColumn('executed', 'datetime', [
                 'notnull' => false,
-                'default' => 0,
-            ])->setComment('Flag which shows if assigned calendar event for users is executed');
+                'default' => null,
+            ])->setComment('Shows datetime when assigned calendar event for users is executed');
 
             $table->setPrimaryKey(['id']);
 
