@@ -65,8 +65,8 @@
 			</AppContent>
 
 			<AppSidebar v-show="showSidebar"
-						:title="t('elbcaltypes', 'Manage reminders for calendar type')"
-						:subtitle="getTitleOfCurrentCalType"
+						:title="getTitleOfCurrentCalType"
+						:subtitle="t('elbcaltypes', 'Assign reminders and group folders for calendar type')"
 						@close="toggleSidebar">
 				<AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit">
 
