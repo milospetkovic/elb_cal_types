@@ -40,8 +40,11 @@ class DateTimeUtility
      * @param $val
      * @return false|string
      */
-    static function convertDateTimeToUserFriendlyDateTime($val)
+    static function convertDateTimeToUserFriendlyDateTime($val, $showSeconds=false)
     {
+        if ($showSeconds) {
+            return date('d.m.Y H:i:s', strtotime($val));
+        }
         return date('d.m.Y H:i', strtotime($val));
     }
 

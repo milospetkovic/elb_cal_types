@@ -199,7 +199,14 @@
 										<div class="item-as-box">{{ eventReminder.def_reminder_title }}</div>
 									</template>
 								</td>
-								<td>{{ calEvent.event_executed }}</td>
+								<td>
+									<template v-if="calEvent.event_executed">
+										<span :title="calEvent.event_executed">{{ t('elb_cal_types', 'Yes') }}</span>
+									</template>
+									<template v-else>
+										<span>{{ t('elb_cal_types', 'No') }}</span>
+									</template>
+								</td>
 								<td>
 									<input v-if="isEventNonExecuted(calEvent)"
 											type="button"

@@ -215,7 +215,7 @@ class ElbCalTypeEventService
                         'event_description' => $arr['event_description'],
                         'event_datetime' => ($arr['event_datetime'] ? DateTimeUtility::convertDateTimeToUserFriendlyDateTime($arr['event_datetime']) : ''),
                         'event_end_datetime' => ($arr['event_end_datetime'] ? DateTimeUtility::convertDateTimeToUserFriendlyDateTime($arr['event_end_datetime']) : ''),
-                        'event_executed' => $arr['event_executed'],
+                        'event_executed' => ($arr['event_executed'] ? DateTimeUtility::convertDateTimeToUserFriendlyDateTime($arr['event_executed'], true) : false),
                         'event_assigned_users' => [],
                         'event_assigned_reminders' => []
                     ];
