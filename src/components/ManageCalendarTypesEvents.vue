@@ -515,7 +515,7 @@ export default {
 			}
 		},
 		isEventNonExecuted(calEvent) {
-			if (calEvent.event_executed > 0) {
+			if (calEvent.event_executed) {
 				return false
 			}
 			return true
