@@ -184,9 +184,24 @@ class ElbCalTypeEventService
             $ret['error_msg'][]= $this->l->t('Event name is required');
         }
 
-        if (!strtotime($data['eventdatetime'])) {
+        $tsEventDateTime = strtotime($data['eventdatetime']);
+
+        if (!$tsEventDateTime) {
             $ret['error'] += 1;
             $ret['error_msg'][]= $this->l->t('Event date and time is required');
+        }
+
+        if ($data['eventenddatetime']) {
+            $tsEventEndDateTime = strtotime($data['eventenddatetime']);
+            if (!$tsEventEndDateTime) {
+                $ret['error'] += 1;
+                $ret['error_msg'][]= $this->l->t('Event end date and time is in wrong format');
+            }
+
+            if ($tsEventDateTime && $tsEventEndDateTime && $tsEventEndDateTime < $tsEventDateTime) {
+                $ret['error'] += 1;
+                $ret['error_msg'][]= $this->l->t('Event end date and time should not be before the start date and time of event');
+            }
         }
 
         if (!(is_array($data['reminders']) && count($data['reminders']))) {
