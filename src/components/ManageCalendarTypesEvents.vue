@@ -333,19 +333,6 @@ export default {
 		})
 	},
 	methods: {
-		calTypeEventsSorted(a, b) {
-			//return this.calTypeEvents.reverse()
-			// const bandA = a.band.toUpperCase();
-			// const bandB = b.band.toUpperCase();
-
-			let comparison = 0;
-			if (a.link_id > b.link_id) {
-				comparison = 1;
-			} else {
-				comparison = -1;
-			}
-			return comparison;
-		},
 		openCalType(calType) {
 			this.visibleCreateNewEventForm = false
 			this.currentCalTypeLinkID = calType.link_id
@@ -465,15 +452,14 @@ export default {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
 					console.log('events raw data: ', result.data)
 					this.calTypeEvents = result.data
-					// if (this.calTypeEvents) {
-					//    	console.log('do sort!!!')
-					// 	// this.calTypeEvents = this.calTypeEvents.sort(this.calTypeEventsSorted())
-					//
-					// 	let test = this.convertObjectToArray(this.calTypeEvents).reverse()
-					//     this.calTypeEvents = null
-					// 	this.calTypeEvents = test
-					//     console.log('test convert: ', this.calTypeEvents)
-					// }
+					if (this.calTypeEvents) { // show latest events on the top
+						let obj = result.data
+                        let arr = Object.keys(obj).map(function(key) {
+                            return obj[key];
+                        });
+                        arr = arr.reverse()
+                        this.calTypeEvents = arr
+					}
 					console.log('calTypeEvents: ', this.calTypeEvents)
 				})
 			} catch (e) {
