@@ -93,6 +93,9 @@ class CalendarManager
             $eventEndDatetime = date('Ymd\THis\Z', strtotime($calTypeEventEndDatetime));
         }
 
+        $tsOffsetFrom = '+0000';
+        $tsOffsetTo = '+0000';
+
         $timeZone = 'Europe/Belgrade';
 
         // populate start calendar event with data
@@ -134,8 +137,8 @@ DTSTART:19700329T020000\r\n
 RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\n
 END:DAYLIGHT\r\n
 BEGIN:STANDARD\r\n
-TZOFFSETFROM:+0200\r\n
-TZOFFSETTO:+0100\r\n
+TZOFFSETFROM:$tsOffsetFrom\r\n
+TZOFFSETTO:$tsOffsetTo\r\n
 TZNAME:CET\r\n
 DTSTART:19701025T030000\r\n
 RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\r\n
