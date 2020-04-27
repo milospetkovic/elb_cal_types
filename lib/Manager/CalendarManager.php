@@ -68,37 +68,35 @@ class CalendarManager
         $this->calendarTypeEventMapper = $calendarTypeEventMapper;
     }
 
-    public function createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, array $eventReminders)
+    public function createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, $calTypeEventEndDatetime, array $eventReminders)
     {
         // uuid for .ics
-        $calDataUri[0] = strtoupper(UUIDUtil::getUUID()) . '.ics';
-
-        $currentTimeFormat = date('Ymd');
+        $calDataUri = strtoupper(UUIDUtil::getUUID()) . '.ics';
 
         // the datetime when calendar event object is created
         $createdDateTime = date('Ymd\THis\Z');
 
-        // the start date time of calendar event
-        $startDateTimeOfEvent = $createdDateTime;
-
         // uuid for calendar object itself
-        $calObjectUUID[0] = strtolower(UUIDUtil::getUUID());
+        $calObjectUUID = strtolower(UUIDUtil::getUUID());
 
         // the name for calendar event
         $eventSummary = $calTypeEventTitle;
 
-        // the end datetime of calendar event
-        // @TODO - discuss for event end date time
-        //$endDateTimeOfEvent = $startDateTimeOfEvent;
-
+        // timestamp of start date/time for calendar type event
         $tsCalTypeEventDatetime = strtotime($calTypeEventDatetime);
 
-        $eventStartDatetime = $endDateTimeFormat = date('Ymd\THis\Z', $tsCalTypeEventDatetime);
+        // the start date time of calendar event (end datatime is equal as start date time in case when end date time is not provided)
+        $eventStartDatetime = $eventEndDatetime = date('Ymd\THis\Z', $tsCalTypeEventDatetime);
+
+        // set end date/time of event if it's provided
+        if ($calTypeEventEndDatetime) {
+            $eventEndDatetime = date('Ymd\THis\Z', strtotime($calTypeEventEndDatetime));
+        }
 
         $timeZone = 'Europe/Belgrade';
 
         // populate start calendar event with data
-        $calData[0] = "BEGIN:VCALENDAR\r\n
+        $calData = "BEGIN:VCALENDAR\r\n
 PRODID:-//IDN nextcloud.com//Calendar app 2.0.1//EN\r\n
 CALSCALE:GREGORIAN\r\n
 VERSION:2.0\r\n
@@ -107,9 +105,9 @@ CREATED:$createdDateTime\r\n
 DTSTAMP:$createdDateTime\r\n
 LAST-MODIFIED:$createdDateTime\r\n
 SEQUENCE:2\r\n
-UID:$calObjectUUID[0]\r\n
+UID:$calObjectUUID\r\n
 DTSTART;TZID=$timeZone:$eventStartDatetime\r\n
-DTEND;TZID=$timeZone:$eventStartDatetime\r\n
+DTEND;TZID=$timeZone:$eventEndDatetime\r\n
 DTSTAMP;VALUE=DATE-TIME:$createdDateTime\r\n
 SUMMARY:$eventSummary\r\n";
 
@@ -117,16 +115,16 @@ if (count($eventReminders)) {
     $arrRemSyntax = $this->elbCalDefRemindersService->returnCalendarReminderSyntaxForDefaultReminders();
     foreach ($eventReminders as $reminder) {
         $calObjRemSyntax = $arrRemSyntax[$reminder['def_reminder_minutes_before_event']];
-        $calData[0] .= "BEGIN:VALARM\r\n
+        $calData.= "BEGIN:VALARM\r\n
 ACTION:DISPLAY\r\n
 TRIGGER;RELATED=START:$calObjRemSyntax\r\n
 END:VALARM\r\n";
     }
 }
 
-$calData[0].="END:VEVENT\r\n";
+$calData.="END:VEVENT\r\n";
 
-$calData[0].="BEGIN:VTIMEZONE\r\n
+$calData.="BEGIN:VTIMEZONE\r\n
 TZID:$timeZone\r\n
 BEGIN:DAYLIGHT\r\n
 TZOFFSETFROM:+0100\r\n
@@ -144,47 +142,42 @@ RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\r\n
 END:STANDARD\r\n
 END:VTIMEZONE\r\n";
 
-$calData[0].="END:VCALENDAR";
+$calData.="END:VCALENDAR";
 
         $calendarType = CalDavBackend::CALENDAR_TYPE_CALENDAR;
 
         // call method which executes creating calendar event(s)
-        foreach ($calData as $ind => $calEventData) {
+        $response = $this->calDavBackend->createCalendarObject($calendarID, $calDataUri, $calData, $calendarType);
 
-            $response = $this->calDavBackend->createCalendarObject($calendarID, $calDataUri[$ind], $calEventData, $calendarType);
+        if (!strlen($response)) {
+            return false; // error during saving cal. event
+        }
 
-            if (!strlen($response)) {
-                return false; // error during saving cal. event
-            }
-
-            if (count($eventReminders)) {
-                // fetch newly created calendar event
-                //$event = $this->calDavBackend->getCalendarObject($calendarID, $calDataUri[$ind], $calendarType);
-                $event = $this->getCalendarEventObject($calendarID, $calDataUri[$ind], $calendarType);
-                $eventID = $event['id'];
-                $eventUID = $event['uid'];
-                foreach ($eventReminders as $reminder) {
-                    $res = $this->calendarReminderManager->insertReminder(
-                        $calendarID,
-                        $eventID,
-                        $eventUID,
-                        false,
-                        0, // @TODO - see how to mapp this field (recurrenceId)
-                        false,
-                        'event_hash', // @TODO - see how to mapp this field (eventHash)
-                        'alarm_hash',// @TODO - see how to mapp this field (eventHash)
-                        ReminderService::REMINDER_TYPE_DISPLAY,
-                        true,
-                        ($tsCalTypeEventDatetime - ($reminder['def_reminder_minutes_before_event'] * 60)),
-                        false
-                    );
-                    if (!($res > 0)) {
-                        return false;
-                    }
+        if (count($eventReminders)) {
+            // fetch newly created calendar event
+            $event = $this->getCalendarEventObject($calendarID, $calDataUri, $calendarType);
+            $eventID = $event['id'];
+            $eventUID = $event['uid'];
+            foreach ($eventReminders as $reminder) {
+                $res = $this->calendarReminderManager->insertReminder(
+                    $calendarID,
+                    $eventID,
+                    $eventUID,
+                    false,
+                    0,
+                    false,
+                    'event_hash',
+                    'alarm_hash',
+                    ReminderService::REMINDER_TYPE_DISPLAY,
+                    true,
+                    ($tsCalTypeEventDatetime - ($reminder['def_reminder_minutes_before_event'] * 60)),
+                    false
+                );
+                if (!($res > 0)) {
+                    return false;
                 }
             }
         }
-
         return true;
     }
 
@@ -230,6 +223,7 @@ $calData[0].="END:VCALENDAR";
         $calTypeEventTitle = $data['event_title'];
         $calTypeEventDescription = $data['event_description'];
         $calTypeEventDatetime = $data['event_datetime'];
+        $calTypeEventEndDatetime = $data['event_end_datetime'];
         $calTypeEventExecuted = $data['event_executed'];
         $calTypeTitle = $data['event_cal_type_title'];
         $calTypeDescription = $data['event_cal_type_description'];
@@ -246,7 +240,7 @@ $calData[0].="END:VCALENDAR";
                 $error++;
                 break;
             }
-            $resCreateEvent = $this->createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, $calTypeEventAssignedReminders);
+            $resCreateEvent = $this->createCalendarEventWithReminders($calendarID, $calTypeEventTitle, $calTypeEventDescription, $calTypeEventDatetime, $calTypeEventEndDatetime, $calTypeEventAssignedReminders);
             if (!$resCreateEvent) {
                 $error++;
                 break;
