@@ -4,12 +4,12 @@
 			<ManageCalendarTypes
 				:issuperadminuser="isSuperAdminUser"
 				:allowsuperadminswitch="permissionToSwitchBetweenCalendarTypesAndEvents"
-				@:perform-switch="performSwitch" />
+				v-on:perform-switch="performSwitch" />
 		</div>
 		<div v-if="permissionToManageCalendarTypesEvents">
 			<ManageCalendarTypesEvents
 				:allowsuperadminswitch="permissionToSwitchBetweenCalendarTypesAndEvents"
-				@:perform-switch="performSwitch" />
+				v-on:perform-switch="performSwitch" />
 		</div>
 		<div v-if="userWithoutAccessPermission">
 			<ForbiddenAccess />

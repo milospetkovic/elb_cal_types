@@ -7,7 +7,7 @@
 				</div>
 
 				<template v-if="allowsuperadminswitch">
-					<SwitchViewButton @:perform-switch="changeView" />
+					<SwitchViewButton v-on:perform-switch="changeView" />
 				</template>
 
 				<AppNavigationNew

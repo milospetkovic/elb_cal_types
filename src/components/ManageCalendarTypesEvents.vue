@@ -6,7 +6,7 @@
 			</div>
 
 			<template v-if="allowsuperadminswitch">
-				<SwitchViewButton @:perform-switch="changeView" />
+				<SwitchViewButton v-on:perform-switch="changeView" />
 			</template>
 
 			<AppNavigationNew
@@ -443,8 +443,8 @@ export default {
 			})
 			this.optionsForCalReminders = ret
 		},
-		showUserWithGroups(userID, userGroups) {
-			return (userID + ' - ' + userGroups)
+		showUserWithGroups({ userID, userGroups }) {
+			return `${userID} - ${userGroups}`
 		},
 		getCalTypeEvents() {
 			this.calTypeEvents = null
