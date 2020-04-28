@@ -2,7 +2,7 @@
 	<div id="content" class="app-elb-cal-types-events">
 		<AppNavigation>
 			<div class="nav-title-field">
-				<h4>{{ t('elb_cal_types', 'Assigned calendar types') }}</h4>
+				<h4>{{ t('elbcaltypes', 'Assigned calendar types') }}</h4>
 			</div>
 
 			<template v-if="allowSuperAdminSwitch">
@@ -26,27 +26,27 @@
 
 		<AppContent>
 			<div v-if="currentCalTypeLinkID">
-				<h2>{{ t('elb_cal_types', 'Manage events for selected calendar type') }}: {{ calTypeEntryItemName(assignedCalendarTypes[currentCalTypeLinkID]) }}</h2>
+				<h2>{{ t('elbcaltypes', 'Manage events for selected calendar type') }}: {{ calTypeEntryItemName(assignedCalendarTypes[currentCalTypeLinkID]) }}</h2>
 			</div>
 			<div v-else>
-				<h2>{{ t('elb_cal_types', 'Please choose calendar type from the left menu to manage events') }}</h2>
+				<h2>{{ t('elbcaltypes', 'Please choose calendar type from the left menu to manage events') }}</h2>
 			</div>
 
 			<div v-if="visibleCreateNewEventForm">
 				<hr class="elb-hr-sep">
-				<h3 class="font-bold">{{ t('elb_cal_types', 'Form for creating event for selected calendar type') }}</h3>
+				<h3 class="font-bold">{{ t('elbcaltypes', 'Form for creating event for selected calendar type') }}</h3>
 				<div class="table-responsive">
 					<table class="table elb-create-cal-event-table">
 						<thead>
 							<tr>
-								<th class="col1">{{ t('elb_cal_types', 'Event attributes') }}</th>
-								<th class="col2">{{ t('elb_cal_types', 'Values') }}</th>
+								<th class="col1">{{ t('elbcaltypes', 'Event attributes') }}</th>
+								<th class="col2">{{ t('elbcaltypes', 'Values') }}</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td class="col1">
-									{{ t('elb_cal_types', 'Event name') }}
+									{{ t('elbcaltypes', 'Event name') }}
 								</td>
 								<td class="col2">
 									<input v-model="eventTitle" name="eventname" type="text">
@@ -55,7 +55,7 @@
 
 							<tr>
 								<td class="col1">
-									{{ t('elb_cal_types', 'Event description') }}
+									{{ t('elbcaltypes', 'Event description') }}
 								</td>
 								<td class="col2">
 									<textarea v-model="eventDescription" name="eventdescription" />
@@ -64,7 +64,7 @@
 
 							<tr>
 								<td class="col1">
-									{{ t('elb_cal_types', 'Event date and time') }}
+									{{ t('elbcaltypes', 'Event date and time') }}
 								</td>
 								<td class="col2">
 									<template>
@@ -87,7 +87,7 @@
 
 							<tr>
 								<td class="col1">
-									{{ t('elb_cal_types', 'Event end date and time (optional)') }}
+									{{ t('elbcaltypes', 'Event end date and time (optional)') }}
 								</td>
 								<td class="col2">
 									<template>
@@ -110,7 +110,7 @@
 
 							<tr>
 								<td class="col1">
-									{{ t('elb_cal_types', 'Reminders for event') }}
+									{{ t('elbcaltypes', 'Reminders for event') }}
 								</td>
 								<td class="col2">
 									<template>
@@ -128,7 +128,7 @@
 							</tr>
 							<tr>
 								<td class="col1">
-									{{ t('elb_cal_types', 'Assign users for event') }}
+									{{ t('elbcaltypes', 'Assign users for event') }}
 								</td>
 								<td class="col2">
 									<template>
@@ -150,11 +150,11 @@
 								<td />
 								<td>
 									<button class="button primary" @click="saveNewEvent">
-										{{ t('elb_cal_types', 'Save') }}
+										{{ t('elbcaltypes', 'Save') }}
 									</button>
 
 									<button @click="cancelCreateNewEvent">
-										{{ t('elb_cal_types', 'Cancel') }}
+										{{ t('elbcaltypes', 'Cancel') }}
 									</button>
 								</td>
 							</tr>
@@ -165,21 +165,21 @@
 			</div>
 			<div v-if="calTypeEvents">
 
-				<h3 class="font-bold">{{ t('elb_cal_types', 'Created events for selected calendar type') }}</h3>
+				<h3 class="font-bold">{{ t('elbcaltypes', 'Created events for selected calendar type') }}</h3>
 
 				<div class="table-responsive">
 					<table class="table elb-events-table">
 						<thead>
 							<tr>
-								<th>{{ t('elb_cal_types', 'ID') }}</th>
-								<th>{{ t('elb_cal_types', 'Event title') }}</th>
-								<th>{{ t('elb_cal_types', 'Event description') }}</th>
-								<th>{{ t('elb_cal_types', 'Event datetime') }}</th>
-								<th>{{ t('elb_cal_types', 'Event end datetime') }}</th>
-								<th>{{ t('elb_cal_types', 'Event assigned users') }}</th>
-								<th>{{ t('elb_cal_types', 'Event reminders') }}</th>
-								<th>{{ t('elb_cal_types', 'Event executed') }}</th>
-								<th>{{ t('elb_cal_types', 'Event actions') }}</th>
+								<th>{{ t('elbcaltypes', 'ID') }}</th>
+								<th>{{ t('elbcaltypes', 'Event title') }}</th>
+								<th>{{ t('elbcaltypes', 'Event description') }}</th>
+								<th>{{ t('elbcaltypes', 'Event datetime') }}</th>
+								<th>{{ t('elbcaltypes', 'Event end datetime') }}</th>
+								<th>{{ t('elbcaltypes', 'Event assigned users') }}</th>
+								<th>{{ t('elbcaltypes', 'Event reminders') }}</th>
+								<th>{{ t('elbcaltypes', 'Event executed') }}</th>
+								<th>{{ t('elbcaltypes', 'Event actions') }}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -201,17 +201,17 @@
 								</td>
 								<td>
 									<template v-if="calEvent.event_executed">
-										<span :title="calEvent.event_executed">{{ t('elb_cal_types', 'Yes') }}</span>
+										<span :title="calEvent.event_executed">{{ t('elbcaltypes', 'Yes') }}</span>
 									</template>
 									<template v-else>
-										<span>{{ t('elb_cal_types', 'No') }}</span>
+										<span>{{ t('elbcaltypes', 'No') }}</span>
 									</template>
 								</td>
 								<td>
 									<input v-if="isEventNonExecuted(calEvent)"
 											type="button"
 										   class="primary pull-left"
-										   :value="t('elb_cal_types', 'Execute event')"
+										   :value="t('elbcaltypes', 'Execute event')"
 										   @click="saveCalendarEventForUsers(calEvent.link_id)">
 									<button v-if="isEventNonExecuted(calEvent)" class="icon-delete pull-right" @click="deleteCalendarTypeEvent(calEvent.link_id)"></button>
 								</td>
@@ -379,7 +379,7 @@ export default {
 			this.visibleCreateNewEventForm = true
 		},
 		cancelCreateNewEvent() {
-			if (confirm(t('elb_cal_types', 'Really cancel') + '?')) {
+			if (confirm(t('elbcaltypes', 'Really cancel') + '?')) {
 				this.visibleCreateNewEventForm = false
 			}
 		},
@@ -407,14 +407,14 @@ export default {
 				} else {
 					this.getCalTypeEvents()
 					OC.dialogs.info(
-						t('elbcaltypes', 'Calendar event has been saved. Please press "Execute event" button to save calendar event for each assigned user.'),
+						t('elbcaltypes', 'Calendar event has been saved. Please press \'Execute event\' button to save calendar event for each assigned user.'),
 						t('elbcaltypes', 'Success')
 					)
 				}
 				console.log('response for save event: ', res)
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not save event for calendar type'))
+				OCP.Toast.error(t('elbcaltypes', 'Could not save event for calendar type'))
 			}
 		},
 		populatePreselectedCalReminders() {
@@ -464,7 +464,7 @@ export default {
 				})
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not get events for calendar type'))
+				OCP.Toast.error(t('elbcaltypes', 'Could not get events for calendar type'))
 			}
 		},
 		saveCalendarEventForUsers(id) {
@@ -487,7 +487,7 @@ export default {
 			}
 		},
 		deleteCalendarTypeEvent(id) {
-			if (confirm(t('elb_cal_types', 'Really delete') + '?')) {
+			if (confirm(t('elbcaltypes', 'Really delete') + '?')) {
 				const data = {
 					linkid: id,
 				}
@@ -496,7 +496,7 @@ export default {
 					this.getCalTypeEvents()
 				} catch (e) {
 					console.error(e)
-					OCP.Toast.error(t('elb_cal_types', 'Could not delete event for calendar type'))
+					OCP.Toast.error(t('elbcaltypes', 'Could not delete event for calendar type'))
 				}
 			}
 		},

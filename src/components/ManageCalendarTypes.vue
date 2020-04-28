@@ -83,7 +83,7 @@
 					</div>
 					<div v-else>
 						<p class="text-warning">
-							{{ t('elbcaltypes', 'The selected calendar type doesn\' have assigned reminder') }}
+							{{ t('elbcaltypes', 'The selected calendar type doesn\'t have assigned reminder') }}
 						</p>
 					</div>
 				</AppSidebarTab>
@@ -288,7 +288,7 @@ export default {
 						actions: [
 							{
 								icon: calType.id === -1 ? 'icon-close' : 'icon-delete',
-								text: calType.id === -1 ? t('elb_cal_types', 'Cancel calendar type creation') : t('elb_cal_types', 'Delete calendar type'),
+								text: calType.id === -1 ? t('elbcaltypes', 'Cancel calendar type creation') : t('elbcaltypes', 'Delete calendar type'),
 								action: () => {
 									if (calType.id === -1) {
 										this.cancelNewCalType(calType)
@@ -486,7 +486,7 @@ export default {
 				this.currentCalTypeID = response.data.id
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not create a new calendar type'))
+				OCP.Toast.error(t('elbcaltypes', 'Could not create a new calendar type'))
 			}
 			this.updating = false
 		},
@@ -500,7 +500,7 @@ export default {
 				await axios.put(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`), calType)
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not update the calendar type'))
+				OCP.Toast.error(t('elbcaltypes', 'Could not update the calendar type'))
 			}
 			this.updating = false
 		},
@@ -509,17 +509,17 @@ export default {
 		 * @param {Object} calType calType object
 		 */
 		async deleteCalType(calType) {
-			if (confirm(t('elb_cal_types', 'Really delete' + '?'))) {
+			if (confirm(t('elbcaltypes', 'Really delete' + '?'))) {
 				try {
 					await axios.delete(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`))
 					this.calTypes.splice(this.calTypes.indexOf(calType), 1)
 					if (this.currentCalTypeID === calType.id) {
 						this.currentCalTypeID = null
 					}
-					OCP.Toast.success(t('elb_cal_types', 'Calendar type has been deleted'))
+					OCP.Toast.success(t('elbcaltypes', 'Calendar type has been deleted'))
 				} catch (e) {
 					console.error(e)
-					OCP.Toast.error(t('elb_cal_types', 'Could not delete the calendar type'))
+					OCP.Toast.error(t('elbcaltypes', 'Could not delete the calendar type'))
 				}
 			} else {
 				return false
@@ -549,11 +549,11 @@ export default {
 					this.uncheckSelectedAvailableReminders()
 				} catch (e) {
 					console.error(e)
-					OCP.Toast.error(t('elb_cal_types', 'Could not assign reminder(s)'))
+					OCP.Toast.error(t('elbcaltypes', 'Could not assign reminder(s)'))
 				}
 
 			} else {
-				alert(t('elb_cal_types', 'Please select at least one reminder'))
+				alert(t('elbcaltypes', 'Please select at least one reminder'))
 			}
 		},
 		/**
@@ -573,7 +573,7 @@ export default {
 				this.$delete(this.assignedRemForCalTypes[this.currentCalTypeID], id)
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not remove reminder for calendar type'))
+				OCP.Toast.error(t('elbcaltypes', 'Could not remove reminder for calendar type'))
 			}
 		},
 		/**
@@ -594,11 +594,11 @@ export default {
 					this.uncheckSelectedGroupFolders()
 				} catch (e) {
 					console.error(e)
-					OCP.Toast.error(t('elb_cal_types', 'Could not assign group folder(s)'))
+					OCP.Toast.error(t('elbcaltypes', 'Could not assign group folder(s)'))
 				}
 
 			} else {
-				alert(t('elb_cal_types', 'Please select at least one group folder'))
+				alert(t('elbcaltypes', 'Please select at least one group folder'))
 			}
 		},
 		/**
@@ -629,7 +629,7 @@ export default {
 				this.$delete(this.assignedGroupFoldersForCalTypes[this.currentCalTypeID], linkID)
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('elb_cal_types', 'Could not remove assigned group folder for calendar type'))
+				OCP.Toast.error(t('elbcaltypes', 'Could not remove assigned group folder for calendar type'))
 			}
 		},
 		changeView() {

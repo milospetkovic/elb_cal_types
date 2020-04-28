@@ -1,11 +1,5 @@
 {
   "translations":  {
-    "Calendar types" : "DE Calendar types",
-    "Manage calendar types" : "DE Manage calendar types",
-    "Switch view" : "DE Switch view",
-    "Create a new calendar type or update existing" : "DE Create a new calendar type or update existing",
-    "New calendar type" : "New calendar type",
-    "Name for calendar type": "Name for calendar type",
-    "Description for calendar type": "Description for calendar type"
+    "Calendar types" : "Calendar types"
   }, "pluralForm" :""
 }

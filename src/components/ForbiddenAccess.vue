@@ -1,7 +1,7 @@
 <template>
 	<div id="content3" class="app-elb-cal-types-forbidden-access">
 		<AppNavigation>
-			<h4>Sorry, you dont have assigned permission for this module</h4>
+			<h4>{{ t('elbcaltypes', 'Sorry, you dont have assigned permission for this module') }}</h4>
 		</AppNavigation>
 		<AppContent>
 		</AppContent>
