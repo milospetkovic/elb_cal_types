@@ -100,7 +100,17 @@ class ElbCalDefRemindersService
      */
     public function findAll($getEntities=true): array
     {
-        return $this->mapper->findAll($getEntities);
+        $getDataArray = $ret = $this->mapper->findAll($getEntities);
+        if ($getEntities) {
+            if (is_array($getDataArray) && count($getDataArray)) {
+                $ret = [];
+                foreach ($getDataArray as $entity) {
+                    $entity->setTitle($this->l->t($entity->getTitle()));
+                    $ret[] = $entity;
+                }
+            }
+        }
+        return $ret;
     }
 
     public function getTranslatedTitlesForEachDefaultReminder()
