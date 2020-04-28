@@ -7,7 +7,7 @@
 				</div>
 
 				<template v-if="allowsuperadminswitch">
-					<SwitchViewButton v-on:perform-switch="changeView"></SwitchViewButton>
+					<SwitchViewButton @:perform-switch="changeView" />
 				</template>
 
 				<AppNavigationNew
@@ -41,17 +41,20 @@
 
 				<div v-if="currentCalType">
 					<input ref="title"
-						   v-model="currentCalType.title"
+						v-model="currentCalType.title"
 						:placeholder="t('elbcaltypes', 'Name for calendar type')"
 						type="text"
 						:disabled="updating">
-					<textarea ref="content" v-model="currentCalType.description" :disabled="updating"
-							  rows="15" :placeholder="t('elbcaltypes', 'Description for calendar type')"/>
+					<textarea ref="content"
+						v-model="currentCalType.description"
+						:disabled="updating"
+						rows="15"
+						:placeholder="t('elbcaltypes', 'Description for calendar type')" />
 					<input type="button"
-						   class="primary"
-						   :value="t('elbcaltypes', 'Save')"
-						   :disabled="updating || !savePossible"
-						   @click="saveCalType">
+						class="primary"
+						:value="t('elbcaltypes', 'Save')"
+						:disabled="updating || !savePossible"
+						@click="saveCalType">
 				</div>
 				<div v-else-if="!calTypes.length" class="emptycontent">
 					<div class="icon-file" />
@@ -65,19 +68,18 @@
 			</AppContent>
 
 			<AppSidebar v-show="showSidebar"
-						:title="getTitleOfCurrentCalType"
-						:subtitle="t('elbcaltypes', 'Assign reminders and group folders for calendar type')"
-						@close="toggleSidebar">
+				:title="getTitleOfCurrentCalType"
+				:subtitle="t('elbcaltypes', 'Assign reminders and group folders for calendar type')"
+				@close="toggleSidebar">
 				<AppSidebarTab id="assigned-reminders" :name="t('elbcaltypes', 'Assigned reminders')" icon="icon-edit">
-
 					{{ t('elbcaltypes', 'Assigned reminders for the selected calendar type') }}
 
 					<hr>
 
 					<div v-if="assignedRemindersForCalTypeID">
 						<ul class="assigned-reminders-for-cal-type">
-							<li v-for="calTypeReminder in listAssignedRemindersForCalTypeID">
-								{{ calTypeReminder.cal_def_reminder_title_trans }}<button class="icon-delete pull-right"  @click="removeReminderForCalendarType(calTypeReminder.link_id)"></button>
+							<li v-for="calTypeReminder in listAssignedRemindersForCalTypeID" :key="calTypeReminder.link_id">
+								{{ calTypeReminder.cal_def_reminder_title_trans }}<button class="icon-delete pull-right" @click="removeReminderForCalendarType(calTypeReminder.link_id)" />
 							</li>
 						</ul>
 					</div>
@@ -97,22 +99,22 @@
 						<hr>
 
 						<ul class="reminders-for-cal-type">
-							<li v-for="defCal in defaultCalReminders">
+							<li v-for="defCal in defaultCalReminders" :key="defCal.id">
 								<input :id="'link-checkbox'+ defCal.id"
-									   name="link-checkbox[]"
-									   :disabled="checkIfDefCalReminderIsAssignedToCalTypeID(defCal.id)"
-									   class="checkbox link-checkbox"
-									   v-model="modelDefaultCalReminder"
-									   :value="defCal.id"
-									   type="checkbox">
+									v-model="modelDefaultCalReminder"
+									name="link-checkbox[]"
+									:disabled="checkIfDefCalReminderIsAssignedToCalTypeID(defCal.id)"
+									class="checkbox link-checkbox"
+									:value="defCal.id"
+									type="checkbox">
 								<label :for="'link-checkbox'+ defCal.id" class="link-checkbox-label">{{ t('elbcaltypes', defCal.title) }}</label>
 							</li>
 						</ul>
 
 						<div class="app-sidebar-tab__buttons">
-
-							<button class="primary" @click="saveRemindersForCalendarType">{{ t('elbcaltypes', 'Assign') }}</button>
-
+							<button class="primary" @click="saveRemindersForCalendarType">
+								{{ t('elbcaltypes', 'Assign') }}
+							</button>
 						</div>
 					</div>
 					<div v-else>
@@ -129,7 +131,7 @@
 					<hr>
 
 					<ul v-if="groupFolders.length" class="group-folders-for-cal-type">
-						<li v-for="gf in groupFolders">
+						<li v-for="gf in groupFolders" :key="gf.folder_id">
 							<input :id="'gf-checkbox'+ gf.folder_id"
 								v-model="modelGroupFolder"
 								name="gf-checkbox[]"
@@ -139,7 +141,7 @@
 								type="checkbox">
 							<label :for="'gf-checkbox'+ gf.folder_id" class="gf-checkbox-label">{{ gf.mount_point }}</label>
 
-							<button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)"></button>
+							<button v-if="checkIfGroupFolderIsAssignedToCalTypeID(gf.folder_id)" class="icon-delete pull-right" @click="removeGroupFolderForCalendarType(gf.folder_id)" />
 						</li>
 					</ul>
 
@@ -166,7 +168,7 @@ import {
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
-import SwitchViewButton from "./SwitchViewButton";
+import SwitchViewButton from './SwitchViewButton'
 
 export default {
 	name: 'ManageCalendarTypes',
@@ -183,11 +185,11 @@ export default {
 	props: {
 		issuperadminuser: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		allowsuperadminswitch: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 	},
 	data() {
@@ -353,7 +355,7 @@ export default {
 
 					Object.keys(this.assignedRemForCalTypes[this.currentCalTypeID]).forEach(key => {
 						const calRemObj = this.assignedRemForCalTypes[this.currentCalTypeID][key]
-						if (calRemObj.cal_def_reminder_id == defRemID) {
+						if (parseInt(calRemObj.cal_def_reminder_id) === defRemID) {
 							response = true
 							return true
 						}
@@ -426,7 +428,7 @@ export default {
 			this.currentCalTypeID = calType.id
 			this.uncheckSelectedAvailableReminders()
 			this.uncheckSelectedGroupFolders()
-			this.assignedRemindersForCalTypeID
+			this.checkAssignedRemindersForCalTypeID()
 			this.$nextTick(() => {
 				this.$refs.content.focus()
 			})
@@ -631,6 +633,16 @@ export default {
 				console.error(e)
 				OCP.Toast.error(t('elbcaltypes', 'Could not remove assigned group folder for calendar type'))
 			}
+		},
+		/**
+		 * Check up if selected calendar type has at least one assigned reminder
+		 * @returns {Integer}
+		 */
+		checkAssignedRemindersForCalTypeID() {
+			if (this.assignedRemForCalTypes[this.currentCalTypeID] !== undefined) {
+				return this.assignedRemForCalTypes[this.currentCalTypeID]
+			}
+			return false
 		},
 		changeView() {
 			this.$emit('perform-switch')

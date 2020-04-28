@@ -1,4 +1,4 @@
-<div>
+<template>
 	<div id="content" class="app-elb-cal-types-events">
 		<AppNavigation>
 			<div class="nav-title-field">
@@ -6,7 +6,7 @@
 			</div>
 
 			<template v-if="allowsuperadminswitch">
-				<SwitchViewButton v-on:perform-switch="changeView"></SwitchViewButton>
+				<SwitchViewButton @:perform-switch="changeView" />
 			</template>
 
 			<AppNavigationNew
@@ -34,13 +34,19 @@
 
 			<div v-if="visibleCreateNewEventForm">
 				<hr class="elb-hr-sep">
-				<h3 class="font-bold">{{ t('elbcaltypes', 'Form for creating event for selected calendar type') }}</h3>
+				<h3 class="font-bold">
+					{{ t('elbcaltypes', 'Form for creating event for selected calendar type') }}
+				</h3>
 				<div class="table-responsive">
 					<table class="table elb-create-cal-event-table">
 						<thead>
 							<tr>
-								<th class="col1">{{ t('elbcaltypes', 'Event attributes') }}</th>
-								<th class="col2">{{ t('elbcaltypes', 'Values') }}</th>
+								<th class="col1">
+									{{ t('elbcaltypes', 'Event attributes') }}
+								</th>
+								<th class="col2">
+									{{ t('elbcaltypes', 'Values') }}
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -93,16 +99,16 @@
 									<template>
 										<span>
 											<DatetimePicker
-													v-model="eventEndDateTime"
-													type="datetime"
-													:default-value="new Date()"
-													:clearable="true"
-													:format="'DD.MM.YYYY HH:mm'"
-													:show-second="false"
-													:time-select-options="{minutes: [0,5,10,15,20,25,30,35,40,45,50,55]}"
-													:lang="'en'"
-													:first-day-of-week="1"
-													:not-before="new Date()" />
+												v-model="eventEndDateTime"
+												type="datetime"
+												:default-value="new Date()"
+												:clearable="true"
+												:format="'DD.MM.YYYY HH:mm'"
+												:show-second="false"
+												:time-select-options="{minutes: [0,5,10,15,20,25,30,35,40,45,50,55]}"
+												:lang="'en'"
+												:first-day-of-week="1"
+												:not-before="new Date()" />
 										</span>
 									</template>
 								</td>
@@ -164,8 +170,9 @@
 				<hr class="elb-hr-sep">
 			</div>
 			<div v-if="calTypeEvents">
-
-				<h3 class="font-bold">{{ t('elbcaltypes', 'Created events for selected calendar type') }}</h3>
+				<h3 class="font-bold">
+					{{ t('elbcaltypes', 'Created events for selected calendar type') }}
+				</h3>
 
 				<div class="table-responsive">
 					<table class="table elb-events-table">
@@ -183,23 +190,21 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="calEvent in calTypeEvents">
+							<tr v-for="calEvent in calTypeEvents" :key="calEvent.link_id">
 								<td>{{ calEvent.link_id }}.</td>
 								<td>{{ calEvent.event_title }}</td>
 								<td>{{ calEvent.event_description }}</td>
 								<td>{{ calEvent.event_datetime }}</td>
 								<td>{{ calEvent.event_end_datetime }}</td>
 								<td>
-									<div class="item-as-box" v-for="eventAssignedUser in calEvent.event_assigned_users" :key="eventAssignedUser">
+									<div v-for="eventAssignedUser in calEvent.event_assigned_users" :key="eventAssignedUser" class="item-as-box">
 										{{ eventAssignedUser }}
 									</div>
 								</td>
 								<td>
-									<template v-for="eventReminder in calEvent.event_assigned_reminders">
-										<div class="item-as-box">
-											{{ eventReminder.def_reminder_title_translated }}
-										</div>
-									</template>
+									<div v-for="eventReminder in calEvent.event_assigned_reminders" :key="eventReminder.def_reminder_title" class="item-as-box">
+										{{ eventReminder.def_reminder_title_translated }}
+									</div>
 								</td>
 								<td>
 									<template v-if="calEvent.event_executed">
@@ -364,7 +369,7 @@ export default {
 				const obj = this.allUsersPerGroupFolders[key]
 				Object.keys(obj).forEach(key2 => {
 					const obj2 = obj[key2]
-					if (key2 == this.currentCalTypeGroupFolderID) {
+					if (key2 === this.currentCalTypeGroupFolderID) {
 						Object.keys(obj2).forEach(key3 => {
 							const valObj3 = obj2[key3]
 							ret.push({ 'userID': key3, 'userGroups': valObj3 })
