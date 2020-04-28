@@ -3,7 +3,7 @@
 		<div id="content" class="app-elb-cal-types">
 			<AppNavigation>
 				<div class="nav-title-field">
-					<h4>{{ t('elb_cal_types', 'Manage calendar types') }}</h4>
+					<h4>{{ t('elbcaltypes', 'Manage calendar types') }}</h4>
 				</div>
 
 				<template v-if="allowSuperAdminSwitch">
