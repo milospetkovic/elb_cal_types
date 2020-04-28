@@ -242,7 +242,8 @@ class ElbCalTypeEventService
                 }
 
                 if (!array_key_exists($arr['event_def_reminder_id'], $ret[$arr['cal_type_event_id']]['event_assigned_reminders'])) {
-                    $ret[$arr['cal_type_event_id']]['event_assigned_reminders'][$arr['event_def_reminder_id']] = ['def_reminder_title' => $arr['def_reminder_title']];
+                    $ret[$arr['cal_type_event_id']]['event_assigned_reminders'][$arr['event_def_reminder_id']] = ['def_reminder_title' => $arr['def_reminder_title'],
+                                                                                                                  'def_reminder_title_translated' => $this->l->t($arr['def_reminder_title'])];
                 }
             }
         }

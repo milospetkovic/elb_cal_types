@@ -509,7 +509,7 @@ export default {
 		 * @param {Object} calType calType object
 		 */
 		async deleteCalType(calType) {
-			if (confirm(t('elbcaltypes', 'Really delete' + '?'))) {
+			if (confirm(t('elbcaltypes', 'Really delete') + '?')) {
 				try {
 					await axios.delete(OC.generateUrl(`/apps/elb_cal_types/caltypes/${calType.id}`))
 					this.calTypes.splice(this.calTypes.indexOf(calType), 1)

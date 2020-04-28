@@ -196,7 +196,7 @@
 								</td>
 								<td>
 									<template v-for="eventReminder in calEvent.event_assigned_reminders">
-										<div class="item-as-box">{{ eventReminder.def_reminder_title }}</div>
+										<div class="item-as-box">{{ eventReminder.def_reminder_title_translated }}</div>
 									</template>
 								</td>
 								<td>
