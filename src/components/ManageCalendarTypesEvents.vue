@@ -1,11 +1,11 @@
-<template>
+<div>
 	<div id="content" class="app-elb-cal-types-events">
 		<AppNavigation>
 			<div class="nav-title-field">
 				<h4>{{ t('elbcaltypes', 'Assigned calendar types') }}</h4>
 			</div>
 
-			<template v-if="allowSuperAdminSwitch">
+			<template v-if="allowsuperadminswitch">
 				<SwitchViewButton v-on:perform-switch="changeView"></SwitchViewButton>
 			</template>
 
@@ -190,13 +190,15 @@
 								<td>{{ calEvent.event_datetime }}</td>
 								<td>{{ calEvent.event_end_datetime }}</td>
 								<td>
-									<template v-for="eventAssignedUser in calEvent.event_assigned_users">
-										<div class="item-as-box">{{ eventAssignedUser }}</div>
-									</template>
+									<div class="item-as-box" v-for="eventAssignedUser in calEvent.event_assigned_users" :key="eventAssignedUser">
+										{{ eventAssignedUser }}
+									</div>
 								</td>
 								<td>
 									<template v-for="eventReminder in calEvent.event_assigned_reminders">
-										<div class="item-as-box">{{ eventReminder.def_reminder_title_translated }}</div>
+										<div class="item-as-box">
+											{{ eventReminder.def_reminder_title_translated }}
+										</div>
 									</template>
 								</td>
 								<td>
@@ -209,11 +211,11 @@
 								</td>
 								<td>
 									<input v-if="isEventNonExecuted(calEvent)"
-											type="button"
-										   class="primary pull-left"
-										   :value="t('elbcaltypes', 'Execute event')"
-										   @click="saveCalendarEventForUsers(calEvent.link_id)">
-									<button v-if="isEventNonExecuted(calEvent)" class="icon-delete pull-right" @click="deleteCalendarTypeEvent(calEvent.link_id)"></button>
+										type="button"
+										class="primary pull-left"
+										:value="t('elbcaltypes', 'Execute event')"
+										@click="saveCalendarEventForUsers(calEvent.link_id)">
+									<button v-if="isEventNonExecuted(calEvent)" class="icon-delete pull-right" @click="deleteCalendarTypeEvent(calEvent.link_id)" />
 								</td>
 							</tr>
 						</tbody>
@@ -235,7 +237,7 @@ import {
 } from 'nextcloud-vue'
 
 import axios from '@nextcloud/axios'
-import SwitchViewButton from "./SwitchViewButton";
+import SwitchViewButton from './SwitchViewButton'
 
 export default {
 	name: 'ManageCalendarTypesEvents',
@@ -249,9 +251,9 @@ export default {
 		SwitchViewButton,
 	},
 	props: {
-		allowSuperAdminSwitch: {
+		allowsuperadminswitch: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 	},
 	data() {
@@ -322,7 +324,6 @@ export default {
 				// perform ajax call to fetch assigned reminders for calendar types
 				axios.post(OC.generateUrl('/apps/elb_cal_types/getassignedremindersforcaltypesids'), data).then((result) => {
 					this.defAssignedRemindersForCalTypes = result.data
-					console.log('defAssignedRemindersForCalTypes: ', this.defAssignedRemindersForCalTypes)
 				})
 			}
 		})
@@ -396,7 +397,6 @@ export default {
 				reminders: this.preselectedCalReminders,
 				assignedusers: this.usersForEvent,
 			}
-			console.log('data for save event: ', data)
 			try {
 				res = await axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendartypeevent'), data)
 				if (res.data.error) {
@@ -411,7 +411,6 @@ export default {
 						t('elbcaltypes', 'Success')
 					)
 				}
-				console.log('response for save event: ', res)
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('elbcaltypes', 'Could not save event for calendar type'))
@@ -439,8 +438,8 @@ export default {
 			})
 			this.optionsForCalReminders = ret
 		},
-		showUserWithGroups({userID, userGroups}) {
-			return `${userID} - ${userGroups}`
+		showUserWithGroups(userID, userGroups) {
+			return (userID + ' - ' + userGroups)
 		},
 		getCalTypeEvents() {
 			this.calTypeEvents = null
@@ -450,17 +449,15 @@ export default {
 			}
 			try {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/getcalendartypeevents'), data).then((result) => {
-					console.log('events raw data: ', result.data)
 					this.calTypeEvents = result.data
 					if (this.calTypeEvents) { // show latest events on the top
-						let obj = result.data
-                        let arr = Object.keys(obj).map(function(key) {
-                            return obj[key];
-                        });
-                        arr = arr.reverse()
-                        this.calTypeEvents = arr
+						const obj = result.data
+						let arr = Object.keys(obj).map(function(key) {
+							return obj[key]
+						})
+						arr = arr.reverse()
+						this.calTypeEvents = arr
 					}
-					console.log('calTypeEvents: ', this.calTypeEvents)
 				})
 			} catch (e) {
 				console.error(e)
@@ -473,7 +470,6 @@ export default {
 			}
 			try {
 				axios.post(OC.generateUrl('/apps/elb_cal_types/saveacalendareventforusers'), data).then((result) => {
-					console.log('response for save calendar events for users for calendar type event: ', result)
 					if (!result.data) {
 						OC.dialogs.alert(t('elbcaltypes', 'Could not save calendar event for users for calendar type event'), t('elbcaltypes', 'Error'))
 					} else {

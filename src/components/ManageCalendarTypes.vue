@@ -1,12 +1,12 @@
 <template>
-	<div v-if="isSuperAdminUser">
+	<div v-if="issuperadminuser">
 		<div id="content" class="app-elb-cal-types">
 			<AppNavigation>
 				<div class="nav-title-field">
 					<h4>{{ t('elbcaltypes', 'Manage calendar types') }}</h4>
 				</div>
 
-				<template v-if="allowSuperAdminSwitch">
+				<template v-if="allowsuperadminswitch">
 					<SwitchViewButton v-on:perform-switch="changeView"></SwitchViewButton>
 				</template>
 
@@ -181,11 +181,11 @@ export default {
 		SwitchViewButton,
 	},
 	props: {
-		isSuperAdminUser: {
+		issuperadminuser: {
 			type: Boolean,
 			default: false
 		},
-		allowSuperAdminSwitch: {
+		allowsuperadminswitch: {
 			type: Boolean,
 			default: false
 		},

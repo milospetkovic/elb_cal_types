@@ -2,14 +2,14 @@
 	<div>
 		<div v-if="permissionToManageCalendarTypes">
 			<ManageCalendarTypes
-					:isSuperAdminUser='isSuperAdminUser'
-					:allowSuperAdminSwitch="permissionToSwitchBetweenCalendarTypesAndEvents"
-					v-on:perform-switch="performSwitch" />
+				:issuperadminuser="isSuperAdminUser"
+				:allowsuperadminswitch="permissionToSwitchBetweenCalendarTypesAndEvents"
+				@:perform-switch="performSwitch" />
 		</div>
 		<div v-if="permissionToManageCalendarTypesEvents">
 			<ManageCalendarTypesEvents
-					:allowSuperAdminSwitch="permissionToSwitchBetweenCalendarTypesAndEvents"
-					v-on:perform-switch="performSwitch" />
+				:allowsuperadminswitch="permissionToSwitchBetweenCalendarTypesAndEvents"
+				@:perform-switch="performSwitch" />
 		</div>
 		<div v-if="userWithoutAccessPermission">
 			<ForbiddenAccess />
@@ -69,7 +69,7 @@ export default {
 	methods: {
 		performSwitch() {
 			this.administratorForCalTypesView = !this.administratorForCalTypesView
-		}
-	}
+		},
+	},
 }
 </script>

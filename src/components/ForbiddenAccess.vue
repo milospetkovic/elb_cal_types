@@ -3,8 +3,7 @@
 		<AppNavigation>
 			<h4>{{ t('elbcaltypes', 'Sorry, you dont have assigned permission for this module') }}</h4>
 		</AppNavigation>
-		<AppContent>
-		</AppContent>
+		<AppContent />
 	</div>
 </template>
 
