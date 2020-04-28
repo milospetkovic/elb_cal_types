@@ -74,7 +74,7 @@ class CalendarManager
         $calDataUri = strtoupper(UUIDUtil::getUUID()) . '.ics';
 
         // the datetime when calendar event object is created
-        $createdDateTime = date('Ymd\THis\Z');
+        $createdDateTime = gmdate('Ymd\THis\Z');
 
         // uuid for calendar object itself
         $calObjectUUID = strtolower(UUIDUtil::getUUID());
@@ -93,8 +93,8 @@ class CalendarManager
             $eventEndDatetime = date('Ymd\THis\Z', strtotime($calTypeEventEndDatetime));
         }
 
-        $tsOffsetFrom = '+0000';
-        $tsOffsetTo = '+0000';
+        $tsOffsetFrom = '+0200';
+        $tsOffsetTo = '+0100';
 
         $timeZone = 'Europe/Belgrade';
 
@@ -111,7 +111,6 @@ SEQUENCE:2\r\n
 UID:$calObjectUUID\r\n
 DTSTART;TZID=$timeZone:$eventStartDatetime\r\n
 DTEND;TZID=$timeZone:$eventEndDatetime\r\n
-DTSTAMP;VALUE=DATE-TIME:$createdDateTime\r\n
 SUMMARY:$eventSummary\r\n";
 
 if (strlen($calTypeEventDescription)) {
