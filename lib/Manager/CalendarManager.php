@@ -114,6 +114,11 @@ DTEND;TZID=$timeZone:$eventEndDatetime\r\n
 DTSTAMP;VALUE=DATE-TIME:$createdDateTime\r\n
 SUMMARY:$eventSummary\r\n";
 
+if (strlen($calTypeEventDescription)) {
+    $trimCalTypeEventDescription = trim($calTypeEventDescription);
+    $calData.= "DESCRIPTION:$trimCalTypeEventDescription\r\n";
+}
+
 if (count($eventReminders)) {
     $arrRemSyntax = $this->elbCalDefRemindersService->returnCalendarReminderSyntaxForDefaultReminders();
     foreach ($eventReminders as $reminder) {
