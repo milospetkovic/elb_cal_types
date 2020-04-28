@@ -1,7 +1,7 @@
 OC.L10N.register(
     "elbcaltypes",
     {
-        "Calendar types" : "DE1 Calendar types",
+        "Calendar types" : "DE Calendar types",
         "Manage calendar types" : "DE Manage calendar types",
         "New calendar type" : "DE New calendar type",
         "Switch view" : "DE Switch view",
